@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+title: "Filtro de Realidad v5 + Anti-Sycophancy: A model-agnostic conduct protocol for AI coding assistants"
+message: "If you use this protocol, please cite it."
+type: dataset
+authors:
+  - family-names: "Ruiz-Hernández"
+    given-names: "Itan"
+    orcid: "https://orcid.org/0000-0001-8075-482X"
+version: 1.0.0
+license: CC-BY-4.0

@@ -1,0 +1,29 @@
+{
+  "title": "Filtro de Realidad v5 + Anti-Sycophancy: A model-agnostic conduct protocol for AI coding assistants",
+  "description": "A model-agnostic, citable conduct protocol for AI coding assistants and agent swarms: anti-sycophancy in both directions, verify-before-asserting reality filtering, and state-verification-over-authority for orchestrator/subordinate agent topologies. Includes a canonical PROTOCOL.md, adapters for Claude Code and Cursor, and a worked example from a computational-chemistry multi-agent swarm.",
+  "creators": [
+    {
+      "name": "Ruiz-Hernández, Itan",
+      "orcid": "0000-0001-8075-482X"
+    }
+  ],
+  "license": "CC-BY-4.0",
+  "upload_type": "publication",
+  "publication_type": "other",
+  "keywords": [
+    "AI agents",
+    "LLM",
+    "anti-sycophancy",
+    "agent governance",
+    "prompt engineering",
+    "AI safety",
+    "multi-agent systems"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/RuizHernandez/Cursor-Hooks-Minimal-Test",
+      "relation": "isSupplementedBy",
+      "scheme": "url"
+    }
+  ]
+}
