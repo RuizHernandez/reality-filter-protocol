@@ -7,7 +7,8 @@ swarms.
 
 **Protocol name:** *Filtro de Realidad v5* (preserved from its private origin). **Release
 version:** `v1.0.0` (this is the first public release — see [LINEAGE.md](LINEAGE.md) for why the
-two numbers differ). **DOI:** to be minted on first Zenodo release; see "How to cite" below.
+two numbers differ). **DOI:** [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994);
+see "How to cite" below.
 
 ## What this is
 
@@ -105,11 +106,10 @@ chain-of-evidence detail behind Tier 1 and the quantified Cursor-hooks findings 
 ```
 Ruiz-Hernández, I. (2026). Filtro de Realidad v5 + Anti-Sycophancy:
 A model-agnostic conduct protocol for AI coding assistants (v1.0.0).
-Zenodo. https://doi.org/10.5281/zenodo.XXXXXXX
+Zenodo. https://doi.org/10.5281/zenodo.21499994
 ```
 
-The DOI above is a placeholder until the first Zenodo release is minted. `CITATION.cff` is also
-present for GitHub's "Cite this repository" feature.
+`CITATION.cff` is also present for GitHub's "Cite this repository" feature.
 
 - ORCID: [0000-0001-8075-482X](https://orcid.org/0000-0001-8075-482X)
 - Google Scholar: `user=BvW7db0AAAAJ`
