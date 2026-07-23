@@ -6,9 +6,10 @@ swarms.
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
 **Protocol name:** *Filtro de Realidad v5* (preserved from its private origin). **Release
-version:** `v1.0.0` (this is the first public release — see [LINEAGE.md](LINEAGE.md) for why the
-two numbers differ). **DOI:** [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994);
-see "How to cite" below.
+version:** `v1.1.0` (see [LINEAGE.md](LINEAGE.md) for why the protocol name and release semver
+are different counters). **Latest archived/citable DOI:**
+[10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994) — this covers the `v1.0.0`
+snapshot; a `v1.1.0`-specific DOI will be added here once Zenodo mints it.
 
 ## What this is
 
