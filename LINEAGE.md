@@ -44,3 +44,29 @@ Future changes to `PROTOCOL.md`'s universal core should bump this repository's r
 (`v1.0.0` → `v1.1.0`/`v2.0.0` per normal semver rules) independently of whether the protocol's
 own name ever changes. If the protocol's name changes (e.g. a future "v6"), record the reason
 here at the time it happens — do not backfill a reason after the fact.
+
+## Release `v1.2.0` — 2026-07-24
+
+**[Empirical]** Post-incident protocol bump approved after the DevSwarm rubric-capture case
+(commit `776f042` in the Ansys-Pyro workspace) and the Cursor IDE hook audit. Source rubric:
+`RFv5_Mejoras` (internal session 2026-07-23; see DevSwrmxML `_rfv5_mejoras_extract.txt`).
+
+**Included (items 1–26 + 30 confirmed):** SHA-anchored contracts; specification immutability;
+stash identifier stability; audit document persistence; pipeline ordering gates;
+single-writer-per-worktree; sign-off provenance; fabricated-deliverable detection; runtime model
+logging; pool-exhaustion notification; inverted anti-sycophancy reinforcement; hook fail-closed
+rules (empty `beforeShellExecution` payloads, UTF-8 BOM strip on Windows CLI hooks, incomplete hook
+coverage); defense-in-depth; `[Empirical]` label; claim-language rule; visual-artifact n=5
+self-check; evaluator-immunity principle; evidence hierarchy; formal-reply label requirement;
+mandatory correction format; cited-figures visibility; no unsolicited rewrites; technical HOLD
+(§3.10); future pre-commit / SHA-reconciliation roadmap (§3.11).
+
+**Excluded (bio items 27–29):** laboratory biochemistry style directives — routed to the
+`bio-researchruiz-hernandez` skill only, not the universal core.
+
+**Stash evidence (wrong-branch WIP, item 30):** On the original DevSwarm machine (Ansys-Pyro repo),
+`stash@{8}` — message `WIP P2 sobre rama P1 equivocada`, branch `ux/p1-progressive-disclosure` —
+contains uncommitted P2 UI work (`93 insertions / 30 deletions` in `app/ui/context.py` and
+`app/ui/shell.py`). Companion stash `stash@{6}` (`coder-P2-wip-sobre-rama-P1-NO-COMMITEAR`) on
+the same branch. Full empirical record: DevSwrmxML `Evidence/devswarm-p2/VERIFICATION-ITEM-30.md`.
+`stash@{n}` indices are unstable; locate by message, not index.
