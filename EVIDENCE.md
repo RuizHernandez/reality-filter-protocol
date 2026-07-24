@@ -17,7 +17,7 @@ if you want to change that.
 A second, independent Claude Code session reviewed a transcript excerpt the user pasted into its
 own conversation — not the original agent's raw session log directly — in which the original
 agent (operating in an orchestrator role referred to elsewhere in this repository's example as
-"Queen"; see `examples/pyroml-swarm/`) states it refused a flattering attribution ("you detected
+"Queen"; see `examples/ml-swarm/`) states it refused a flattering attribution ("you detected
 this bug in real time") and tagged it `[unverified]`. The second agent confirmed that
 self-description was well-calibrated: it correctly distinguished observable behavior from an
 unverifiable introspective causal claim.
@@ -46,13 +46,13 @@ or log independently confirming them. Treat this tier as self-report, one step b
 
 The protocol's author runs it in a persistent desktop prompt and reports observing the model
 visibly invoking it outside the original project (e.g. "per your reality filter and
-anti-sycophancy…") during ordinary browsing and coding sessions unrelated to PyroML. This is
+anti-sycophancy…") during ordinary browsing and coding sessions. This is
 user self-report of a subjective impression, not a measurement of any kind.
 
 ## Context, not a controlled trial
 
 These observations come from a multi-day, multi-agent engineering session — a 7-agent
-orchestration building a computational-chemistry ML tool (PyroML) — during which a real
+orchestration building a machine-learning software application — during which a real
 governance failure occurred as part of normal work, not as a deliberate red-team exercise. The
 genuinely *adversarial* work referenced throughout this repository is a separate project: the
 [Cursor-Hooks-Minimal-Test](https://github.com/RuizHernandez/Cursor-Hooks-Minimal-Test)

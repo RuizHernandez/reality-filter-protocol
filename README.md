@@ -57,8 +57,8 @@ Use this protocol for the social half. Do not mistake it for the technical one.
 
 ## A worked example
 
-[`examples/pyroml-swarm/`](examples/pyroml-swarm/) shows the universal core specialized for a
-real project: a computational-chemistry ML tool built by a 7-agent swarm. It is reproduced
+[`examples/ml-swarm/`](examples/ml-swarm/) shows the universal core specialized for a 
+real project: a machine-learning software application built by a 7-agent swarm. It is reproduced
 undiluted from the private source, labeled as an example — copy it as a template, not as a
 required rule.
 

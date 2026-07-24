@@ -4,7 +4,7 @@
 
 `PROTOCOL.md` is the single canonical source of truth for the three universal, domain-agnostic
 rules. Everything else in this repository — the adapters in `adapters/`, the worked example in
-`examples/pyroml-swarm/` — either derives from it or is explicitly labeled as an example, not a
+`examples/ml-swarm/` — either derives from it or is explicitly labeled as an example, not a
 rule.
 
 ## Porting to a new platform
