@@ -1,5 +1,7 @@
 # Reality Filter v5 + Anti-Sycophancy
 
+**English** | [Español](README.es.md)
+
 A public, model-agnostic, citable conduct protocol for AI coding assistants and multi-agent
 swarms.
 
