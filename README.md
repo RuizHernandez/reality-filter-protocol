@@ -13,6 +13,26 @@ are different counters). **Latest archived/citable DOI:**
 [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994) — this covers the `v1.0.0`
 snapshot; a `v1.2.0`-specific DOI will be added here once Zenodo mints it.
 
+## Included domain skills
+
+This repo includes the skills developed for the biochemical-engineering / bioprocess research
+workflow of Dr. Itan Homero Ruiz-Hernández:
+
+- **`bio-ruiz-hernandez`** — the flagship specialization, and the clearest demonstration of
+  what a domain layer adds beyond a plain port of the protocol. Three things make it
+  different: (1) it generalizes the n=5 visual self-check into an **n=10 manuscript audit** —
+  five content passes, four ethics passes, one format pass — applied to every draft; (2) it
+  adds an **AI-in-research ethics layer** the core protocol does not cover: the agent acts as
+  a tool and never as an author, sensitive data must be anonymized and computed locally,
+  every analytical result ships with its reproducible code, and a bilingual (ES/EN)
+  transparency notice declares AI involvement — so the skill doubles as a journal-ready
+  AI-use policy for manuscripts; (3) it enforces **hard editorial invariants** (microbial
+  nomenclature in italics, clean Unicode notation, single bold citation per block, EPS figure
+  handling via watermark-free Ghostscript).
+- **`numerical-data-analysis`** — anti-data-leakage rules (`fit` on Train only, mandatory
+  pipelines, SMOTE inside CV folds), scaler selection by distribution and algorithm, and a
+  Julia/SciML directive for ODE kinetic modeling of bioprocesses.
+
 ## What this is
 
 Three domain-agnostic conduct rules — anti-sycophancy in both directions, verify-before-you-claim
@@ -23,21 +43,8 @@ topologies — written once in [`PROTOCOL.md`](PROTOCOL.md) and adapted for spec
 - **Claude Code:** [`adapters/claude-code/SKILL.md`](adapters/claude-code/SKILL.md)
 - **Antigravity:** [`adapters/antigravity/SKILL.md`](adapters/antigravity/SKILL.md)
 - **Cursor:** [`adapters/cursor/reality-filter.mdc`](adapters/cursor/reality-filter.mdc)
-- **Gemini CLI (domain skills):** [`adapters/gemini-cli/`](adapters/gemini-cli/)
-  - **`bio-ruiz-hernandez`** — the flagship specialization, and the clearest demonstration of
-    what a domain layer adds beyond a plain port of the protocol. Three things make it
-    different: (1) it generalizes the n=5 visual self-check into an **n=10 manuscript audit**
-    — five content passes, four ethics passes, one format pass — applied to every draft;
-    (2) it adds an **AI-in-research ethics layer** the core protocol does not cover: the agent
-    acts as a tool and never as an author, sensitive data must be anonymized and computed
-    locally, every analytical result ships with its reproducible code, and a bilingual
-    (ES/EN) transparency notice declares AI involvement — so the skill doubles as a
-    journal-ready AI-use policy for manuscripts; (3) it enforces hard editorial invariants
-    (microbial nomenclature in italics, clean Unicode notation, single bold citation per
-    block, EPS figure handling via watermark-free Ghostscript).
-  - **`numerical-data-analysis`** — anti-data-leakage rules (`fit` on Train only, mandatory
-    pipelines, SMOTE inside CV folds), scaler selection by distribution and algorithm, and a
-    Julia/SciML directive for ODE kinetic modeling of bioprocesses.
+- **Gemini CLI (domain skills):** [`adapters/gemini-cli/`](adapters/gemini-cli/) — bioprocess
+  research editorial + numerical data-analysis skills (see **Included domain skills** above)
 - **Other platforms** (ChatGPT, Windsurf, …): no first-party adapter yet — see
   [CONTRIBUTING.md](CONTRIBUTING.md) for a porting guide.
 

@@ -8,6 +8,13 @@ Un protocolo de conducta público, agnóstico de modelo y citable, para asistent
 
 **Nombre del protocolo:** *Filtro de Realidad v5* (conservado de su origen privado). **Versión de la release:** `v1.2.0` (ver [LINEAGE.md](LINEAGE.md) para entender por qué el nombre del protocolo y el semver de la release son contadores distintos). **Último DOI archivado/citable:** [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994) — cubre el snapshot `v1.0.0`; aquí se añadirá el DOI específico de `v1.2.0` cuando Zenodo lo emita.
 
+## Skills de dominio incluidos
+
+Este repo incluye los skills desarrollados para el flujo de investigación en ingeniería bioquímica y bioprocesos del Dr. Itan Homero Ruiz-Hernández:
+
+- **`bio-ruiz-hernandez`** — la especialización insignia, y la demostración más clara de lo que una capa de dominio aporta más allá de una simple adaptación del protocolo. Tres cosas lo hacen diferente: (1) generaliza el auto-chequeo visual n=5 en una **auditoría de manuscritos n=10** — cinco pases de contenido, cuatro de ética, uno de formato — aplicada a cada borrador; (2) añade una **capa de ética de IA en investigación** que el protocolo núcleo no cubre: el agente actúa como herramienta y nunca como autor, los datos sensibles deben anonimizarse y computarse localmente, todo resultado analítico se entrega con su código reproducible, y un aviso de transparencia bilingüe (ES/EN) declara la participación de la IA — de modo que el skill funciona también como una política de uso de IA lista para revistas; (3) impone **invariantes editoriales duros** (nomenclatura microbiana en itálicas, notación Unicode limpia, citación única en negritas por bloque, manejo de figuras EPS con Ghostscript sin marca de agua).
+- **`numerical-data-analysis`** — reglas anti-fuga de datos (`fit` solo en Train, pipelines obligatorios, SMOTE dentro de los folds de CV), selección de scaler según distribución y algoritmo, y una directiva Julia/SciML para modelado cinético de bioprocesos con ODEs.
+
 ## Qué es esto
 
 Tres reglas de conducta agnósticas de dominio — anti-sycophancy en ambas direcciones, filtrado de realidad verifica-antes-de-afirmar, y verificación-de-estado-sobre-autoridad para topologías de agentes orquestador/subordinado — escritas una sola vez en [`PROTOCOL.md`](PROTOCOL.md) y adaptadas a plataformas específicas:
@@ -16,22 +23,7 @@ Tres reglas de conducta agnósticas de dominio — anti-sycophancy en ambas dire
 - **Claude Code:** [`adapters/claude-code/SKILL.md`](adapters/claude-code/SKILL.md)
 - **Antigravity:** [`adapters/antigravity/SKILL.md`](adapters/antigravity/SKILL.md)
 - **Cursor:** [`adapters/cursor/reality-filter.mdc`](adapters/cursor/reality-filter.mdc)
-- **Gemini CLI (skills de dominio):** [`adapters/gemini-cli/`](adapters/gemini-cli/)
-  - **`bio-ruiz-hernandez`** — la especialización insignia, y la demostración más clara de lo
-    que una capa de dominio aporta más allá de una simple adaptación del protocolo. Tres cosas
-    lo hacen diferente: (1) generaliza el auto-chequeo visual n=5 en una **auditoría de
-    manuscritos n=10** — cinco pases de contenido, cuatro de ética, uno de formato — aplicada
-    a cada borrador; (2) añade una **capa de ética de IA en investigación** que el protocolo
-    núcleo no cubre: el agente actúa como herramienta y nunca como autor, los datos sensibles
-    deben anonimizarse y computarse localmente, todo resultado analítico se entrega con su
-    código reproducible, y un aviso de transparencia bilingüe (ES/EN) declara la participación
-    de la IA — de modo que el skill funciona también como una política de uso de IA lista para
-    revistas; (3) impone invariantes editoriales duros (nomenclatura microbiana en itálicas,
-    notación Unicode limpia, citación única en negritas por bloque, manejo de figuras EPS con
-    Ghostscript sin marca de agua).
-  - **`numerical-data-analysis`** — reglas anti-fuga de datos (`fit` solo en Train, pipelines
-    obligatorios, SMOTE dentro de los folds de CV), selección de scaler según distribución y
-    algoritmo, y una directiva Julia/SciML para modelado cinético de bioprocesos con ODEs.
+- **Gemini CLI (skills de dominio):** [`adapters/gemini-cli/`](adapters/gemini-cli/) — skills editoriales de investigación en bioprocesos + análisis de datos numéricos (ver **Skills de dominio incluidos** arriba)
 - **Otras plataformas** (ChatGPT, Windsurf, …): aún sin adapter oficial — ver [CONTRIBUTING.md](CONTRIBUTING.md) para la guía de portado.
 
 Es prosa conductual, no código ejecutable. Su valor es la portabilidad de reglas de conducta entre modelos, y su citabilidad como artefacto académico.
