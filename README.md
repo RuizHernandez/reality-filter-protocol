@@ -19,8 +19,11 @@ topologies — written once in [`PROTOCOL.md`](PROTOCOL.md) and adapted for spec
 
 - **Canonical:** [`PROTOCOL.md`](PROTOCOL.md)
 - **Claude Code:** [`adapters/claude-code/SKILL.md`](adapters/claude-code/SKILL.md)
+- **Antigravity:** [`adapters/antigravity/SKILL.md`](adapters/antigravity/SKILL.md)
 - **Cursor:** [`adapters/cursor/reality-filter.mdc`](adapters/cursor/reality-filter.mdc)
-- **Other platforms** (ChatGPT, Antigravity, Windsurf, …): no first-party adapter yet — see
+- **Gemini CLI (domain skills):** [`adapters/gemini-cli/`](adapters/gemini-cli/) — bioprocess
+  research editorial + numerical data-analysis skills
+- **Other platforms** (ChatGPT, Windsurf, …): no first-party adapter yet — see
   [CONTRIBUTING.md](CONTRIBUTING.md) for a porting guide.
 
 It is behavioral prose, not executable code. Its value is portability of conduct rules across
@@ -55,12 +58,16 @@ does that.
 
 Use this protocol for the social half. Do not mistake it for the technical one.
 
-## A worked example
+## Worked examples
 
 [`examples/ml-swarm/`](examples/ml-swarm/) shows the universal core specialized for a 
 real project: a machine-learning software application built by a 7-agent swarm. It is reproduced
 undiluted from the private source, labeled as an example — copy it as a template, not as a
 required rule.
+
+[`examples/bioprocess-research/`](examples/bioprocess-research/) shows the same specialization
+for a research domain: biochemical-engineering scientific writing and numerical data analysis,
+implemented as two installable Gemini CLI skills ([`adapters/gemini-cli/`](adapters/gemini-cli/)).
 
 ## Evidence & limitations
 
