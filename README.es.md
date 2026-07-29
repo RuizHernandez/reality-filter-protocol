@@ -16,10 +16,22 @@ Tres reglas de conducta agnósticas de dominio — anti-sycophancy en ambas dire
 - **Claude Code:** [`adapters/claude-code/SKILL.md`](adapters/claude-code/SKILL.md)
 - **Antigravity:** [`adapters/antigravity/SKILL.md`](adapters/antigravity/SKILL.md)
 - **Cursor:** [`adapters/cursor/reality-filter.mdc`](adapters/cursor/reality-filter.mdc)
-- **Gemini CLI (skills de dominio):** [`adapters/gemini-cli/`](adapters/gemini-cli/) —
-  `bio-ruiz-hernandez` (protocolo editorial de redacción científica: auditoría n=10, ética de
-  IA en investigación, aviso de transparencia) y `numerical-data-analysis` (reglas anti-fuga
-  de datos, directiva Julia/SciML para modelado cinético con ODEs)
+- **Gemini CLI (skills de dominio):** [`adapters/gemini-cli/`](adapters/gemini-cli/)
+  - **`bio-ruiz-hernandez`** — la especialización insignia, y la demostración más clara de lo
+    que una capa de dominio aporta más allá de una simple adaptación del protocolo. Tres cosas
+    lo hacen diferente: (1) generaliza el auto-chequeo visual n=5 en una **auditoría de
+    manuscritos n=10** — cinco pases de contenido, cuatro de ética, uno de formato — aplicada
+    a cada borrador; (2) añade una **capa de ética de IA en investigación** que el protocolo
+    núcleo no cubre: el agente actúa como herramienta y nunca como autor, los datos sensibles
+    deben anonimizarse y computarse localmente, todo resultado analítico se entrega con su
+    código reproducible, y un aviso de transparencia bilingüe (ES/EN) declara la participación
+    de la IA — de modo que el skill funciona también como una política de uso de IA lista para
+    revistas; (3) impone invariantes editoriales duros (nomenclatura microbiana en itálicas,
+    notación Unicode limpia, citación única en negritas por bloque, manejo de figuras EPS con
+    Ghostscript sin marca de agua).
+  - **`numerical-data-analysis`** — reglas anti-fuga de datos (`fit` solo en Train, pipelines
+    obligatorios, SMOTE dentro de los folds de CV), selección de scaler según distribución y
+    algoritmo, y una directiva Julia/SciML para modelado cinético de bioprocesos con ODEs.
 - **Otras plataformas** (ChatGPT, Windsurf, …): aún sin adapter oficial — ver [CONTRIBUTING.md](CONTRIBUTING.md) para la guía de portado.
 
 Es prosa conductual, no código ejecutable. Su valor es la portabilidad de reglas de conducta entre modelos, y su citabilidad como artefacto académico.
