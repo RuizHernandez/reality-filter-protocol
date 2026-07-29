@@ -64,6 +64,18 @@ agent's narrative, *including its own*. This governance layer is the protocol's 
 contribution: not novel in the abstract (least-privilege and orchestrator-worker patterns
 long predate it), but a portable, prompt-level articulation of it for LLM agent swarms.
 
+The two domain skills exist for the same reason. The core protocol governs general agent
+conduct, but it does not answer the questions that appear when it is taken into real
+research: who signs the interpretation of a result? how do you stop a model from reporting
+data-leakage-inflated metrics as valid? what format does a journal demand?
+**`bio-ruiz-hernandez`** matters because it turns generic honesty into *operational academic
+integrity*: without its ethics layer, a perfectly "honest" agent can still write conclusions
+while simulating authorship, accept sensitive data unanonymized, or hand over numbers with no
+code backing them. **`numerical-data-analysis`** matters because the most expensive error in
+applied ML is not a bad model but a good model *measured wrong*: data leakage silently
+inflates metrics, and no truthfulness label can detect that on its own — it takes structural
+rules (`fit` on Train only, mandatory pipelines) that make it impossible by construction.
+
 ### The social half of a two-part lesson
 
 A conversational instruction is **not** technical enforcement. A prompt that says "the
