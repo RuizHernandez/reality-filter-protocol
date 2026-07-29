@@ -16,7 +16,10 @@ Tres reglas de conducta agnósticas de dominio — anti-sycophancy en ambas dire
 - **Claude Code:** [`adapters/claude-code/SKILL.md`](adapters/claude-code/SKILL.md)
 - **Antigravity:** [`adapters/antigravity/SKILL.md`](adapters/antigravity/SKILL.md)
 - **Cursor:** [`adapters/cursor/reality-filter.mdc`](adapters/cursor/reality-filter.mdc)
-- **Gemini CLI (skills de dominio):** [`adapters/gemini-cli/`](adapters/gemini-cli/) — skills editoriales de investigación en bioprocesos + análisis de datos numéricos
+- **Gemini CLI (skills de dominio):** [`adapters/gemini-cli/`](adapters/gemini-cli/) —
+  `bio-ruiz-hernandez` (protocolo editorial de redacción científica: auditoría n=10, ética de
+  IA en investigación, aviso de transparencia) y `numerical-data-analysis` (reglas anti-fuga
+  de datos, directiva Julia/SciML para modelado cinético con ODEs)
 - **Otras plataformas** (ChatGPT, Windsurf, …): aún sin adapter oficial — ver [CONTRIBUTING.md](CONTRIBUTING.md) para la guía de portado.
 
 Es prosa conductual, no código ejecutable. Su valor es la portabilidad de reglas de conducta entre modelos, y su citabilidad como artefacto académico.
@@ -40,7 +43,7 @@ Usa este protocolo para la mitad social. No lo confundas con la técnica.
 
 [`examples/ml-swarm/`](examples/ml-swarm/) muestra el núcleo universal especializado para un proyecto real: una aplicación de software de machine learning construida por un enjambre de 7 agentes. Se reproduce sin diluir desde la fuente privada, etiquetada como ejemplo — cópiala como plantilla, no como una regla que este repositorio te exija adoptar.
 
-[`examples/bioprocess-research/`](examples/bioprocess-research/) muestra la misma especialización para un dominio de investigación: redacción científica en ingeniería bioquímica y análisis de datos numéricos, implementados como dos skills instalables de Gemini CLI ([`adapters/gemini-cli/`](adapters/gemini-cli/)).
+[`examples/bioprocess-research/`](examples/bioprocess-research/) muestra la misma especialización para un dominio de investigación: redacción científica en ingeniería bioquímica (`bio-ruiz-hernandez`, con su auditoría n=10 y ética de IA en investigación) y análisis de datos numéricos (`numerical-data-analysis`, con reglas anti-fuga de datos y directiva Julia/SciML), implementados como dos skills instalables de Gemini CLI ([`adapters/gemini-cli/`](adapters/gemini-cli/)).
 
 ## Evidencia y limitaciones
 

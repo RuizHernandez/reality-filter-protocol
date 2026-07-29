@@ -23,8 +23,10 @@ topologies — written once in [`PROTOCOL.md`](PROTOCOL.md) and adapted for spec
 - **Claude Code:** [`adapters/claude-code/SKILL.md`](adapters/claude-code/SKILL.md)
 - **Antigravity:** [`adapters/antigravity/SKILL.md`](adapters/antigravity/SKILL.md)
 - **Cursor:** [`adapters/cursor/reality-filter.mdc`](adapters/cursor/reality-filter.mdc)
-- **Gemini CLI (domain skills):** [`adapters/gemini-cli/`](adapters/gemini-cli/) — bioprocess
-  research editorial + numerical data-analysis skills
+- **Gemini CLI (domain skills):** [`adapters/gemini-cli/`](adapters/gemini-cli/) —
+  `bio-ruiz-hernandez` (scientific-writing editorial protocol: n=10 audit, AI-in-research
+  ethics, transparency notice) and `numerical-data-analysis` (anti-data-leakage rules,
+  Julia/SciML directive for ODE kinetic modeling)
 - **Other platforms** (ChatGPT, Windsurf, …): no first-party adapter yet — see
   [CONTRIBUTING.md](CONTRIBUTING.md) for a porting guide.
 
@@ -68,8 +70,10 @@ undiluted from the private source, labeled as an example — copy it as a templa
 required rule.
 
 [`examples/bioprocess-research/`](examples/bioprocess-research/) shows the same specialization
-for a research domain: biochemical-engineering scientific writing and numerical data analysis,
-implemented as two installable Gemini CLI skills ([`adapters/gemini-cli/`](adapters/gemini-cli/)).
+for a research domain: biochemical-engineering scientific writing (`bio-ruiz-hernandez`, with
+its n=10 audit and AI-in-research ethics) and numerical data analysis
+(`numerical-data-analysis`, with anti-leakage rules and a Julia/SciML directive), implemented
+as two installable Gemini CLI skills ([`adapters/gemini-cli/`](adapters/gemini-cli/)).
 
 ## Evidence & limitations
 
