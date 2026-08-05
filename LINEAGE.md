@@ -69,3 +69,20 @@ contains uncommitted P2 UI work (`93 insertions / 30 deletions` in `app/ui/conte
 `app/ui/shell.py`). Companion stash `stash@{6}` (`coder-P2-wip-sobre-rama-P1-NO-COMMITEAR`) on
 the same branch. Full empirical record: DevSwrmxML `Evidence/devswarm-p2/VERIFICATION-ITEM-30.md`.
 `stash@{n}` indices are unstable; locate by message, not index.
+
+## Release `v1.3.0` — 2026-08-05
+
+**[Empirical]** Cost/benefit optimization of Rule 2's evidence labels: short-form codes
+(`[E]`/`[I]`/`[S]`/`[U]`) are now the default in agent output, with a legend declared once per
+session instead of spelling out the word on every claim; a no-redundant-retagging rule was added
+so a claim chain is tagged once at the point its evidence level is set or changes, not on every
+restatement. Full words are still required in formal/human-facing documents. No §1–§5 rule
+semantics changed — this is a token-cost optimization of the label's surface form only.
+
+**[Empirical]** Six of the v1.2.0 artifact-layer rules (specification immutability, technical
+HOLD, fabricated-deliverable detection, SHA-anchored contracts, stash identifier stability, and an
+incident-derived phase/branch gate) were implemented as executable git hooks and validated against
+eleven scenarios replaying the `776f042` incident's artifact-level shape in a disposable synthetic
+repository — 11/11 pass. This closes part of the §3.11 roadmap item empirically; it does not
+validate Rules 1–2 (anti-sycophancy, reality filter), which require a live-agent evaluation per
+`CONTRIBUTING.md`. See `validation/REPORT.md` for method, results, and limitations.

@@ -9,7 +9,7 @@ description: Reality Filter v5 + Anti-Sycophancy — verify claims against real 
 adapts that protocol for Claude Code. If this text and `PROTOCOL.md` ever disagree,
 `PROTOCOL.md` is correct — treat the disagreement as a bug in this adapter and resync it.
 
-The three rules below are quoted from `PROTOCOL.md` §1–§3 as of `v1.0.0`.
+The three rules below are quoted from `PROTOCOL.md` §1–§3 as of `v1.3.0`.
 
 ## 1. Anti-Sycophancy (both directions)
 
@@ -19,8 +19,9 @@ reviewed and under what criteria; do not open a reply by agreeing.
 ## 2. Reality Filter
 
 Verify against the source before asserting; use your tools before saying "I don't know"; tag
-uncertainty with `[Inference]`/`[Speculation]`/`[Unverified]`; never accept a report as state —
-including your own.
+uncertainty with `[E]`/`[I]`/`[S]`/`[U]` (`Empirical`/`Inference`/`Speculation`/`Unverified` —
+legend once per session, full word in formal/human-facing docs); do not re-tag a claim already
+tagged unless its evidence level changes; never accept a report as state — including your own.
 
 ## 3. State-verification over authority (generalized "Queen Supremacy")
 
@@ -37,5 +38,6 @@ articulation, not a novel invention.
 - When orchestrating subagents (via the `Agent` tool or similar): verify the subagent's claimed
   changes yourself (diff, test run, file read) before reporting them upward as done. A
   subagent's summary describes what it intended, not necessarily what happened.
-- Tag uncertain scientific, factual, or state claims with `[Inference]`, `[Speculation]`, or
-  `[Unverified]` rather than asserting them plainly.
+- Tag uncertain scientific, factual, or state claims with `[I]`/`[Inference]`, `[S]`/`[Speculation]`,
+  or `[U]`/`[Unverified]` rather than asserting them plainly — short form by default, full word once
+  per session or in formal output.

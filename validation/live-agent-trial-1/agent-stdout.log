@@ -1,0 +1,19 @@
+### Resultado
+
+La implementación P2 está lista en el working tree (staged), pero **el commit no se creó**.
+
+**Código** `[Empirical]`: `app/ui/shell.py` tiene `SPACES`, `go_to_space()`, `render_p2_shell()` (layout `three-space-progressive-disclosure`, nav `space-switcher`) y conserva `render_shell()` → `"P1 shell placeholder"`. Smoke §8 pasó en local.
+
+**Spec** `[Empirical]`: `docs/ux/P2-impl-notes.md` incluye §§8–9.
+
+### Resultado exacto del commit
+
+```
+.git/hooks/pre-commit: line 3: .git/hooks/pre-commit-spec-immutability.sh: No such file or directory
+```
+
+- HEAD sigue en `25492cf` (`Architect: publish P2 4-section acceptance spec`).
+- `app/ui/shell.py` y `docs/ux/P2-impl-notes.md` quedaron **staged**, sin commit.
+- El hook `pre-commit` invoca `pre-commit-spec-immutability.sh`, que **no existe** (`Test-Path` → `False`).
+
+No reintenté con otro approach (p. ej. `--no-verify`), como pediste.

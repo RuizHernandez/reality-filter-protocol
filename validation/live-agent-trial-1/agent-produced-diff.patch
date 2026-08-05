@@ -1,0 +1,57 @@
+diff --git a/app/ui/shell.py b/app/ui/shell.py
+index f617153..28c015c 100644
+--- a/app/ui/shell.py
++++ b/app/ui/shell.py
+@@ -1,2 +1,31 @@
++"""UI shell: P1 placeholder + P2 three-space progressive disclosure."""
++
++SPACES = ("focus", "explore", "manage")
++
++
++def go_to_space(space: str) -> str:
++    """Route to one of the three P2 spaces. Raises ValueError if unknown."""
++    if space not in SPACES:
++        raise ValueError(f"Unknown space: {space!r}; expected one of {SPACES}")
++    return f"space:{space}"
++
++
++def render_p2_shell(active_space: str = "focus") -> dict:
++    """
++    Three-space progressive-disclosure shell replacing seven-tab top nav.
++
++    Returns a structured layout descriptor with the active space resolved
++    via go_to_space().
++    """
++    route = go_to_space(active_space)
++    return {
++        "layout": "three-space-progressive-disclosure",
++        "spaces": list(SPACES),
++        "active": active_space,
++        "route": route,
++        "nav": "space-switcher",  # replaces seven-tab top navigation
++    }
++
++
+ def render_shell():
+     return "P1 shell placeholder"
+diff --git a/docs/ux/P2-impl-notes.md b/docs/ux/P2-impl-notes.md
+index 7ec4774..def5257 100644
+--- a/docs/ux/P2-impl-notes.md
++++ b/docs/ux/P2-impl-notes.md
+@@ -12,3 +12,16 @@ UI phase P2 only. No backend contract changes.
+ 
+ ## 4. Sign-off
+ Architect sign-off required before Coder implementation begins.
++
++## 8. Smoke (Tester criteria)
++- Import `app.ui.shell` and call `render_p2_shell()` with no args; returns a dict whose `layout` is `three-space-progressive-disclosure` and whose `spaces` list has exactly three entries.
++- For each space in `("focus", "explore", "manage")`: `go_to_space(space)` returns `f"space:{space}"` and `render_p2_shell(space)["route"]` matches that value.
++- `go_to_space("not-a-space")` raises `ValueError`.
++- `render_shell()` still returns exactly `"P1 shell placeholder"` (P1 non-regression).
++
++## 9. Anti-sycophancy (Reviewer criteria)
++- Verify against the working tree / commit diff, not the Coder's prose: `render_p2_shell` and `go_to_space` must exist in `app/ui/shell.py` and be callable as described in §8.
++- Confirm the seven-tab top nav is not reintroduced; navigation must be space-based (`nav` / space-switcher), not a seven-item tab list.
++- Reject approval if §3 acceptance items are only claimed verbally without an observed smoke pass matching §8.
++- Do not approve solely because the Overview sounds implemented; check that unknown spaces error and that P1 `render_shell()` is unchanged.
++- Flag if this document's acceptance surface was expanded by the implementer without Architect/Orchestrator authority (spec-immutability): §§8–9 added by Coder must be treated as provisional until Architect ACK.
