@@ -1,0 +1,42 @@
+warning: in the working copy of 'app/ui/shell.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/ux/P2-impl-notes.md', LF will be replaced by CRLF the next time Git touches it
+=== Scenario A: rubric capture (commit 776f042 pattern) ===
+warning: in the working copy of 'app/ui/shell.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/ux/P2-impl-notes.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/ui/shell.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/ux/P2-impl-notes.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/ui/shell.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/ux/P2-impl-notes.md', LF will be replaced by CRLF the next time Git touches it
+=== Scenario B: technical HOLD (§3.10) ===
+warning: in the working copy of 'app/ui/shell.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.HOLD', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/devswarm/AUDIT.md', LF will be replaced by CRLF the next time Git touches it
+=== Scenario C: phase/branch mismatch (fifth compounding failure) ===
+warning: in the working copy of 'app/ui/shell.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/ui/shell.py', LF will be replaced by CRLF the next time Git touches it
+=== Scenario D: fabricated deliverable (§3.8) ===
+warning: in the working copy of 'docs/devswarm/EXPLORER-P2-MAP.md', LF will be replaced by CRLF the next time Git touches it
+=== Scenario E: SHA-anchored contract read (§3.1) ===
+=== Scenario F: stash identifier stability (§3.3) ===
+warning: in the working copy of 'app/ui/shell.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/ui/shell.py', LF will be replaced by CRLF the next time Git touches it
+=== Scenario G: composed hooks via wrapper (installation-mechanism check) ===
+warning: in the working copy of 'app/ui/shell.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/ux/P2-impl-notes.md', LF will be replaced by CRLF the next time Git touches it
+
+================ RESULTS ================
+PASS | A1 baseline (no hook): Coder expands spec 4->10 + ships code in one commit | expected=0 got=0
+PASS | A2 protected (spec-immutability hook): same Coder commit as A1 | expected=1 got=1
+PASS | A3 protected: Architect legitimate spec-only edit (no false positive) | expected=0 got=0
+PASS | B1 Coder commits while .HOLD present | expected=1 got=1
+PASS | B2 Orchestrator commits while .HOLD present (must remain able to act) | expected=0 got=0
+PASS | C1 P2-tagged commit landing on ux/p1-* branch (DevSwarm P2 shape) | expected=1 got=1
+PASS | C2 P2-tagged commit on matching ux/p2-* branch (no false positive) | expected=0 got=0
+PASS | D1 loose untracked file claimed as Explorer deliverable | expected=1 got=1
+PASS | D2 same file, actually committed on explorer branch (no false positive) | expected=0 got=0
+PASS | E1 spec is readable via git show <sha>:path (contract mechanism exists) | expected=0 got=0
+PASS | F1 locate the P2-on-P1 stash by message, not by stash@{0} | expected=0 got=0
+PASS | G1 composed wrapper (spec-immutability + HOLD) rejects Coder commit | expected=1 got=1
+PASS | G2 rejection is for the immutability reason, not a missing-script error | expected=0 got=0
+===========================================
+PASS=13 FAIL=0
