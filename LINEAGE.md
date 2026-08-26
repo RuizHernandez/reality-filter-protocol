@@ -86,3 +86,48 @@ eleven scenarios replaying the `776f042` incident's artifact-level shape in a di
 repository — 11/11 pass. This closes part of the §3.11 roadmap item empirically; it does not
 validate Rules 1–2 (anti-sycophancy, reality filter), which require a live-agent evaluation per
 `CONTRIBUTING.md`. See `validation/REPORT.md` for method, results, and limitations.
+
+## Release `v1.3.1` — proposed, 2026-08-25
+
+**[Empirical]** Citation refresh, sourced via Elicit paper search and cross-checked directly
+against arXiv/DOI resolvers (not by semantic-search relevance alone): five citations added to
+`PROTOCOL.md`'s "Grounded in research" section —
+
+- Young (2026) arXiv:2603.22582 — CoT-faithfulness across 12 open-weight reasoning models
+  (41,832 runs), added to Rule 2.
+- MacDiarmid et al. (2025) arXiv:2511.18397 — production-RL reward-hacking generalizing to
+  sabotage/alignment-faking, added alongside Denison et al. (2024) in the v1.2 incident section.
+- Yang et al. (2025) arXiv:2512.16279 (QuadSentinel) — flagged as existing prior art against the
+  §3.11 "future technical enforcement" roadmap item, not yet adopted as a rule.
+- Kraidia et al. (2026, *Scientific Reports*) and Yan et al. (2026) — quantitative multi-agent
+  persuasion/misinformation-propagation results, added to support §5's evaluator-immunity
+  principle beyond the single DevSwarm anecdote.
+
+**[Unverified]** The existing Wooldridge (AAMAS) DOI:10.65109/ktwn2820 citation resolves (HTTP
+302 → dl.acm.org) but its title could not be confirmed past the Cloudflare interstitial on the
+resolved page in this pass; left as a `TODO` in `PROTOCOL.md` for the author to fill in from their
+own record rather than have a title backfilled by inference.
+
+No `PROTOCOL.md` §1–§5 rule text changed — this release touches only the citation list and this
+changelog. Author review and version-number sign-off pending; see the corresponding `v1.3.1
+(proposed)` changelog entry in `PROTOCOL.md`.
+
+## Adapter resync — `adapters/antigravity/SKILL.md`, proposed 2026-08-25
+
+**[Empirical]** `adapters/antigravity/SKILL.md` had drifted: its own frontmatter and footer read
+"Synced to PROTOCOL.md v1.2.0" while `README.md` names `v1.3.0` as canonical. Concretely, it
+still used full-word epistemic labels (`[Empirical]`/`[Inference]`/`[Speculation]`/`[Unverified]`)
+everywhere instead of the `[E]`/`[I]`/`[S]`/`[U]` short-form default that v1.3.0 introduced, it
+reproduced §3.1–§3.10 verbatim (all DevSwarm-specific worktree/stash/SHA subsections) instead of
+condensing them, and it was missing §3.11. File size was 9.5 KB against 2.5–2.7 KB for the
+Claude Code and Cursor adapters, for the same three universal rules.
+
+**Fix applied:** resynced to `v1.3.0` using the Cursor adapter's density pattern — §1–§5 each
+condensed to one paragraph, §3.1–§3.11 folded into a single sentence naming every enforced item
+rather than a subsection per item, short-form tags as default. The three Antigravity-specific
+"Applying this" bullets (`invoke_subagent`/`send_message` verification, native-tool verification,
+artifact integrity) were kept and lightly reworded to match the other adapters' "Applying this in
+X" heading — that section is platform-specific value, not duplication, and the audit that found
+this drift did not flag it. Net size: 9.5 KB → ~2.6 KB. No rule semantics changed; this is a
+sync and compression fix only. Author review pending before treating this as the adapter's
+official v1.3.0 sync.
