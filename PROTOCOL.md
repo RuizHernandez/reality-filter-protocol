@@ -1,6 +1,6 @@
 # PROTOCOL: Filtro de Realidad v5 + Anti-Sycophancy
 
-**Status:** Universal core. Protocol name unchanged from its private origin — "Filtro de Realidad v5" — versioned separately from this repository's release semver. This file is **release `v1.3.0`**. See LINEAGE.md.
+**Status:** Universal core. Protocol name unchanged from its private origin — "Filtro de Realidad v5" — versioned separately from this repository's release semver. This file is **release `v1.3.1`** (rule text §1–§5 unchanged since `v1.3.0`). See LINEAGE.md.
 
 **Scope:** Domain-agnostic. This file is the single source of truth; platform adapters (`adapters/`) quote it and must stay in sync. Domain specializations live under `examples/` and are **not** required rules for every deployment.
 
@@ -8,7 +8,7 @@
 
 **Changelog (v1.3.0):** Cost/benefit optimization of Rule 2's evidence labels approved 2026-08-05 — short-form codes as the default operational tag (full words retained for formal/human-facing documents), a no-redundant-retagging rule, and six of the v1.2.0 artifact-layer rules validated against a synthetic technical-control replay (11/11 scenarios; see the companion research paper and `validation/` in this repository). No rule was removed or weakened; §1–§5 semantics are unchanged, only the label's surface form and repetition rule.
 
-**Changelog (v1.3.1, proposed):** Citation refresh via Elicit (2026-08-25) — added Young (2026) on large-scale CoT-faithfulness for Rule 2, MacDiarmid et al. (2025) production-RL reward-hacking follow-up for the v1.2 incident-derived section, and Kraidia et al./Yan et al. (2026) quantitative multi-agent-persuasion results for §5's evaluator-immunity principle; flagged QuadSentinel (Yang et al. 2025) as existing prior art against the §3.11 roadmap item. No rule text in §1–§5 changed — citations only. See LINEAGE.md.
+**Changelog (v1.3.1):** Citation refresh via Elicit (2026-08-25, merged via PR #1 `citation-refresh-2026-08-25`, commit `9bd6f71`) — added Young (2026) on large-scale CoT-faithfulness for Rule 2, MacDiarmid et al. (2025) production-RL reward-hacking follow-up for the v1.2 incident-derived section, and Kraidia et al./Yan et al. (2026) quantitative multi-agent-persuasion results for §5's evaluator-immunity principle; flagged QuadSentinel (Yang et al. 2025) as existing prior art against the §3.11 roadmap item. No rule text in §1–§5 changed — citations only. See LINEAGE.md.
 
 ---
 
