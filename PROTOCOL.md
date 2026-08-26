@@ -8,6 +8,8 @@
 
 **Changelog (v1.3.0):** Cost/benefit optimization of Rule 2's evidence labels approved 2026-08-05 — short-form codes as the default operational tag (full words retained for formal/human-facing documents), a no-redundant-retagging rule, and six of the v1.2.0 artifact-layer rules validated against a synthetic technical-control replay (11/11 scenarios; see the companion research paper and `validation/` in this repository). No rule was removed or weakened; §1–§5 semantics are unchanged, only the label's surface form and repetition rule.
 
+**Changelog (v1.3.1, proposed):** Citation refresh via Elicit (2026-08-25) — added Young (2026) on large-scale CoT-faithfulness for Rule 2, MacDiarmid et al. (2025) production-RL reward-hacking follow-up for the v1.2 incident-derived section, and Kraidia et al./Yan et al. (2026) quantitative multi-agent-persuasion results for §5's evaluator-immunity principle; flagged QuadSentinel (Yang et al. 2025) as existing prior art against the §3.11 roadmap item. No rule text in §1–§5 changed — citations only. See LINEAGE.md.
+
 ---
 
 ## 1. Anti-Sycophancy (both directions)
@@ -125,10 +127,10 @@ Citations show the *problem* is real — they are not evidence that this protoco
 
 **Rule 1 — Anti-Sycophancy.** Sharma et al. (ICLR 2024) arXiv:2310.13548; Wei et al. (2023) arXiv:2308.03958.
 
-**Rule 2 — Reality Filter.** Turpin et al. (NeurIPS 2023) arXiv:2305.04388; Lanham et al. (2023) arXiv:2307.13702; Ji et al. (EMNLP 2025) arXiv:2503.14477.
+**Rule 2 — Reality Filter.** Turpin et al. (NeurIPS 2023) arXiv:2305.04388; Lanham et al. (2023) arXiv:2307.13702; Ji et al. (EMNLP 2025) arXiv:2503.14477; Young (2026) arXiv:2603.22582 — 41,832-run study across 12 open-weight reasoning models, sycophancy-hint acknowledgment as low as 53.9%, with a gap between internal (~87.5%) and stated (~28.6%) hint recognition.
 
-**Rule 3 — State-verification over authority.** Wooldridge (AAMAS) DOI:10.65109/ktwn2820; Zhu et al. (2025) arXiv:2512.11147.
+**Rule 3 — State-verification over authority.** Wooldridge (AAMAS) DOI:10.65109/ktwn2820 [**TODO — title not independently confirmed past DOI resolution; author should fill in from own record rather than have this backfilled by inference**]; Zhu et al. (2025) arXiv:2512.11147. §3.11 roadmap has prior art as of 2025: Yang et al. (2025) arXiv:2512.16279 (QuadSentinel) compiles natural-language policy into machine-checkable predicate rules via a four-agent guard — the same text-to-technical-gate gap this section flags, not yet adopted here.
 
-**Incident-derived engineering (v1.2).** Document-layer reward tampering aligns with Denison et al. (2024) arXiv:2406.10162 and multi-agent persuasive-error propagation (Amayuelas et al., EMNLP 2024). Hook empty-payload / BOM failures are harness observations, not controlled security proofs.
+**Incident-derived engineering (v1.2).** Document-layer reward tampering aligns with Denison et al. (2024) arXiv:2406.10162, extended to production coding-agent RL by MacDiarmid et al. (2025) arXiv:2511.18397 (reward hacking generalizing to sabotage and alignment-faking in live coding environments); multi-agent persuasive-error propagation (Amayuelas et al., EMNLP 2024), quantified further by Kraidia et al. (2026, *Scientific Reports*, DOI:10.1038/s41598-026-42705-7 — a single adversarial debate agent drops group accuracy 10–40%, and inference-time techniques like Best-of-N/RAG amplify rather than mitigate the effect) and Yan et al. (2026) — aggregate truth recovery collapsing from 72.50% to 14.17% when one agent holds falsified evidence. Hook empty-payload / BOM failures are harness observations, not controlled security proofs.
 
-*Base literature search via Elicit (2026-07-22). v1.2 incident rules approved 2026-07-24. Items 27–29 (lab biochemistry style) intentionally excluded — skill bio-research only.*
+*Base literature search via Elicit (2026-07-22); citation refresh via Elicit (2026-08-25). v1.2 incident rules approved 2026-07-24. Items 27–29 (lab biochemistry style) intentionally excluded — skill bio-research only.*
