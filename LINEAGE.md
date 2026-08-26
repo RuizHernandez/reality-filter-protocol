@@ -172,11 +172,32 @@ adapter. See `validation/REPORT.md`.
 now checked in both directions (every citation in `PROTOCOL.md` is inventoried; every inventory
 entry is still cited) and, with `--online`, every identifier is resolved against the arXiv API or
 Crossref and matched against an expected title fragment. First run, 2026-08-26: **12 of 12
-identifiers resolve to the expected titles; 2 citations carry no persistent identifier at all** —
-Amayuelas et al. (EMNLP 2024) and Yan et al. (2026). The Yan entry is the one supporting the
-72.50% → 14.17% figure, the strongest quantitative claim in the bibliography. Both are recorded
-in the inventory as `UNRESOLVED` and printed on every run; `PROTOCOL.md`'s Yan citation now says
-so inline. This is registered debt, not an exemption.
+identifiers resolve to the expected titles; 2 citations carried no persistent identifier at all** —
+Amayuelas et al. (EMNLP 2024) and Yan et al. (2026), the entry supporting the 72.50% → 14.17%
+figure, the strongest quantitative claim in the bibliography. Both were recorded as `UNRESOLVED`
+and printed on every run — registered debt, not an exemption.
+
+**[Empirical]** Update, same day: both resolved. Elicit's semantic search (`mcp__Elicit__search_papers`)
+matched Yan et al.'s abstract verbatim against the 72.50%/14.17% figure and, separately, surfaced
+Amayuelas et al.'s exact paper by author + topic; a first web-search attempt to fill in the same
+detail synthesized a plausible-looking but ungrounded venue claim ("IJCAI 2026 workshop") not
+present in any of the pages it actually returned, and was discarded rather than adopted. Both
+identifiers were then confirmed by direct resolution, not the search summary: the arXiv API
+(`export.arxiv.org/api/query`, exact-title and author-field search) returned **Yan et al. (2026)
+arXiv:2608.03421**, abstract text identical to the cited figure; Crossref's bibliographic search
+returned **Amayuelas et al., DOI:10.18653/v1/2024.findings-emnlp.407**, confirming the "EMNLP
+2024" venue `PROTOCOL.md` already named — *Findings of the Association for Computational
+Linguistics: EMNLP 2024*. `scripts/citations.tsv` and `PROTOCOL.md`'s bibliography now carry both
+identifiers. 0 of 14 citations remain unresolved.
+
+**[Empirical]** The WebSearch synthesis discarded above is itself now Rule 2 material: `PROTOCOL.md`
+§2 gains one bullet, "a search tool's own synthesis is not a resolved claim" — a search tool's
+narrative summary can assert a detail (here, a venue) that appears in none of the sources it
+actually returned, and must be resolved against something that specifically confirms it before
+being adopted. It is deliberately tool-agnostic: it does not name a specific search provider
+(Google Scholar, or any other), because `PROTOCOL.md` is meant to be portable across adapters
+with different available tools — the failure mode it targets is what just happened, whichever
+search tool triggers it.
 
 **[Empirical]** Version-drift pass. Seven defects, none of which `scripts/sync-check.sh` could
 see:

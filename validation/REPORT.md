@@ -194,9 +194,13 @@ deny by default. The checker was fixed before this report was written.
 `scripts/citations.tsv` in both directions, and with `--online` resolves every
 identifier against the arXiv API or Crossref and matches it to an expected
 title fragment. First run, 2026-08-26: 12 of 12 identifiers resolved to their
-expected titles; 2 citations (Amayuelas et al. 2024; Yan et al. 2026) carry no
-persistent identifier and are recorded as `UNRESOLVED`, reported on every run.
-The offline structural check is the CI default so the build stays
+expected titles; 2 citations (Amayuelas et al. 2024; Yan et al. 2026) carried no
+persistent identifier and were recorded as `UNRESOLVED`. Both were resolved the same day —
+Amayuelas et al. to DOI:10.18653/v1/2024.findings-emnlp.407 (Crossref bibliographic search),
+Yan et al. to arXiv:2608.03421 (arXiv API exact-title search) — after Elicit's semantic search
+surfaced the candidate papers; see `LINEAGE.md` for the full method, including a WebSearch
+synthesis that was discarded for asserting a venue no returned source actually stated. All 14
+citations now resolve; the offline structural check remains the CI default so the build stays
 deterministic when the resolvers are unreachable.
 
 ## Reproduce it

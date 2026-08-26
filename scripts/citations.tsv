@@ -21,5 +21,5 @@ Yang	2025	arxiv	2512.16279	QuadSentinel	Rule 3 / §3.11 prior art
 Denison	2024	arxiv	2406.10162	Sycophancy to Subterfuge	v1.2 incident-derived
 MacDiarmid	2025	arxiv	2511.18397	Natural Emergent Misalignment from Reward Hacking	v1.2 incident-derived
 Kraidia	2026	doi	10.1038/s41598-026-42705-7	When collaboration fails	v1.2 incident-derived / §3.12
-Amayuelas	2024	none	-	-	UNRESOLVED: cited as "EMNLP 2024" with no arXiv id or DOI in PROTOCOL.md; not resolved as of 2026-08-26
-Yan	2026	none	-	-	UNRESOLVED: carries the 72.50%->14.17% figure, the strongest quantitative claim in the bibliography, with no locatable identifier as of 2026-08-26
+Amayuelas	2024	doi	10.18653/v1/2024.findings-emnlp.407	MultiAgent Collaboration Attack	v1.2 incident-derived; resolved 2026-08-26 via Elicit (semantic match) + arXiv API + Crossref bibliographic search
+Yan	2026	arxiv	2608.03421	When Truth Is Distributed	v1.2 incident-derived / §3.12; resolved 2026-08-26 via Elicit (semantic match, exact abstract text) + arXiv API
