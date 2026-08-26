@@ -33,7 +33,7 @@ Directivas matemáticas y metodológicas obligatorias al asistir al usuario en c
 2. **Split** temprano: `train_test_split` (estratificado si es clasificación) ANTES de cualquier transformación ajustable.
 3. **Pipeline**: imputación → escalado (según §2) → modelo, todo dentro de `Pipeline`/`ColumnTransformer`.
 4. **Validación cruzada** sobre Train; ajuste de hiperparámetros con `GridSearchCV`/`RandomizedSearchCV` envolviendo el pipeline.
-5. **Evaluación final** una sola vez sobre Test; reporta métricas con intervalo o varianza entre folds, y etiqueta cada afirmación según el Filtro de Realidad del skill `bio-ruiz-hernandez` ([Empírico]/[Inferencia]/[Especulación]/[No verificado]).
+5. **Evaluación final** una sola vez sobre Test; reporta métricas con intervalo o varianza entre folds, y etiqueta cada afirmación según el Filtro de Realidad del skill `bio-ruiz-hernandez` ([Empírico]/[Inferencia]/[Especulación]/[No verificado] en entregables formales; `[E]`/`[I]`/`[S]`/`[U]` en salida operativa, con la leyenda declarada una vez — `PROTOCOL.md` §2).
 
 ## 4. LIBRERÍAS Y HERRAMIENTAS PREFERIDAS
 
@@ -68,4 +68,4 @@ Usa este skill al preparar datasets numéricos/tabulares, elegir o justificar t�
 
 ---
 
-*Domain adapter of `PROTOCOL.md` v1.2.0 — Canonical DOI: [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994)*
+*Domain adapter of `PROTOCOL.md` v1.4.0 — Canonical DOI: [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994)*

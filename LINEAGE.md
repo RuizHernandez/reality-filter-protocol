@@ -82,8 +82,8 @@ semantics changed — this is a token-cost optimization of the label's surface f
 **[Empirical]** Six of the v1.2.0 artifact-layer rules (specification immutability, technical
 HOLD, fabricated-deliverable detection, SHA-anchored contracts, stash identifier stability, and an
 incident-derived phase/branch gate) were implemented as executable git hooks and validated against
-eleven scenarios replaying the `776f042` incident's artifact-level shape in a disposable synthetic
-repository — 11/11 pass. This closes part of the §3.11 roadmap item empirically; it does not
+thirteen scenarios replaying the `776f042` incident's artifact-level shape in a disposable
+synthetic repository — 13/13 pass. This closes part of the §3.11 roadmap item empirically; it does not
 validate Rules 1–2 (anti-sycophancy, reality filter), which require a live-agent evaluation per
 `CONTRIBUTING.md`. See `validation/REPORT.md` for method, results, and limitations.
 
@@ -129,6 +129,78 @@ rather than a subsection per item, short-form tags as default. The three Antigra
 "Applying this" bullets (`invoke_subagent`/`send_message` verification, native-tool verification,
 artifact integrity) were kept and lightly reworded to match the other adapters' "Applying this in
 X" heading — that section is platform-specific value, not duplication, and the audit that found
-this drift did not flag it. Net size: 9.5 KB → ~2.6 KB. No rule semantics changed; this is a
+this drift did not flag it. Net size: 9550 → 3842 bytes (9.5 KB → 3.8 KB). No rule semantics changed; this is a
 sync and compression fix only. Merged via PR #1 `citation-refresh-2026-08-25` (commit `9bd6f71`);
 this is the adapter's official v1.3.0 sync.
+
+## Release `v1.4.0` — 2026-08-26
+
+**[Empirical]** Adds `PROTOCOL.md` §3.12 (peer verification independence) — the first §3
+subsection derived from published literature rather than from an observed incident, and marked
+`[Literature-derived, not incident-derived]` in the rule text itself so that §3's
+incident-derived property does not quietly become false. It specializes Rule 2's "never accept a
+report as state" for horizontal (peer-to-peer) topologies, which §3 previously addressed only
+vertically (orchestrator ↔ subordinate).
+
+Three drafting decisions are worth recording, because the first draft of this rule (proposed by a
+third-party model review, 2026-08-26) had them the other way round:
+
+- **Independence is defined over artifact and method, not over command text.** The draft
+  prohibited re-running the sender's exact command. That contradicts §3.1, which *prescribes*
+  `git show <canonical_sha>:path` — a canonical form expected to be byte-identical across agents.
+  As drafted, the rule would have flagged protocol-compliant behavior. The shipped rule instead
+  targets the failure that the draft's example actually illustrated: a **narrowed** read
+  (`head`, `tail`, a filtered `grep`) accepted as verification of a whole-artifact claim.
+- **`peer-unverified` is a log event type, not an epistemic label.** The draft introduced it as a
+  fifth bracket token alongside `[E]`/`[I]`/`[S]`/`[U]`, which would have diluted the four-label
+  vocabulary v1.3.0 had just settled.
+- **The rule is a specialization, not a discovery.** Rule 2 already covers "a subordinate agent,
+  a tool summary, or your own prior reasoning." §3.12 makes the horizontal case explicit; it does
+  not add a principle.
+
+**[Empirical]** §3.12 ships with eight executable scenarios
+(`validation/peer_verification_suite.sh`, 8/8 pass, log at `validation/peer_run_2026-08-26.log`).
+Every PASS/FAIL is the exit code of a real invocation of
+`validation/lib/peer_verification_check.sh` against a fixture transcript. Two of the eight are
+false-positive guards (canonical re-read allowed; full read allowed) and two are §4.1
+fail-closed guards added after a mutation test showed the checker's first version returned 0 for
+an empty or unparseable transcript. What this does **not** establish: that any agent complies
+with §3.12, that a flagged claim was actually false, or that the checker is wired into any
+adapter. See `validation/REPORT.md`.
+
+**[Empirical]** New `scripts/check-citations.sh` + `scripts/citations.tsv`. The bibliography is
+now checked in both directions (every citation in `PROTOCOL.md` is inventoried; every inventory
+entry is still cited) and, with `--online`, every identifier is resolved against the arXiv API or
+Crossref and matched against an expected title fragment. First run, 2026-08-26: **12 of 12
+identifiers resolve to the expected titles; 2 citations carry no persistent identifier at all** —
+Amayuelas et al. (EMNLP 2024) and Yan et al. (2026). The Yan entry is the one supporting the
+72.50% → 14.17% figure, the strongest quantitative claim in the bibliography. Both are recorded
+in the inventory as `UNRESOLVED` and printed on every run; `PROTOCOL.md`'s Yan citation now says
+so inline. This is registered debt, not an exemption.
+
+**[Empirical]** Version-drift pass. Seven defects, none of which `scripts/sync-check.sh` could
+see:
+
+| File | Was | Now |
+|---|---|---|
+| `README.es.md` | `v1.2.0` | `v1.4.0` |
+| `CITATION.cff` | `1.3.0` | `1.4.0` |
+| `adapters/gemini-cli/bio-ruiz-hernandez/SKILL.md` | `v1.2.0` footer | `v1.4.0` |
+| `adapters/gemini-cli/numerical-data-analysis/SKILL.md` | `v1.2.0` footer | `v1.4.0` |
+| `scripts/sync-check.sh` comment | claimed the gemini-cli skills "carry no PROTOCOL.md version marker" — both carried one | comment corrected, both files now checked |
+| `PROTOCOL.md` / `LINEAGE.md` scenario count | stated 11 ("eleven scenarios") | 13, matching `validation/REPORT.md` and the run log |
+| `LINEAGE.md` Antigravity resync size | "9.5 KB → ~2.6 KB" | 9550 → 3842 bytes (9.5 KB → 3.8 KB), from `git show` |
+
+Also corrected: `README.md` and `.zenodo.json` still described the source project as
+"computational-chemistry", a domain reference commit `9d49480` had anonymized everywhere else to
+"machine-learning software application."
+
+`scripts/sync-check.sh` was widened to cover `README.es.md`, `CITATION.cff`, `.zenodo.json` and
+both gemini-cli skills, and to cross-check the scenario count between `PROTOCOL.md`,
+`LINEAGE.md` and `validation/REPORT.md`.
+
+**Not done in this release:** the anti-sycophancy worked examples (`examples/`) discussed
+alongside this work are deferred pending a decision on whether they derive from real transcripts
+(which would put them in `validation/` with a chain of custody) or are illustrative and synthetic
+(which needs its own clearly-labeled directory, since `examples/` is defined above as undiluted
+reproduction from the private source). No `[E]`-tier evidence about Rules 1–2 is added here.

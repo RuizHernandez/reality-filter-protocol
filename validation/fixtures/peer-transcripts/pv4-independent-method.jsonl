@@ -1,0 +1,2 @@
+{"seq":1,"agent":"analyst","event":"claim","label":"E","scope":"config.yaml","tools":["grep 'timeout: 30' config.yaml"]}
+{"seq":2,"agent":"reviewer","event":"claim","label":"E","scope":"config.yaml","tools":["python3 -c \"import yaml; print(yaml.safe_load(open('config.yaml'))['server']['timeout'])\""]}

@@ -134,11 +134,85 @@ Role 'coder' may not commit while HOLD is active.
    now blocks it. Closing that remaining gap needs the live-agent A/B
    described in `CONTRIBUTING.md`.
 
+## Peer-verification suite (§3.12, added 2026-08-26)
+
+`PROTOCOL.md` §3.12 (peer verification independence) ships with its own harness,
+separate from the replay above because it exercises a different control:
+`validation/lib/peer_verification_check.sh`, a checker that reads an
+orchestration transcript and answers one question — for every claim the
+receiving agent labels `[E]`, did that agent read the claimed artifact itself,
+at a scope covering the claim?
+
+Run it with `bash validation/peer_verification_suite.sh`. As above, **every
+PASS/FAIL is the exit code of a real invocation of the checker against a
+fixture transcript** — not a comparison of two string literals, and not a
+prediction.
+
+| # | Scenario | Expected | Why it is in the suite |
+|---|---|---|---|
+| PV1 | Receiver adopts a peer's `[E]` having run nothing | reject (1) | The base failure §3.12 names |
+| PV2 | Two agreeing peers, receiver claims `[E]` with no artifact trace | reject (1) | Consensus is not verification |
+| PV3 | Receiver re-runs the sender's *canonical* `git show <sha>:path` | allow (0) | **False-positive guard.** §3.1 prescribes this exact command; a rule that flagged it would contradict the protocol |
+| PV4 | Receiver verifies the same artifact by a different method | allow (0) | False-positive guard |
+| PV5 | Receiver's only read of the artifact is truncated (`head -5`) | reject (1) | The narrowing is where a contradicting record hides |
+| PV6 | Same artifact, same sender, receiver reads it in full | allow (0) | False-positive guard against PV5's rule |
+| PV7 | Empty transcript | invalid input (2) | §4.1 fail-closed |
+| PV8 | Unparseable transcript | invalid input (2) | §4.1 fail-closed |
+
+Result, run 2026-08-26: **PASS=8 FAIL=0** (`validation/peer_run_2026-08-26.log`).
+
+PV7/PV8 exist because a mutation test on the checker's first version showed it
+returned `0` for a transcript it could not parse — a fail-open in a checker
+whose own protocol (§4.1) says an empty payload is a dispatch failure and must
+deny by default. The checker was fixed before this report was written.
+
+### What the peer suite does not establish
+
+1. **It does not test any LLM.** Nothing here shows an agent complies with
+   §3.12, or is more likely to verify a peer's claim when the rule is loaded.
+   That remains the unrun live-agent evaluation in `CONTRIBUTING.md`, exactly
+   as for Rules 1–2.
+2. **It checks the shape of verification, not the truth of the claim.** PV5's
+   `head -5` is rejected because the read is narrower than the claim, not
+   because the harness knows what the hidden rows contain. A narrowed read of
+   an artifact with nothing to hide is flagged identically — that is the
+   intended conservative behaviour, and it is a false-positive source in
+   production.
+3. **Nothing consumes this checker yet.** It is not wired into any adapter, and
+   no adapter emits transcripts in this schema. The transcript format used by
+   the fixtures (`validation/fixtures/peer-transcripts/*.jsonl`) is this
+   harness's own, chosen to be minimal; mapping a real harness's transcript
+   onto it is unbuilt work.
+4. **Command classification is heuristic.** "Narrowing" is detected by matching
+   `head`/`tail`/`grep`/`cut`/`sed -n`/`awk NR<`. A truncating read by some
+   other means is not recognised, and a `grep` that genuinely covers the claim
+   scope is flagged anyway.
+
+## Citation checking (added 2026-08-26)
+
+`scripts/check-citations.sh` verifies `PROTOCOL.md`'s bibliography against
+`scripts/citations.tsv` in both directions, and with `--online` resolves every
+identifier against the arXiv API or Crossref and matches it to an expected
+title fragment. First run, 2026-08-26: 12 of 12 identifiers resolved to their
+expected titles; 2 citations (Amayuelas et al. 2024; Yan et al. 2026) carry no
+persistent identifier and are recorded as `UNRESOLVED`, reported on every run.
+The offline structural check is the CI default so the build stays
+deterministic when the resolvers are unreachable.
+
 ## Reproduce it
 
 ```bash
-cd tools/reality-filter-protocol/validation
-bash replay_incident.sh /path/to/scratch-dir
+# artifact-layer replay (13 scenarios)
+bash validation/replay_incident.sh /path/to/scratch-dir
+
+# peer-verification checker (§3.12, 8 scenarios)
+bash validation/peer_verification_suite.sh
+
+# bibliography (structural; add --online to resolve every identifier)
+bash scripts/check-citations.sh
+
+# cross-file version and scenario-count consistency
+bash scripts/sync-check.sh
 ```
 
 The script is idempotent (wipes and rebuilds the scratch repo each run) and

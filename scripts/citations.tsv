@@ -1,0 +1,25 @@
+# Citation inventory for PROTOCOL.md's "Grounded in research" section.
+# Checked by scripts/check-citations.sh in both directions: every citation in
+# PROTOCOL.md must appear here, and every entry here must appear in PROTOCOL.md.
+#
+# Columns: surname <TAB> year <TAB> id_type <TAB> id <TAB> title_fragment <TAB> note
+# id_type "none" = no persistent identifier located. Such an entry MUST carry a
+# note saying so; the check reports it as UNRESOLVED on every run. It is
+# registered debt, deliberately visible — not an exemption.
+#
+# Title fragments were taken from the resolver responses (arXiv API / Crossref)
+# on 2026-08-26, not from memory.
+Sharma	2024	arxiv	2310.13548	Towards Understanding Sycophancy in Language Models	Rule 1
+Wei	2023	arxiv	2308.03958	Simple synthetic data reduces sycophancy	Rule 1
+Turpin	2023	arxiv	2305.04388	Language Models Don't Always Say What They Think	Rule 2
+Lanham	2023	arxiv	2307.13702	Measuring Faithfulness in Chain-of-Thought Reasoning	Rule 2
+Ji	2025	arxiv	2503.14477	Calibrating Verbal Uncertainty	Rule 2
+Young	2026	arxiv	2603.22582	How Faithful Is Chain-of-Thought Reasoning	Rule 2
+Wooldridge	2026	doi	10.65109/ktwn2820	Rethinking Multi-agent Systems in the Era of LLMs	Rule 3
+Zhu	2025	arxiv	2512.11147	Least Privilege Framework for Authorizing Tool Calling Agents	Rule 3
+Yang	2025	arxiv	2512.16279	QuadSentinel	Rule 3 / §3.11 prior art
+Denison	2024	arxiv	2406.10162	Sycophancy to Subterfuge	v1.2 incident-derived
+MacDiarmid	2025	arxiv	2511.18397	Natural Emergent Misalignment from Reward Hacking	v1.2 incident-derived
+Kraidia	2026	doi	10.1038/s41598-026-42705-7	When collaboration fails	v1.2 incident-derived / §3.12
+Amayuelas	2024	none	-	-	UNRESOLVED: cited as "EMNLP 2024" with no arXiv id or DOI in PROTOCOL.md; not resolved as of 2026-08-26
+Yan	2026	none	-	-	UNRESOLVED: carries the 72.50%->14.17% figure, the strongest quantitative claim in the bibliography, with no locatable identifier as of 2026-08-26

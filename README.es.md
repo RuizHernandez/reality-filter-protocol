@@ -6,7 +6,7 @@ Un protocolo de conducta público, agnóstico de modelo y citable, para asistent
 
 [![Licencia: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
-**Nombre del protocolo:** *Filtro de Realidad v5* (conservado de su origen privado). **Versión de la release:** `v1.2.0` (ver [LINEAGE.md](LINEAGE.md) para entender por qué el nombre del protocolo y el semver de la release son contadores distintos). **Último DOI archivado/citable:** [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994) — cubre el snapshot `v1.0.0`; aquí se añadirá el DOI específico de `v1.2.0` cuando Zenodo lo emita.
+**Nombre del protocolo:** *Filtro de Realidad v5* (conservado de su origen privado). **Versión de la release:** `v1.4.0` (ver [LINEAGE.md](LINEAGE.md) para entender por qué el nombre del protocolo y el semver de la release son contadores distintos). **Último DOI archivado/citable:** [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994) — cubre el snapshot `v1.0.0`; aquí se añadirá el DOI específico de `v1.4.0` cuando Zenodo lo emita.
 
 ## Skills de dominio incluidos
 

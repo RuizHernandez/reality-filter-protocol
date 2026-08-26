@@ -11,5 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify PROTOCOL.md / LINEAGE.md / README.md / adapters are in sync
+      - name: Verify PROTOCOL.md / LINEAGE.md / READMEs / citation metadata / adapters are in sync
         run: bash scripts/sync-check.sh
+      - name: Verify the bibliography against the citation inventory
+        # Structural only. Identifier resolution needs the network and is run
+        # deliberately (`--online`) rather than on every push, so a resolver
+        # outage cannot turn into a red build on an unrelated change.
+        run: bash scripts/check-citations.sh
+
+  validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Artifact-layer replay (PROTOCOL.md §3.1/§3.2/§3.3/§3.8/§3.10)
+        run: bash validation/replay_incident.sh "$RUNNER_TEMP/replay"
+      - name: Peer-verification checker (PROTOCOL.md §3.12)
+        run: bash validation/peer_verification_suite.sh

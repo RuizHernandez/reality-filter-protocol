@@ -1,0 +1,2 @@
+{"seq":1,"agent":"analyst-adversarial","event":"claim","label":"E","scope":"metrics.csv","tools":["head -5 metrics.csv"]}
+{"seq":2,"agent":"reviewer","event":"claim","label":"E","scope":"metrics.csv","tools":["head -5 metrics.csv"]}
