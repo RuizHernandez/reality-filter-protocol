@@ -8,10 +8,10 @@ swarms.
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
 **Protocol name:** *Filtro de Realidad v5* (preserved from its private origin). **Release
-version:** `v1.3.0` (see [LINEAGE.md](LINEAGE.md) for why the protocol name and release semver
+version:** `v1.3.1` (see [LINEAGE.md](LINEAGE.md) for why the protocol name and release semver
 are different counters). **Latest archived/citable DOI:**
 [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994) — this covers the `v1.0.0`
-snapshot; a `v1.3.0`-specific DOI will be added here once Zenodo mints it.
+snapshot; a `v1.3.1`-specific DOI will be added here once Zenodo mints it.
 
 ## Included domain skills
 

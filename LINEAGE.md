@@ -87,7 +87,7 @@ repository — 11/11 pass. This closes part of the §3.11 roadmap item empirical
 validate Rules 1–2 (anti-sycophancy, reality filter), which require a live-agent evaluation per
 `CONTRIBUTING.md`. See `validation/REPORT.md` for method, results, and limitations.
 
-## Release `v1.3.1` — proposed, 2026-08-25
+## Release `v1.3.1` — 2026-08-25
 
 **[Empirical]** Citation refresh, sourced via Elicit paper search and cross-checked directly
 against arXiv/DOI resolvers (not by semantic-search relevance alone): five citations added to
@@ -109,10 +109,10 @@ resolved page in this pass; left as a `TODO` in `PROTOCOL.md` for the author to 
 own record rather than have a title backfilled by inference.
 
 No `PROTOCOL.md` §1–§5 rule text changed — this release touches only the citation list and this
-changelog. Author review and version-number sign-off pending; see the corresponding `v1.3.1
-(proposed)` changelog entry in `PROTOCOL.md`.
+changelog. Merged via PR #1 `citation-refresh-2026-08-25` (commit `9bd6f71`, same PR as the
+Antigravity resync below); `PROTOCOL.md`'s Status line and changelog entry are updated to match.
 
-## Adapter resync — `adapters/antigravity/SKILL.md`, proposed 2026-08-25
+## Adapter resync — `adapters/antigravity/SKILL.md`, 2026-08-25
 
 **[Empirical]** `adapters/antigravity/SKILL.md` had drifted: its own frontmatter and footer read
 "Synced to PROTOCOL.md v1.2.0" while `README.md` names `v1.3.0` as canonical. Concretely, it
@@ -129,5 +129,5 @@ rather than a subsection per item, short-form tags as default. The three Antigra
 artifact integrity) were kept and lightly reworded to match the other adapters' "Applying this in
 X" heading — that section is platform-specific value, not duplication, and the audit that found
 this drift did not flag it. Net size: 9.5 KB → ~2.6 KB. No rule semantics changed; this is a
-sync and compression fix only. Author review pending before treating this as the adapter's
-official v1.3.0 sync.
+sync and compression fix only. Merged via PR #1 `citation-refresh-2026-08-25` (commit `9bd6f71`);
+this is the adapter's official v1.3.0 sync.
