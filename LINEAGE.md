@@ -103,10 +103,11 @@ against arXiv/DOI resolvers (not by semantic-search relevance alone): five citat
   persuasion/misinformation-propagation results, added to support §5's evaluator-immunity
   principle beyond the single DevSwarm anecdote.
 
-**[Unverified]** The existing Wooldridge (AAMAS) DOI:10.65109/ktwn2820 citation resolves (HTTP
-302 → dl.acm.org) but its title could not be confirmed past the Cloudflare interstitial on the
-resolved page in this pass; left as a `TODO` in `PROTOCOL.md` for the author to fill in from their
-own record rather than have a title backfilled by inference.
+**[Empirical]** Update, 2026-08-26: the Wooldridge (AAMAS) DOI:10.65109/ktwn2820 `TODO` above is
+resolved. Title confirmed independently via the Crossref API (`api.crossref.org/works/...`) and
+the Semantic Scholar Graph API (`api.semanticscholar.org/graph/v1/paper/DOI:...`), which agree:
+"Rethinking Multi-agent Systems in the Era of LLMs," AAMAS 2026 (25th ICAAMAS, Paphos, Cyprus,
+25–29 May 2026), IFAAMAS. `PROTOCOL.md` §Rule 3 updated to drop the `TODO` marker.
 
 No `PROTOCOL.md` §1–§5 rule text changed — this release touches only the citation list and this
 changelog. Merged via PR #1 `citation-refresh-2026-08-25` (commit `9bd6f71`, same PR as the
