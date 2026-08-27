@@ -16,7 +16,8 @@ snapshot; a `v1.4.0`-specific DOI will be added here once Zenodo mints it.
 ## Included domain skills
 
 This repo includes the skills developed for the biochemical-engineering / bioprocess research
-workflow of Dr. Itan Homero Ruiz-Hernández:
+workflow of Dr. Itan Homero Ruiz-Hernández, plus a domain-general skill for computational systems
+engineers so the protocol is not limited to that one research domain:
 
 - **`bio-ruiz-hernandez`** — the flagship specialization, and the clearest demonstration of
   what a domain layer adds beyond a plain port of the protocol. Three things make it
@@ -32,6 +33,13 @@ workflow of Dr. Itan Homero Ruiz-Hernández:
 - **`numerical-data-analysis`** — anti-data-leakage rules (`fit` on Train only, mandatory
   pipelines, SMOTE inside CV folds), scaler selection by distribution and algorithm, and a
   Julia/SciML directive for ODE kinetic modeling of bioprocesses.
+- **`computational-systems`** — the domain-general skill for computer systems engineers: reality
+  filter applied to code (no hallucinated API surfaces or CLI flags, no reporting an unexecuted
+  test/build as passing, dependency versions checked against the real lockfile), anti-sycophancy
+  in code review, and hard rules against OWASP-class vulnerabilities, over-engineering,
+  unverified completeness claims, and destructive git operations without explicit authorization.
+  Unlike `bio-ruiz-hernandez`, it is not written for one researcher's workflow — same generality
+  as `numerical-data-analysis`, applied to software/systems engineering instead of ML.
 
 ## What this is
 
@@ -44,7 +52,8 @@ topologies — written once in [`PROTOCOL.md`](PROTOCOL.md) and adapted for spec
 - **Antigravity:** [`adapters/antigravity/SKILL.md`](adapters/antigravity/SKILL.md)
 - **Cursor:** [`adapters/cursor/reality-filter.mdc`](adapters/cursor/reality-filter.mdc)
 - **Gemini CLI (domain skills):** [`adapters/gemini-cli/`](adapters/gemini-cli/) — bioprocess
-  research editorial + numerical data-analysis skills (see **Included domain skills** above)
+  research editorial, numerical data-analysis, and computational-systems engineering skills (see
+  **Included domain skills** above)
 - **Other platforms** (ChatGPT, Windsurf, …): no first-party adapter yet — see
   [CONTRIBUTING.md](CONTRIBUTING.md) for a porting guide.
 
@@ -104,6 +113,12 @@ for a research domain: biochemical-engineering scientific writing (`bio-ruiz-her
 its n=10 audit and AI-in-research ethics) and numerical data analysis
 (`numerical-data-analysis`, with anti-leakage rules and a Julia/SciML directive), implemented
 as two installable Gemini CLI skills ([`adapters/gemini-cli/`](adapters/gemini-cli/)).
+
+[`examples/computational-systems/`](examples/computational-systems/) shows the same
+specialization for a non-research domain: general software/systems engineering
+(`computational-systems`, with reality filter applied to code, anti-sycophancy in review, and
+hard rules against OWASP-class vulnerabilities and destructive git operations), also an
+installable Gemini CLI skill.
 
 ## Evidence & limitations
 

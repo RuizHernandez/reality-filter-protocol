@@ -225,3 +225,32 @@ alongside this work are deferred pending a decision on whether they derive from 
 (which would put them in `validation/` with a chain of custody) or are illustrative and synthetic
 (which needs its own clearly-labeled directory, since `examples/` is defined above as undiluted
 reproduction from the private source). No `[E]`-tier evidence about Rules 1–2 is added here.
+
+## New domain skill — `computational-systems`, 2026-08-27
+
+**[Empirical]** The two Gemini CLI skills present since before `v1.2.0` (`bio-ruiz-hernandez`,
+`numerical-data-analysis`) both specialize `PROTOCOL.md` for biochemical-engineering / bioprocess
+research. Nothing in the repository generalized the protocol for computational systems
+engineering — general software/systems development — even though `PROTOCOL.md` itself is
+domain-agnostic and the repository's stated purpose is a "conduct protocol for AI coding
+assistants," an audience wider than one research domain.
+
+Added `adapters/gemini-cli/computational-systems/SKILL.md`: a domain-general specialization
+(not tied to one researcher's workflow, same generality as `numerical-data-analysis`) covering
+reality filter applied to code (no hallucinated API surfaces/CLI flags, no reporting an
+unexecuted test/build/pipeline as passing, dependency versions checked against the real
+lockfile/manifest rather than memory), anti-sycophancy in code review, and hard rules against
+OWASP-class vulnerabilities, over-engineering, unverified completeness claims, and destructive
+git operations (`--force`, `reset --hard`, history rewrites) without explicit authorization —
+plus dependency/supply-chain, CI/CD, and architecture-documentation guidance.
+
+Also added: `examples/computational-systems/README.md` (the mapping table showing how the skill
+specializes `PROTOCOL.md`, mirroring `examples/bioprocess-research/`), and documentation updates
+across `README.md`, `README.es.md`, and `adapters/gemini-cli/README.md` naming the new skill.
+`scripts/sync-check.sh`'s `adapters` array now includes the new skill file so CI checks it for
+version drift the same way it checks the other two gemini-cli skills.
+
+**No `PROTOCOL.md` §1–§5 rule text changed** — this is a new domain adapter, not a core-protocol
+change, so the release version stays `v1.4.0` (same pattern as the Antigravity adapter resync
+above, which also did not bump the release version). The new skill's footer and frontmatter
+reference `v1.4.0`, the current release.

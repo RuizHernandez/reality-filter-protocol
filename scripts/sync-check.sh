@@ -86,6 +86,7 @@ adapters=(
   "adapters/antigravity/SKILL.md"
   "adapters/gemini-cli/bio-ruiz-hernandez/SKILL.md"
   "adapters/gemini-cli/numerical-data-analysis/SKILL.md"
+  "adapters/gemini-cli/computational-systems/SKILL.md"
 )
 
 # README.es.md carries its own release marker and was two releases behind

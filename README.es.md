@@ -10,10 +10,11 @@ Un protocolo de conducta público, agnóstico de modelo y citable, para asistent
 
 ## Skills de dominio incluidos
 
-Este repo incluye los skills desarrollados para el flujo de investigación en ingeniería bioquímica y bioprocesos del Dr. Itan Homero Ruiz-Hernández:
+Este repo incluye los skills desarrollados para el flujo de investigación en ingeniería bioquímica y bioprocesos del Dr. Itan Homero Ruiz-Hernández, más un skill de dominio general para ingenieros en sistemas computacionales, de modo que el protocolo no quede limitado a ese único dominio de investigación:
 
 - **`bio-ruiz-hernandez`** — la especialización insignia, y la demostración más clara de lo que una capa de dominio aporta más allá de una simple adaptación del protocolo. Tres cosas lo hacen diferente: (1) generaliza el auto-chequeo visual n=5 en una **auditoría de manuscritos n=10** — cinco pases de contenido, cuatro de ética, uno de formato — aplicada a cada borrador; (2) añade una **capa de ética de IA en investigación** que el protocolo núcleo no cubre: el agente actúa como herramienta y nunca como autor, los datos sensibles deben anonimizarse y computarse localmente, todo resultado analítico se entrega con su código reproducible, y un aviso de transparencia bilingüe (ES/EN) declara la participación de la IA — de modo que el skill funciona también como una política de uso de IA lista para revistas; (3) impone **invariantes editoriales duros** (nomenclatura microbiana en itálicas, notación Unicode limpia, citación única en negritas por bloque, manejo de figuras EPS con Ghostscript sin marca de agua).
 - **`numerical-data-analysis`** — reglas anti-fuga de datos (`fit` solo en Train, pipelines obligatorios, SMOTE dentro de los folds de CV), selección de scaler según distribución y algoritmo, y una directiva Julia/SciML para modelado cinético de bioprocesos con ODEs.
+- **`computational-systems`** — el skill de dominio general para ingenieros en sistemas computacionales: filtro de realidad aplicado a código (sin alucinar firmas de API ni banderas CLI, sin reportar un test o build no ejecutado como si hubiera pasado, versiones de dependencias verificadas contra el lockfile real), anti-sycophancy en revisión de código, y reglas duras contra vulnerabilidades tipo OWASP, sobre-ingeniería, afirmaciones de completitud sin evidencia, y operaciones destructivas de git sin autorización explícita. A diferencia de `bio-ruiz-hernandez`, no está escrito para el flujo de un investigador específico — misma generalidad que `numerical-data-analysis`, aplicada a ingeniería de software/sistemas en vez de ML.
 
 ## Qué es esto
 
@@ -23,7 +24,7 @@ Tres reglas de conducta agnósticas de dominio — anti-sycophancy en ambas dire
 - **Claude Code:** [`adapters/claude-code/SKILL.md`](adapters/claude-code/SKILL.md)
 - **Antigravity:** [`adapters/antigravity/SKILL.md`](adapters/antigravity/SKILL.md)
 - **Cursor:** [`adapters/cursor/reality-filter.mdc`](adapters/cursor/reality-filter.mdc)
-- **Gemini CLI (skills de dominio):** [`adapters/gemini-cli/`](adapters/gemini-cli/) — skills editoriales de investigación en bioprocesos + análisis de datos numéricos (ver **Skills de dominio incluidos** arriba)
+- **Gemini CLI (skills de dominio):** [`adapters/gemini-cli/`](adapters/gemini-cli/) — skills editoriales de investigación en bioprocesos, análisis de datos numéricos, e ingeniería de sistemas computacionales (ver **Skills de dominio incluidos** arriba)
 - **Otras plataformas** (ChatGPT, Windsurf, …): aún sin adapter oficial — ver [CONTRIBUTING.md](CONTRIBUTING.md) para la guía de portado.
 
 Es prosa conductual, no código ejecutable. Su valor es la portabilidad de reglas de conducta entre modelos, y su citabilidad como artefacto académico.
@@ -50,6 +51,8 @@ Usa este protocolo para la mitad social. No lo confundas con la técnica.
 [`examples/ml-swarm/`](examples/ml-swarm/) muestra el núcleo universal especializado para un proyecto real: una aplicación de software de machine learning construida por un enjambre de 7 agentes. Se reproduce sin diluir desde la fuente privada, etiquetada como ejemplo — cópiala como plantilla, no como una regla que este repositorio te exija adoptar.
 
 [`examples/bioprocess-research/`](examples/bioprocess-research/) muestra la misma especialización para un dominio de investigación: redacción científica en ingeniería bioquímica (`bio-ruiz-hernandez`, con su auditoría n=10 y ética de IA en investigación) y análisis de datos numéricos (`numerical-data-analysis`, con reglas anti-fuga de datos y directiva Julia/SciML), implementados como dos skills instalables de Gemini CLI ([`adapters/gemini-cli/`](adapters/gemini-cli/)).
+
+[`examples/computational-systems/`](examples/computational-systems/) muestra la misma especialización para un dominio no académico: ingeniería de software/sistemas en general (`computational-systems`, con filtro de realidad aplicado a código, anti-sycophancy en revisión, y reglas duras contra vulnerabilidades tipo OWASP y operaciones destructivas de git), también un skill instalable de Gemini CLI.
 
 ## Evidencia y limitaciones
 
