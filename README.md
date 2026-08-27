@@ -8,10 +8,10 @@ swarms.
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
 **Protocol name:** *Filtro de Realidad v5* (preserved from its private origin). **Release
-version:** `v1.3.1` (see [LINEAGE.md](LINEAGE.md) for why the protocol name and release semver
+version:** `v1.4.0` (see [LINEAGE.md](LINEAGE.md) for why the protocol name and release semver
 are different counters). **Latest archived/citable DOI:**
 [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994) — this covers the `v1.0.0`
-snapshot; a `v1.3.1`-specific DOI will be added here once Zenodo mints it.
+snapshot; a `v1.4.0`-specific DOI will be added here once Zenodo mints it.
 
 ## Included domain skills
 
@@ -130,8 +130,18 @@ verify that these specific events occurred as described. Treat as self-report.
 prompt and observes the model visibly invoking it outside the original project ("per your reality
 filter and anti-sycophancy…") during ordinary browsing/coding. User self-report, not measurement.
 
+**What is actually executable.** Two harnesses in `validation/` run real commands and report
+real exit codes: `replay_incident.sh` (13/13) replays the incident's artifact-level shape against
+git hooks implementing §3.1/§3.2/§3.3/§3.8/§3.10, and `peer_verification_suite.sh` (8/8) exercises
+the §3.12 peer-verification checker. `scripts/check-citations.sh` resolves the bibliography's
+identifiers, and `scripts/sync-check.sh` catches version drift between this file, `PROTOCOL.md`,
+`LINEAGE.md` and the adapters. All four run in CI. **None of them tests a model**: they test
+artifact-layer and document-layer controls. The behavioral claims above are still Tier 1–3
+observations, not measurements — see `validation/REPORT.md` for what each harness does and does
+not establish.
+
 **Context, not a controlled trial:** these observations come from a multi-day, multi-agent
-engineering session (a 7-agent orchestration building a computational-chemistry ML tool) where a
+engineering session (a 7-agent orchestration building a machine-learning software application) where a
 real governance failure occurred during normal work — not a deliberate red-team. (The genuinely
 *adversarial* work is the separate
 [Cursor hooks investigation](https://github.com/RuizHernandez/Cursor-Hooks-Minimal-Test), which

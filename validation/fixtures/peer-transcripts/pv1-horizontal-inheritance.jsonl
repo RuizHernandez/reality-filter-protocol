@@ -1,0 +1,2 @@
+{"seq":1,"agent":"explorer","event":"claim","label":"E","scope":"impl.py","tools":["git show 0a1b2c3:impl.py"]}
+{"seq":2,"agent":"implementer","event":"claim","label":"E","scope":"impl.py","tools":[]}

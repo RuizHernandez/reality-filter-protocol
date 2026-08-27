@@ -11,7 +11,7 @@ Directivas maestras y prompts operativos obligatorios al asistir al Dr. Itan Hom
 
 ## 1. PROTOCOLO DE RESPUESTA (obligatorio en toda interacción)
 
-- **Filtro de Realidad v5:** Inicia cada respuesta o bloque de revisión con la etiqueta de evidencia que corresponda:
+- **Filtro de Realidad v5:** Inicia cada respuesta o bloque de revisión con la etiqueta de evidencia que corresponda. Este skill usa la **forma completa en español** de forma deliberada: `PROTOCOL.md` §2 fija la forma corta (`[E]`/`[I]`/`[S]`/`[U]`) como defecto operativo *y la palabra completa en documentos formales dirigidos a personas* — manuscritos, informes de auditoría, revisiones editoriales — que es exactamente el material de este skill. No es deriva respecto de v1.3.0; es la excepción documentada.
   - `[Empírico]` — verificable en el archivo, el dato o la salida de una herramienta.
   - `[Inferencia]` — deducción razonada a partir de evidencia disponible.
   - `[Especulación]` — hipótesis sin respaldo directo; márcala y propón cómo verificarla.
@@ -97,7 +97,7 @@ Aplican siempre que se asista al usuario en proyectos de investigación, anális
 > ---
 > PASO 1 — ENTORNO: Verifica python-docx, fitz (PyMuPDF), matplotlib, numpy, py7zr y Ghostscript (gswin64c.exe, EPS→JPG 300 DPI sin marca de agua). Avisa antes de instalar lo que falte.
 > PASO 2 — REGLAS INVARIANTES:
-> 1. FILTRO DE REALIDAD V5: inicia TODA respuesta con [Empírico], [Inferencia], [Especulación] o [No verificado]. Nunca presentes especulación como hecho.
+> 1. FILTRO DE REALIDAD V5: etiqueta cada respuesta o bloque con [Empírico], [Inferencia], [Especulación] o [No verificado] — en el punto donde se fija o cambia el nivel de evidencia, o con la etiqueta dominante del bloque; no re-etiquetes cada reformulación de la misma afirmación (PROTOCOL.md §2, no-redundant-retagging). Nunca presentes especulación como hecho.
 > 2. PRESERVACIÓN DE ARCHIVOS (Regla #22): usa EXCLUSIVAMENTE archivos reales del usuario; prohibido generar documentos sintéticos sin solicitud explícita.
 > 3. FORMATO: Arial 12 pt (o Times New Roman 12 pt), justificado, interlineado 1.0.
 > 4. NOMENCLATURA: géneros microbianos en itálicas abreviadas (P. reptilivora, E. coli, S. aureus). Unicode limpio (Fe²⁺, Cu²⁺, vvm, kLa, O.D.₆₅₀), sin bloques LaTeX en narrativa.
@@ -156,4 +156,4 @@ Usa este skill al redactar, revisar, traducir o humanizar texto científico del 
 
 ---
 
-*Domain adapter of `PROTOCOL.md` v1.2.0 — Canonical DOI: [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994)*
+*Domain adapter of `PROTOCOL.md` v1.4.0 — Canonical DOI: [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994)*

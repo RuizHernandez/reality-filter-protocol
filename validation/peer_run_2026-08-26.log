@@ -1,0 +1,33 @@
+=== PV1 peer's [E] adopted with no artifact read of the receiver's own ===
+REJECTED [peer-verification PROTOCOL.md §3.12]: agent 'implementer' labelled 'impl.py' [E] from peer 'explorer' without reading the artifact itself. A peer's [E] is at most [I] to the receiver.
+
+=== PV2 two agreeing peers, receiver claims [E] with no artifact trace ===
+REJECTED [peer-verification PROTOCOL.md §3.12]: agent 'deployer' labelled 'test_results.json' [E] on peer consensus (2 agreeing peers: analyst-a,analyst-b) with no artifact read of its own. Consensus is not verification.
+
+=== PV3 receiver re-runs the sender's canonical git show (§3.1 form, allowed) ===
+
+=== PV4 receiver verifies the same artifact by a different method ===
+
+=== PV5 receiver's only read of the artifact is truncated (head -5) ===
+REJECTED [peer-verification PROTOCOL.md §3.12]: agent 'reviewer' labelled 'metrics.csv' [E], but every read of that artifact was narrowed (truncated/filtered). A whole-artifact claim verified only through a narrowed read is [I].
+
+=== PV6 same artifact, same sender, receiver reads it in full ===
+
+=== PV7 empty transcript is invalid input, not a clean run (§4.1) ===
+REJECTED [peer-verification PROTOCOL.md §3.12/§4.1]: transcript '/home/user/reality-filter-protocol/validation/fixtures/peer-transcripts/pv7-empty.jsonl' is empty or unparseable — treated as invalid input, not as a clean run.
+
+=== PV8 unparseable transcript is invalid input, not a clean run (§4.1) ===
+REJECTED [peer-verification PROTOCOL.md §3.12/§4.1]: transcript '/home/user/reality-filter-protocol/validation/fixtures/peer-transcripts/pv8-corrupt.jsonl' is empty or unparseable — treated as invalid input, not as a clean run.
+
+=== Results ===
+PASS | PV1 peer's [E] adopted with no artifact read of the receiver's own | expected=1 got=1
+PASS | PV2 two agreeing peers, receiver claims [E] with no artifact trace | expected=1 got=1
+PASS | PV3 receiver re-runs the sender's canonical git show (§3.1 form, allowed) | expected=0 got=0
+PASS | PV4 receiver verifies the same artifact by a different method | expected=0 got=0
+PASS | PV5 receiver's only read of the artifact is truncated (head -5) | expected=1 got=1
+PASS | PV6 same artifact, same sender, receiver reads it in full | expected=0 got=0
+PASS | PV7 empty transcript is invalid input, not a clean run (§4.1) | expected=2 got=2
+PASS | PV8 unparseable transcript is invalid input, not a clean run (§4.1) | expected=2 got=2
+
+PASS=8 FAIL=0
+peer-unverified events logged: 3 -> /tmp/rfp-peer-giPuiH/peer-unverified.jsonl

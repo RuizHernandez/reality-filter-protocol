@@ -22,7 +22,10 @@ echo "PROTOCOL.md declares release: v$protocol_version"
 # every adapter to bump its "synced to" marker — only releases that
 # actually change §1-5 do. Default to the release version itself when no
 # such annotation is present.
-rules_version=$(grep -oP 'rule text §1–§5 unchanged since `v\K[0-9]+\.[0-9]+\.[0-9]+' PROTOCOL.md | head -1)
+# `|| true`: the annotation is absent by design on a release that DOES change
+# §1-§5 rule text. Without it, `set -euo pipefail` aborted the whole script
+# with no message the first time such a release came along (v1.4.0).
+rules_version=$(grep -oP 'rule text §1–§5 unchanged since `v\K[0-9]+\.[0-9]+\.[0-9]+' PROTOCOL.md | head -1 || true)
 rules_version="${rules_version:-$protocol_version}"
 echo "Adapters must be synced to (rules-affecting) version: v$rules_version"
 
@@ -72,13 +75,86 @@ if [[ -n "$stale_proposed" ]]; then
   fail=1
 fi
 
-# First-party adapters (excludes gemini-cli/*, which are domain skills,
-# not protocol-core adapters, and carry no PROTOCOL.md version marker).
+# Every file that carries a "PROTOCOL.md vX.Y.Z" marker. The gemini-cli
+# skills are domain specializations rather than protocol-core adapters, but
+# they DO carry a version footer -- an earlier version of this comment
+# asserted they did not, which is how both of them sat at v1.2.0 through two
+# releases without CI noticing.
 adapters=(
   "adapters/claude-code/SKILL.md"
   "adapters/cursor/reality-filter.mdc"
   "adapters/antigravity/SKILL.md"
+  "adapters/gemini-cli/bio-ruiz-hernandez/SKILL.md"
+  "adapters/gemini-cli/numerical-data-analysis/SKILL.md"
 )
+
+# README.es.md carries its own release marker and was two releases behind
+# (v1.2.0 at v1.3.1) because this script only ever looked at README.md.
+es_version=$(tr '\n' ' ' <README.es.md | grep -oP '\*\*Versión de la release:\*\* `v\K[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+if [[ -z "$es_version" ]]; then
+  echo "FAIL: could not find a '**Versión de la release:** \`vX.Y.Z\`' line in README.es.md"
+  fail=1
+elif [[ "$es_version" != "$protocol_version" ]]; then
+  echo "FAIL: README.es.md declares release v$es_version, PROTOCOL.md declares v$protocol_version"
+  fail=1
+else
+  echo "OK: README.es.md release version matches PROTOCOL.md (v$es_version)"
+fi
+
+# Citation metadata drifts the same way and is what Zenodo/GitHub actually mint.
+cff_version=$(grep -oP '^version:\s*\K[0-9]+\.[0-9]+\.[0-9]+' CITATION.cff | head -1)
+if [[ "$cff_version" != "$protocol_version" ]]; then
+  echo "FAIL: CITATION.cff declares version ${cff_version:-<none>}, PROTOCOL.md declares v$protocol_version"
+  fail=1
+else
+  echo "OK: CITATION.cff version matches PROTOCOL.md ($cff_version)"
+fi
+
+zen_version=$(grep -oP '"version"\s*:\s*"\K[0-9]+\.[0-9]+\.[0-9]+' .zenodo.json | head -1)
+if [[ "$zen_version" != "$protocol_version" ]]; then
+  echo "FAIL: .zenodo.json declares version ${zen_version:-<none>}, PROTOCOL.md declares v$protocol_version"
+  fail=1
+else
+  echo "OK: .zenodo.json version matches PROTOCOL.md ($zen_version)"
+fi
+
+# Scenario counts: prose in PROTOCOL.md/LINEAGE.md drifted from what the
+# harness actually printed (11 vs 13) because nothing cross-checked them.
+# Checking that the right count appears SOMEWHERE is not enough -- that still
+# passes while a stale count sits next to it. So: collect every "N/N" the
+# docs assert, and require each one to be a count some run log actually
+# produced. A stale "11/11" then fails no matter where it hides.
+# Corollary the docs must respect: the "N/N" form is reserved for scenario
+# counts. Write other ratios as "N of N" so they are not read as one.
+valid_counts=""
+for logfile in validation/replay_run_2026-08-05.log validation/peer_run_2026-08-26.log; do
+  if [[ ! -f "$logfile" ]]; then
+    echo "FAIL: expected run log missing: $logfile"
+    fail=1
+    continue
+  fi
+  logged=$(grep -c '^PASS |' "$logfile" || true)
+  declared=$(grep -oP '^PASS=\K[0-9]+' "$logfile" | head -1 || true)
+  if [[ "$logged" != "$declared" ]]; then
+    echo "FAIL: $logfile is internally inconsistent: $logged PASS lines but reports PASS=$declared"
+    fail=1
+    continue
+  fi
+  valid_counts="$valid_counts $logged"
+done
+echo "Run logs report passing scenario counts:$valid_counts"
+
+asserted=$(grep -ohP '\b([0-9]+)/\1\b' PROTOCOL.md LINEAGE.md validation/REPORT.md | sort -u || true)
+for a in $asserted; do
+  n="${a%%/*}"
+  if ! printf '%s' "$valid_counts" | grep -qw "$n"; then
+    echo "FAIL: docs assert '$a' scenarios, but no run log reports $n passing scenarios (valid:$valid_counts)"
+    fail=1
+  fi
+done
+if [[ "$fail" -eq 0 ]]; then
+  echo "OK: every N/N scenario count asserted in the docs matches a real run log"
+fi
 
 for adapter in "${adapters[@]}"; do
   if [[ ! -f "$adapter" ]]; then

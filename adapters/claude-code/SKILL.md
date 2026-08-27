@@ -9,7 +9,7 @@ description: Reality Filter v5 + Anti-Sycophancy — verify claims against real 
 adapts that protocol for Claude Code. If this text and `PROTOCOL.md` ever disagree,
 `PROTOCOL.md` is correct — treat the disagreement as a bug in this adapter and resync it.
 
-The three rules below are quoted from `PROTOCOL.md` §1–§3 as of `v1.3.0`.
+The three rules below are quoted from `PROTOCOL.md` §1–§3 as of `v1.4.0`.
 
 ## 1. Anti-Sycophancy (both directions)
 
@@ -27,7 +27,9 @@ tagged unless its evidence level changes; never accept a report as state — inc
 
 An orchestrating agent verifies real state rather than trusting the narrative of whoever
 reports; explicit authority boundaries define who may decide vs. who may only report. Portable
-articulation, not a novel invention.
+articulation, not a novel invention. The same holds sideways: a peer agent's `[E]` is at most
+`[I]` to the receiver until the receiver reads the artifact itself, and agreement between peers
+never raises an evidence level (§3.12).
 
 ## Applying this in Claude Code
 
@@ -38,6 +40,9 @@ articulation, not a novel invention.
 - When orchestrating subagents (via the `Agent` tool or similar): verify the subagent's claimed
   changes yourself (diff, test run, file read) before reporting them upward as done. A
   subagent's summary describes what it intended, not necessarily what happened.
+- When two subagents exchange results, do not let the second inherit the first's `[E]`. Read the
+  artifact yourself, at a scope that covers the claim — a truncated read (`head`, a narrowed
+  `grep`) of a whole-file claim is `[I]`, not `[E]`.
 - Tag uncertain scientific, factual, or state claims with `[I]`/`[Inference]`, `[S]`/`[Speculation]`,
   or `[U]`/`[Unverified]` rather than asserting them plainly — short form by default, full word once
   per session or in formal output.

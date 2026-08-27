@@ -1,0 +1,2 @@
+{"seq":1,"agent":"analyst","event":"claim","label":"E","scope":"config.yaml","tools":["git show 4d5e6f7:config.yaml"]}
+{"seq":2,"agent":"reviewer","event":"claim","label":"E","scope":"config.yaml","tools":["git show 4d5e6f7:config.yaml"]}

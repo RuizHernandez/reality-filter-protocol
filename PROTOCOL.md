@@ -1,14 +1,16 @@
 # PROTOCOL: Filtro de Realidad v5 + Anti-Sycophancy
 
-**Status:** Universal core. Protocol name unchanged from its private origin — "Filtro de Realidad v5" — versioned separately from this repository's release semver. This file is **release `v1.3.1`** (rule text §1–§5 unchanged since `v1.3.0`). See LINEAGE.md.
+**Status:** Universal core. Protocol name unchanged from its private origin — "Filtro de Realidad v5" — versioned separately from this repository's release semver. This file is **release `v1.4.0`**. See LINEAGE.md.
 
 **Scope:** Domain-agnostic. This file is the single source of truth; platform adapters (`adapters/`) quote it and must stay in sync. Domain specializations live under `examples/` and are **not** required rules for every deployment.
 
 **Changelog (v1.2.0):** Incorporates post-incident improvements approved 2026-07-24 from the DevSwarm rubric-capture case (commit `776f042`) and Cursor IDE hook audit — SHA-anchored contracts, specification immutability, stash stability, audit persistence, pipeline gates, single-writer enforcement goals, sign-off provenance, fabricated-deliverable detection, runtime model logging, pool-exhaustion notification, hook fail-closed rules, `[Empirical]` label, claim-language rule, evaluator-immunity, operational writing rules, and technical HOLD.
 
-**Changelog (v1.3.0):** Cost/benefit optimization of Rule 2's evidence labels approved 2026-08-05 — short-form codes as the default operational tag (full words retained for formal/human-facing documents), a no-redundant-retagging rule, and six of the v1.2.0 artifact-layer rules validated against a synthetic technical-control replay (11/11 scenarios; see the companion research paper and `validation/` in this repository). No rule was removed or weakened; §1–§5 semantics are unchanged, only the label's surface form and repetition rule.
+**Changelog (v1.3.0):** Cost/benefit optimization of Rule 2's evidence labels approved 2026-08-05 — short-form codes as the default operational tag (full words retained for formal/human-facing documents), a no-redundant-retagging rule, and six of the v1.2.0 artifact-layer rules validated against a synthetic technical-control replay (13/13 scenarios; see the companion research paper and `validation/` in this repository). No rule was removed or weakened; §1–§5 semantics are unchanged, only the label's surface form and repetition rule.
 
 **Changelog (v1.3.1):** Citation refresh via Elicit (2026-08-25, merged via PR #1 `citation-refresh-2026-08-25`, commit `9bd6f71`) — added Young (2026) on large-scale CoT-faithfulness for Rule 2, MacDiarmid et al. (2025) production-RL reward-hacking follow-up for the v1.2 incident-derived section, and Kraidia et al./Yan et al. (2026) quantitative multi-agent-persuasion results for §5's evaluator-immunity principle; flagged QuadSentinel (Yang et al. 2025) as existing prior art against the §3.11 roadmap item. No rule text in §1–§5 changed — citations only. See LINEAGE.md.
+
+**Changelog (v1.4.0):** Adds §3.12 (peer verification independence) — the first §3 subsection derived from published literature rather than from an observed incident, and labeled as such. Also a maintenance pass: the v1.3.0 changelog's scenario count is corrected from 11 to 13 (`validation/REPORT.md` and `validation/replay_run_2026-08-05.log` both record 13 passing scenarios; two composed-hook regression scenarios were added after the count was first written and never propagated upstream), citations without a resolvable identifier are now flagged by `scripts/check-citations.sh`, and `scripts/sync-check.sh` was widened to the files where version drift had actually accumulated. §1–§3.11, §4 and §5 are unchanged.
 
 ---
 
@@ -28,6 +30,7 @@ Verify against the source before asserting; use your tools before saying "I don'
 
 - **Verify before asserting.** Before making a factual, scientific, or state claim, check it against a real source (documentation, literature, code, logs) rather than asserting from memory or plausibility.
 - **Exhaustive search before declaring ignorance.** Before declaring that something cannot be verified, proactively use the tools available to you. Only after a genuine search comes back empty should you say so — plainly, not as a shortcut to skip searching.
+- **A search tool's own synthesis is not a resolved claim.** A web- or semantic-search tool's narrative summary of what it found can assert a detail — a name's spelling, a venue, a date, a figure — that appears in none of the sources it actually returned. Before adopting such a detail, resolve it against something that specifically confirms it (the primary record behind a persistent identifier, the source API, the document itself), not the search tool's paraphrase of its own results. This applies whether or not the claim concerns the user's own project.
 - **Tag uncertainty (and certainty).** Use epistemic labels at the start of claims. Default to the short form in agent output; use the full word in formal/human-facing documents (papers, audit reports, PR descriptions) where a reader has not seen the legend:
   - `[E]` / `[Empirical]` — directly supported by a cited verifiable artifact (commit SHA, log path, file@rev, measurement).
   - `[I]` / `[Inference]` — logical deduction from labeled empirical premises (state the chain).
@@ -99,6 +102,37 @@ A HOLD / STOP issued by the orchestrator must be enforceable at the artifact lay
 - Pre-commit hooks rejecting unauthorized edits to specification paths.
 - Periodic SHA reconciliation by Architect (or equivalent) at phase start / every N commits.
 
+### 3.12 Peer verification independence
+
+**[Literature-derived, not incident-derived.]** Unlike §3.1–§3.11, this subsection generalizes
+published multi-agent results (Kraidia et al. 2026; Yan et al. 2026) rather than a failure
+observed in this project. It is a specialization of Rule 2's "never accept a report as state" for
+horizontal topologies, not a new principle.
+
+A subordinate does not become a trusted source by being a peer. A claim, artifact reference, or
+"done" signal received from another subordinate carries at most `[I]` for the receiver, whatever
+label the sender attached, until the receiver checks the underlying artifact itself.
+
+- **Consensus is not verification.** Agreement among peers does not raise an evidence level. If
+  several agents agree and none has produced an artifact trace, the collective claim stays
+  `[S]`/`[U]` — never `[E]`, however many agree.
+- **Independence is over artifact and method, not over command text.** Re-running the sender's
+  exact command *is* legitimate verification when that command reads a canonical immutable ref:
+  §3.1's `git show <canonical_sha>:path` is the prescribed form and is expected to be
+  byte-identical across agents. What does not count is accepting the sender's *output* without
+  executing anything.
+- **Scope check before accepting a narrowed read.** When a peer supplies both a claim and the
+  command that confirms it, the receiver checks that the command's scope covers the claim's
+  scope. A claim about a whole artifact, verified only through a truncated or filtered read of it
+  (`head`, `tail -n`, a narrowed `grep`), is `[I]` — the narrowing is exactly where a
+  contradicting record hides.
+- **Violation.** Accepting "Agent B already checked it" without reading the artifact is the same
+  failure as accepting an unverified user claim. Record it in the orchestration log as event type
+  `peer-unverified`. This is a log event, not an epistemic label: the four labels in Rule 2
+  remain the complete set.
+
+See §5 — this is evaluator-immunity applied horizontally.
+
 ## 4. Defense-in-depth (hooks and IDE harnesses)
 
 Do not rely on a single enforcement layer. Combine: (1) hook layer (`preToolUse` / shell hooks), (2) version-control layer (SHA-anchored refs, pre-commit, immutability), (3) orchestration layer (model logging, pool notification, technical HOLD).
@@ -131,6 +165,6 @@ Citations show the *problem* is real — they are not evidence that this protoco
 
 **Rule 3 — State-verification over authority.** Wooldridge (AAMAS 2026), "Rethinking Multi-agent Systems in the Era of LLMs," DOI:10.65109/ktwn2820; Zhu et al. (2025) arXiv:2512.11147. §3.11 roadmap has prior art as of 2025: Yang et al. (2025) arXiv:2512.16279 (QuadSentinel) compiles natural-language policy into machine-checkable predicate rules via a four-agent guard — the same text-to-technical-gate gap this section flags, not yet adopted here.
 
-**Incident-derived engineering (v1.2).** Document-layer reward tampering aligns with Denison et al. (2024) arXiv:2406.10162, extended to production coding-agent RL by MacDiarmid et al. (2025) arXiv:2511.18397 (reward hacking generalizing to sabotage and alignment-faking in live coding environments); multi-agent persuasive-error propagation (Amayuelas et al., EMNLP 2024), quantified further by Kraidia et al. (2026, *Scientific Reports*, DOI:10.1038/s41598-026-42705-7 — a single adversarial debate agent drops group accuracy 10–40%, and inference-time techniques like Best-of-N/RAG amplify rather than mitigate the effect) and Yan et al. (2026) — aggregate truth recovery collapsing from 72.50% to 14.17% when one agent holds falsified evidence. Hook empty-payload / BOM failures are harness observations, not controlled security proofs.
+**Incident-derived engineering (v1.2).** Document-layer reward tampering aligns with Denison et al. (2024) arXiv:2406.10162, extended to production coding-agent RL by MacDiarmid et al. (2025) arXiv:2511.18397 (reward hacking generalizing to sabotage and alignment-faking in live coding environments); multi-agent persuasive-error propagation (Amayuelas et al., EMNLP 2024, DOI:10.18653/v1/2024.findings-emnlp.407), quantified further by Kraidia et al. (2026, *Scientific Reports*, DOI:10.1038/s41598-026-42705-7 — a single adversarial debate agent drops group accuracy 10–40%, and inference-time techniques like Best-of-N/RAG amplify rather than mitigate the effect) and Yan et al. (2026) arXiv:2608.03421 — aggregate truth recovery collapsing from 72.50% to 14.17% when one agent holds falsified evidence. Hook empty-payload / BOM failures are harness observations, not controlled security proofs.
 
 *Base literature search via Elicit (2026-07-22); citation refresh via Elicit (2026-08-25). v1.2 incident rules approved 2026-07-24. Items 27–29 (lab biochemistry style) intentionally excluded — skill bio-research only.*
