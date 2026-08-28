@@ -264,3 +264,42 @@ the protocol's stated value. §7 also records that `[E]` means *empirically veri
 the primary content rather than an appendix, mirroring `bio-ruiz-hernandez` §5 — is a separate
 piece of work and is not included here. Infrastructure-as-code and orchestration are likewise out
 of scope; §5 fixes only the principle that infrastructure state is queried, not narrated.
+
+## Domain skill added — `adapters/gemini-cli/cybersecurity/SKILL.md`, 2026-08-27
+
+**[Empirical]** Second skill authored for this repository (see the `computational-arch` entry
+above for the provenance distinction). Completes the software-side domain layer: `computational-arch`
+governs general verification of software work, this one governs security work specifically.
+
+**Structural decision — the ethics layer is §1, not an appendix.** `bio-ruiz-hernandez` places
+its AI-in-research ethics at §5, after the editorial and workflow rules. This skill deliberately
+inverts that: in research, ethics governs how a result may be *reported*; in security, it governs
+whether the action may *run at all*. Authorization and scope are therefore a precondition checked
+before anything else — owner identified, authorization explicit (own infrastructure, lab/CTF, or
+written authorization), scope treated as a hard boundary that is never self-extended and never
+transitive across time, untrusted code isolated in a disposable environment, responsible
+disclosure, and a rule to stop rather than extract when third-party data is exposed.
+
+**Reality-filter specialization (§3).** Security has its own characteristic overclaim, and the
+skill names each one: `[E]` never means *secure*; a finding without documented reproduction stays
+`[S]`; "the scanner reported it" is `[I]`, because false positives are the normal case, not the
+exception; severity must be argued for *this* deployment rather than inherited from an advisory,
+since the same vulnerability can be critical when exposed and irrelevant in an unreachable
+dependency; and presence of a vulnerable version is not reachability.
+
+**Anti-hallucination (§2.1).** CVE, CWE, GHSA and vendor-advisory identifiers must be verified
+against the authoritative database before being cited — a fabricated identifier is a
+domain-specific instance of the failure Rule 2 exists to prevent, and it sends the reader to
+look for something that does not exist. This is the same class of error the repository's own
+`scripts/check-citations.sh` was built to catch in the bibliography.
+
+**Scope boundaries recorded in the skill itself:** it is not an authorization and does not
+substitute for a pentest contract, a bug-bounty program's rules, or institutional policy (the
+stricter one always prevails); it does not cover regulatory compliance (ISO 27001, PCI-DSS,
+LFPDPPP) or software licensing, each of which is its own domain.
+
+**Not done:** no `validation/` harness accompanies either new skill. Both are prompt-layer
+conduct rules — the "social half" in `README.md`'s terms — and the repository's own §3.11
+position is that a conversational instruction is not technical enforcement. Executable gates for
+these domains (dependency-audit and secret-scanning hooks) remain open work, and no `[E]`-tier
+evidence about their effect is claimed here.
