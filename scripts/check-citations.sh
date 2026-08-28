@@ -78,6 +78,15 @@ while IFS=$'\t' read -r surname year idtype id frag note; do
         echo "FAIL: $surname — malformed DOI '$id'"; fail=1; continue
       fi
       ;;
+    rfc)
+      # IETF RFCs are the primary literature for large parts of computer
+      # systems and carry no DOI in general use. IEEE and ACM need no separate
+      # type: their DOIs resolve through Crossref like any other (the
+      # Wooldridge AAMAS citation above is an ACM DOI).
+      if ! printf '%s' "$id" | grep -qE '^[0-9]{1,5}$'; then
+        echo "FAIL: $surname — malformed RFC number '$id' (expected digits only, e.g. 8446)"; fail=1; continue
+      fi
+      ;;
     *)
       echo "FAIL: $surname — unknown id_type '$idtype'"; fail=1; continue
       ;;
@@ -100,6 +109,12 @@ while IFS=$'\t' read -r surname year idtype id frag note; do
   if [ "$idtype" = "arxiv" ]; then
     title=$(curl -sSL --max-time 30 "https://export.arxiv.org/api/query?id_list=$id" 2>/dev/null \
       | python3 -c "import re,sys;t=re.findall(r'<title>(.*?)</title>',sys.stdin.read(),re.S);print(' '.join(t[1].split()) if len(t)>1 else '')" 2>/dev/null)
+  elif [ "$idtype" = "rfc" ]; then
+    # IETF Datatracker. Parsed with python3 rather than jq so that adding RFC
+    # support does not add a dependency the offline path never needed --
+    # python3 is already required above for the arXiv branch.
+    title=$(curl -sSL --max-time 30 "https://datatracker.ietf.org/api/v1/doc/document/rfc$id/?format=json" 2>/dev/null \
+      | python3 -c "import json,sys;print(json.load(sys.stdin).get('title',''))" 2>/dev/null)
   else
     title=$(curl -sS --max-time 30 "https://api.crossref.org/works/$id" \
       -H 'User-Agent: rfp-citation-check/1.0 (mailto:noreply@example.org)' 2>/dev/null \

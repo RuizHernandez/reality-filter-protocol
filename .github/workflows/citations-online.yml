@@ -1,0 +1,21 @@
+name: citations-online
+
+# Resolution debt is invisible if nothing ever resolves the identifiers.
+# check-citations.sh runs structurally on every push, deliberately: a resolver
+# outage must not redden a build over an unrelated change. That reasoning
+# keeps PRs honest but means a citation whose identifier silently stops
+# resolving would never be noticed. This runs the online pass on its own
+# schedule, where a failure points at the bibliography rather than at whoever
+# pushed last, and can be triggered by hand before a release.
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resolve every citation identifier and match its title
+        run: bash scripts/check-citations.sh --online

@@ -356,3 +356,26 @@ platform that asked for them: the check was green on GitHub and red on the maint
 at the same commit. Fixed at both levels — `.gitattributes` pins `*.sh`, `*.tsv`, `*.jsonl` and
 `*.yml` to LF in every working tree, and the reader strips carriage returns defensively for
 contributors who already have CRLF copies.
+
+## Citation identifiers — RFC support and scheduled resolution, 2026-08-27
+
+**[Empirical]** `scripts/check-citations.sh` accepted only `arxiv` and `doi`, rejecting anything
+else with `unknown id_type`. IETF RFCs are primary literature for much of computer systems and
+carry no DOI in general use, so the systems-side bibliography had no way in. Added `id_type: rfc`
+(digits only), resolved against the IETF Datatracker and parsed with `python3`, which the arXiv
+branch already required — RFC support adds no new dependency.
+
+**Not added: IEEE and ACM types.** They need none. Their DOIs resolve through Crossref like any
+other, which the existing `doi` branch already does — the Wooldridge AAMAS citation in
+`PROTOCOL.md` is an ACM DOI and resolved that way on 2026-08-26. A proposal to add them
+separately was declined as redundant after checking.
+
+Verified against the live API: `rfc8446` resolves to "The Transport Layer Security (TLS) Protocol
+Version 1.3". No entry in `scripts/citations.tsv` uses `id_type=rfc` yet; the resolver is in place
+for future systems-side citations and was not retrofitted by inventing one.
+
+**Scheduled online resolution.** `scripts/check-citations.sh` runs structurally on every push and
+deliberately does not resolve identifiers, so a resolver outage cannot redden a build over an
+unrelated change. That keeps PRs honest but means an identifier that silently stopped resolving
+would never be noticed. `.github/workflows/citations-online.yml` runs the `--online` pass weekly
+and on demand, where a failure points at the bibliography rather than at whoever pushed last.
