@@ -203,6 +203,52 @@ synthesis that was discarded for asserting a venue no returned source actually s
 citations now resolve; the offline structural check remains the CI default so the build stays
 deterministic when the resolvers are unreachable.
 
+## Domain-skill gates (added 2026-08-27)
+
+`adapters/gemini-cli/computational-arch` and `adapters/gemini-cli/cybersecurity`
+were added as prompt-layer conduct rules. `README.md` calls that the "social
+half", and §3.11 holds that a conversational instruction is not technical
+enforcement — so two of their rules were made executable:
+
+- `validation/lib/secret_scan_check.sh` (cybersecurity §2.3) — rejects content
+  containing a string shaped like a live credential. Reports `file:line` and
+  the pattern, never the matched text: a scanner that echoes a secret into a
+  build log has published it where logs are most widely readable.
+  `validation/hooks/pre-commit-secret-scan.sh` wires it as a real commit stop,
+  scanning the **staged blob** rather than the working tree, because those
+  differ under partial staging and the blob is what the commit would contain.
+- `validation/lib/dependency_manifest_check.sh` (computational-arch §2.2) —
+  rejects a manifest naming a package that does not exist in its registry. An
+  unregistered name is an unclaimed namespace a third party can register, not
+  a typo (slopsquatting / dependency confusion).
+
+**Results (run 2026-08-27): 13/13 scenarios pass** — see
+`validation/gates_run_2026-08-27.log`. Six exercise the secret scanner (three
+credential shapes rejected; environment indirection, documentation
+placeholders and ordinary config correctly left alone), five exercise
+dependency existence across `requirements.txt` and `package.json` including a
+parser case where comments, `-r` includes, `--index-url`, extras and
+environment markers must not be read as package names, and two confirm that
+invalid input is reported as invalid input rather than as a clean run — the
+same distinction PV7/PV8 make.
+
+Package resolution is injected through `RFP_PKG_RESOLVER`, so the suite
+exercises the real decision logic and real exit codes without network access.
+A gate whose tests need the internet stops running the first time CI is
+offline.
+
+### What the gates suite does not establish
+
+- Not that any LLM agent obeys either skill. These check artifacts, not agents.
+- Not that a flagged string is a live credential, nor that an unflagged file
+  contains none. A clean scan is `[I]` "these patterns did not match", never
+  `[E]` "no secrets present" — the distinction the `cybersecurity` skill
+  itself insists on, which applies to its own tooling.
+- Not that an existing package is the right or safe one. Existence is the
+  floor, not the ceiling.
+- Nothing about secrets already in history: once a credential is in an object,
+  a pre-commit hook cannot help, and rotation is the only remedy.
+
 ## Reproduce it
 
 ```bash
@@ -211,6 +257,9 @@ bash validation/replay_incident.sh /path/to/scratch-dir
 
 # peer-verification checker (§3.12, 8 scenarios)
 bash validation/peer_verification_suite.sh
+
+# domain-skill gates (cybersecurity §2.3 + computational-arch §2.2, 13 scenarios)
+bash validation/skill_gates_suite.sh
 
 # bibliography (structural; add --online to resolve every identifier)
 bash scripts/check-citations.sh

@@ -1,0 +1,61 @@
+=== SG1 AWS access key id is a credential ===
+REJECTED [secret cybersecurity §2.3]: /tmp/claude/E--2026-Escritorio/7bdbd18b-78e0-473c-b7b1-08521cfcd8cf/scratchpad/reality-filter-protocol/validation/fixtures/secrets/s1-aws-key.txt:2 matches a credential pattern
+  pattern: AKIA[0-9A-Z]{16}
+
+=== SG2 PEM private key block is a credential ===
+REJECTED [secret cybersecurity §2.3]: /tmp/claude/E--2026-Escritorio/7bdbd18b-78e0-473c-b7b1-08521cfcd8cf/scratchpad/reality-filter-protocol/validation/fixtures/secrets/s2-private-key.txt:1 matches a credential pattern
+  pattern: -----BEGIN [A-Z ]*PRIVATE KEY-----
+
+=== SG3 hardcoded password in a JSON-shaped config is a credential ===
+REJECTED [secret cybersecurity §2.3]: /tmp/claude/E--2026-Escritorio/7bdbd18b-78e0-473c-b7b1-08521cfcd8cf/scratchpad/reality-filter-protocol/validation/fixtures/secrets/s6-hardcoded-password.txt:3 matches a credential pattern
+  pattern: (api[_-]?key|secret|passwd|password|token)["']?[[:space:]]*[:=][[:space:]]*["']?[^[:space:]"']{8,}
+
+=== SG4 environment indirection is not a secret ===
+
+=== SG5 documentation placeholder is not a secret ===
+
+=== SG6 ordinary config with no credential is clean ===
+
+=== SG7 requirements.txt naming only real packages passes ===
+OK: pypi/requests exists (/tmp/claude/E--2026-Escritorio/7bdbd18b-78e0-473c-b7b1-08521cfcd8cf/scratchpad/reality-filter-protocol/validation/fixtures/manifests/m1-requirements-valid.txt)
+OK: pypi/numpy exists (/tmp/claude/E--2026-Escritorio/7bdbd18b-78e0-473c-b7b1-08521cfcd8cf/scratchpad/reality-filter-protocol/validation/fixtures/manifests/m1-requirements-valid.txt)
+OK: pypi/scikit-learn exists (/tmp/claude/E--2026-Escritorio/7bdbd18b-78e0-473c-b7b1-08521cfcd8cf/scratchpad/reality-filter-protocol/validation/fixtures/manifests/m1-requirements-valid.txt)
+
+=== SG8 requirements.txt naming a nonexistent package is rejected ===
+OK: pypi/requests exists (/tmp/claude/E--2026-Escritorio/7bdbd18b-78e0-473c-b7b1-08521cfcd8cf/scratchpad/reality-filter-protocol/validation/fixtures/manifests/m2-requirements-hallucinated.txt)
+REJECTED [dependency computational-arch §2.2]: pypi/pandas-dataframe-utils named in /tmp/claude/E--2026-Escritorio/7bdbd18b-78e0-473c-b7b1-08521cfcd8cf/scratchpad/reality-filter-protocol/validation/fixtures/manifests/m2-requirements-hallucinated.txt does not exist in the registry
+  an unregistered name is an unclaimed namespace, not a typo
+OK: pypi/numpy exists (/tmp/claude/E--2026-Escritorio/7bdbd18b-78e0-473c-b7b1-08521cfcd8cf/scratchpad/reality-filter-protocol/validation/fixtures/manifests/m2-requirements-hallucinated.txt)
+
+=== SG9 package.json naming only real packages passes ===
+OK: npm/express exists (/tmp/claude/E--2026-Escritorio/7bdbd18b-78e0-473c-b7b1-08521cfcd8cf/scratchpad/reality-filter-protocol/validation/fixtures/manifests/m3-package.json)
+OK: npm/lodash exists (/tmp/claude/E--2026-Escritorio/7bdbd18b-78e0-473c-b7b1-08521cfcd8cf/scratchpad/reality-filter-protocol/validation/fixtures/manifests/m3-package.json)
+
+=== SG10 package.json naming a nonexistent package is rejected ===
+OK: npm/express exists (/tmp/claude/E--2026-Escritorio/7bdbd18b-78e0-473c-b7b1-08521cfcd8cf/scratchpad/reality-filter-protocol/validation/fixtures/manifests/m4-hallucinated-package.json)
+REJECTED [dependency computational-arch §2.2]: npm/react-hooks-async-utils named in /tmp/claude/E--2026-Escritorio/7bdbd18b-78e0-473c-b7b1-08521cfcd8cf/scratchpad/reality-filter-protocol/validation/fixtures/manifests/m4-hallucinated-package.json does not exist in the registry
+  an unregistered name is an unclaimed namespace, not a typo
+
+=== SG11 comments, options, extras and markers are not package names ===
+OK: pypi/requests exists (/tmp/claude/E--2026-Escritorio/7bdbd18b-78e0-473c-b7b1-08521cfcd8cf/scratchpad/reality-filter-protocol/validation/fixtures/manifests/m5-requirements-messy.txt)
+OK: pypi/numpy exists (/tmp/claude/E--2026-Escritorio/7bdbd18b-78e0-473c-b7b1-08521cfcd8cf/scratchpad/reality-filter-protocol/validation/fixtures/manifests/m5-requirements-messy.txt)
+
+=== SG12 missing file is invalid input, not a clean scan ===
+
+=== SG13 unsupported manifest type is invalid input, not a clean run ===
+
+PASS | SG1 AWS access key id is a credential | expected=1 got=1
+PASS | SG2 PEM private key block is a credential | expected=1 got=1
+PASS | SG3 hardcoded password in a JSON-shaped config is a credential | expected=1 got=1
+PASS | SG4 environment indirection is not a secret | expected=0 got=0
+PASS | SG5 documentation placeholder is not a secret | expected=0 got=0
+PASS | SG6 ordinary config with no credential is clean | expected=0 got=0
+PASS | SG7 requirements.txt naming only real packages passes | expected=0 got=0
+PASS | SG8 requirements.txt naming a nonexistent package is rejected | expected=1 got=1
+PASS | SG9 package.json naming only real packages passes | expected=0 got=0
+PASS | SG10 package.json naming a nonexistent package is rejected | expected=1 got=1
+PASS | SG11 comments, options, extras and markers are not package names | expected=0 got=0
+PASS | SG12 missing file is invalid input, not a clean scan | expected=2 got=2
+PASS | SG13 unsupported manifest type is invalid input, not a clean run | expected=2 got=2
+
+PASS=13 FAIL=0

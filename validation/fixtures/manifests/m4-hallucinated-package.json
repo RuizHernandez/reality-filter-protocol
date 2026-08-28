@@ -1,0 +1,7 @@
+{
+  "name": "fixture-hallucinated",
+  "dependencies": {
+    "express": "^4.18.2",
+    "react-hooks-async-utils": "^2.1.0"
+  }
+}

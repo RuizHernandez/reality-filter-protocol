@@ -1,0 +1,6 @@
+# comments and options must not be read as package names
+-r base.txt
+--index-url https://pypi.org/simple
+
+requests[security]==2.31.0    # extras and a pin
+numpy>=1.26 ; python_version >= "3.10"
