@@ -86,11 +86,13 @@ for doc in "${DOCS[@]}"; do
     # resolve; registering it would misrepresent a wildcard as an anchor.
     elif [[ $tok == *[*?]* ]]; then
       continue
-    # Must be spellable as a plain path first. PROTOCOL.md also backticks
-    # regex literals and contract templates such as
-    # `<canonical_sha>:path/to/spec.md`; both contain a slash while naming
-    # nothing, so the character set -- not the slash -- has to decide.
-    elif [[ $tok =~ ^[A-Za-z0-9._/@-]+$ ]] \
+    # Must be spellable as a plain path first. The documents also backtick
+    # regex literals, contract templates such as
+    # `<canonical_sha>:path/to/spec.md`, and ref selectors that carry an `@`
+    # (`actions/checkout@v4`, `stash@{8}`, `file@rev`). All contain a slash
+    # while naming no file here, so the character set -- not the slash --
+    # decides, and `@` marks a version selector rather than a path.
+    elif [[ $tok =~ ^[A-Za-z0-9._/-]+$ ]] \
       && { [[ $tok == */* ]] || [[ $tok =~ \.(md|sh|log|jsonl|json|patch|tsv|yml|cff|mdc|py)$ ]]; }; then
       kind=path
     else
