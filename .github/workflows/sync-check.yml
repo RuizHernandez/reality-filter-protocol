@@ -11,6 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # check-claims.sh resolves the commit SHAs the documents cite, and
+          # the default shallow checkout has no history to resolve them
+          # against.
+          fetch-depth: 0
       - name: Verify PROTOCOL.md / LINEAGE.md / READMEs / citation metadata / adapters are in sync
         run: bash scripts/sync-check.sh
       - name: Verify the bibliography against the citation inventory

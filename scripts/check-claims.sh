@@ -32,6 +32,17 @@ DOCS=(PROTOCOL.md LINEAGE.md EVIDENCE.md validation/REPORT.md)
 fail=0
 unresolved=0
 
+# A shallow clone has no history to resolve commit anchors against. Reporting
+# those as "resolves nowhere" would be a false assertion -- the commit very
+# likely exists and this checkout simply cannot see it -- and asserting
+# something unverified is the failure this script exists to catch. So the
+# state is named instead: SHA anchors become UNVERIFIABLE and the run fails
+# with the remediation rather than with a wrong claim.
+shallow=0
+if [ "$(git rev-parse --is-shallow-repository 2>/dev/null)" = "true" ]; then
+  shallow=1
+fi
+
 [ -f "$REG" ] || { echo "FAIL: missing $REG"; exit 1; }
 for d in "${DOCS[@]}"; do
   [ -f "$d" ] || { echo "FAIL: expected document missing: $d"; exit 1; }
@@ -93,6 +104,11 @@ for doc in "${DOCS[@]}"; do
 
     resolved=0
     if [ "$kind" = sha ]; then
+      if [ "$shallow" -eq 1 ]; then
+        echo "UNVERIFIABLE: sha $tok (shallow clone has no history to check against)"
+        fail=1
+        continue
+      fi
       git cat-file -e "${tok}^{commit}" 2>/dev/null && resolved=1
     else
       # Repo-root-relative first, then relative to the citing document --
@@ -145,7 +161,13 @@ done < "$REG"
 
 echo
 if [ "$fail" -ne 0 ]; then
-  echo "check-claims FAILED"
+  if [ "$shallow" -eq 1 ]; then
+    echo "check-claims FAILED: this is a shallow clone, so commit anchors could not be"
+    echo "checked. Re-run with full history (git fetch --unshallow, or actions/checkout"
+    echo "with fetch-depth: 0) before treating any SHA result above as meaningful."
+  else
+    echo "check-claims FAILED"
+  fi
   exit 1
 fi
 echo "check-claims passed (anchors verified, unresolved: $unresolved)."

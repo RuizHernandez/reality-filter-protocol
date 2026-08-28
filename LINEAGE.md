@@ -337,3 +337,13 @@ first version spawned several subprocesses per token and took minutes under Git 
 where process spawn is expensive; it now runs in about a second. A check nobody can afford to run
 locally is a check that rots — and `computational-arch` §1, added the same day, is precisely the
 rule against assuming someone else's environment.
+
+**Shallow-clone correction (same day).** The first CI run of this check failed on GitHub Actions
+while passing locally: `actions/checkout@v4` performs a depth-1 checkout by default, so the
+history the commit anchors live in was not present, and the script reported two commits that do
+exist as resolving nowhere. Reporting "does not resolve" when the truth is "this checkout cannot
+see it" is itself an unverified assertion — the failure mode the script was written to catch,
+reproduced by the script. It now detects a shallow repository, reports SHA anchors as
+UNVERIFIABLE, and fails with the remediation instead of with a false claim; the workflow sets
+`fetch-depth: 0`. Verified both ways: full clone resolves, a `--depth 1` clone reports
+UNVERIFIABLE.
