@@ -225,3 +225,42 @@ alongside this work are deferred pending a decision on whether they derive from 
 (which would put them in `validation/` with a chain of custody) or are illustrative and synthetic
 (which needs its own clearly-labeled directory, since `examples/` is defined above as undiluted
 reproduction from the private source). No `[E]`-tier evidence about Rules 1–2 is added here.
+
+## Domain skill added — `adapters/gemini-cli/computational-arch/SKILL.md`, 2026-08-27
+
+**[Empirical]** First domain skill authored *for* this repository rather than extracted from a
+private working source. The two bioprocess skills were reproduced undiluted from Dr. Ruiz-Hernández's
+own workflow; this one has no such provenance, and `adapters/gemini-cli/README.md`'s language note
+was corrected to stop implying otherwise for all skills in that directory.
+
+**Motivation:** the universal core has always been software-shaped (§3 is git/worktree/stash/CI
+mechanics; §4 is IDE hooks), but the *domain layer* covered only bioprocess research. A reader
+landing on `README.md` saw two bio skills and reasonably concluded the project was a bioprocess
+artifact. This closes that asymmetry without touching §1–§5.
+
+**Distinguishing rule — environment preflight (§1).** The bio skills already perform ad-hoc
+environment checks: `bio-ruiz-hernandez` §6 and its bootstrap prompt open with "PASO 1 — ENTORNO",
+Ghostscript is located by ordered PATH search with no hardcoded path, and
+`numerical-data-analysis` gates its Julia/SciML directive on `julia --version` responding, with a
+declared SciPy fallback. `computational-arch` promotes that scattered pattern into a named
+contract: detect, never assume; no assumed OS/shell/paths; missing tooling is reported before
+anything is installed; absence of admin rights is treated as the normal case; and detected
+versions become the empirical basis any later version-dependent claim must cite.
+
+**Remaining §2–§6 content** covers the failure modes the core does not name: API/package
+existence verified against the *installed* version and the official registry (an invented package
+name is a live attack surface — slopsquatting/dependency confusion); test, build and performance
+claims require an executable trace or degrade to `[U]`/`[S]`; concurrency and distributed-state
+claims cap at `[I]` absent a deterministic reproduction, since a racy program passes most runs;
+destructive operations must show their blast radius first.
+
+**Deliberately not done:** the evidence labels are **not** redefined for this domain. §7 gives
+per-label *examples* in a software context and states explicitly that `PROTOCOL.md` §2 governs
+their semantics — redefining them per domain would forfeit the cross-domain portability that is
+the protocol's stated value. §7 also records that `[E]` means *empirically verified* and never
+*secure*: a clean static-analysis run is evidence about the tool's coverage, not about the code.
+
+**Scope note:** a security/cybersecurity skill — where the domain-layer ethics section would be
+the primary content rather than an appendix, mirroring `bio-ruiz-hernandez` §5 — is a separate
+piece of work and is not included here. Infrastructure-as-code and orchestration are likewise out
+of scope; §5 fixes only the principle that infrastructure state is queried, not narrated.

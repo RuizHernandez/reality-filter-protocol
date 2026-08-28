@@ -15,8 +15,9 @@ snapshot; a `v1.4.0`-specific DOI will be added here once Zenodo mints it.
 
 ## Included domain skills
 
-This repo includes the skills developed for the biochemical-engineering / bioprocess research
-workflow of Dr. Itan Homero Ruiz-Hernández:
+Domain skills are the layer above the universal core: `PROTOCOL.md` governs conduct, each skill
+adds the invariants of one working domain. Two cover the biochemical-engineering / bioprocess
+research workflow of Dr. Itan Homero Ruiz-Hernández; one covers software and systems work.
 
 - **`bio-ruiz-hernandez`** — the flagship specialization, and the clearest demonstration of
   what a domain layer adds beyond a plain port of the protocol. Three things make it
@@ -32,6 +33,17 @@ workflow of Dr. Itan Homero Ruiz-Hernández:
 - **`numerical-data-analysis`** — anti-data-leakage rules (`fit` on Train only, mandatory
   pipelines, SMOTE inside CV folds), scaler selection by distribution and algorithm, and a
   Julia/SciML directive for ODE kinetic modeling of bioprocesses.
+- **`computational-arch`** — the software/systems layer, and the first domain skill written for
+  this repository rather than extracted from a private workflow. Its distinguishing rule is a
+  mandatory **environment preflight**: the toolchain is detected, never assumed, which
+  generalizes the ad-hoc checks the bio skills already perform. It then adds the failure modes
+  specific to software: APIs and package names must be verified against the *installed* version
+  and the official registry (an invented package name is a live attack surface —
+  *slopsquatting*); "the tests pass" and "X is faster" require an executable trace (command,
+  exit code, log path; n runs with dispersion) or they are `[U]`/`[S]`; concurrency claims cap
+  at `[I]` because code with a race condition passes most runs; and destructive operations show
+  their blast radius before running. It also states plainly that `[E]` means *empirically
+  verified*, never *secure* — a clean static-analysis run is evidence about the tool, not the code.
 
 ## What this is
 
