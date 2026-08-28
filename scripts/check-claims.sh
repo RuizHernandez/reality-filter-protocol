@@ -63,7 +63,7 @@ while IFS=$'\t' read -r anchor kind reason; do
     *) echo "FAIL: registry entry '$anchor' has unknown kind '$kind'"; fail=1; continue ;;
   esac
   reg_anchors="${reg_anchors}${anchor}"$'\n'
-done < "$REG"
+done < <(tr -d '\r' < "$REG")
 
 echo "== Anchor resolution =="
 seen=$'\n'
@@ -158,7 +158,7 @@ while IFS=$'\t' read -r anchor kind reason; do
     fail=1
     stale=1
   fi
-done < "$REG"
+done < <(tr -d '\r' < "$REG")
 [ "$stale" -eq 0 ] && echo "OK: every registry entry is still cited"
 
 echo
