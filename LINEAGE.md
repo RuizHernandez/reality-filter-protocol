@@ -379,3 +379,45 @@ deliberately does not resolve identifiers, so a resolver outage cannot redden a 
 unrelated change. That keeps PRs honest but means an identifier that silently stopped resolving
 would never be noticed. `.github/workflows/citations-online.yml` runs the `--online` pass weekly
 and on demand, where a failure points at the bibliography rather than at whoever pushed last.
+
+## Domain-skill gates — executable enforcement for the two new skills, 2026-08-27
+
+**[Empirical]** `adapters/gemini-cli/computational-arch` and
+`adapters/gemini-cli/cybersecurity` were merged as prompt-layer conduct rules — what `README.md`
+calls the "social half", and what §3.11 says is not technical enforcement. Two of their rules are
+now executable, so the skills are no longer only prose:
+
+- `validation/lib/secret_scan_check.sh` (cybersecurity §2.3) rejects content containing a string
+  shaped like a live credential, and `validation/hooks/pre-commit-secret-scan.sh` wires it as a
+  real commit stop. It scans the **staged blob** rather than the working tree, because the two
+  differ under partial staging and the blob is what the commit would contain. It reports
+  `file:line` and the matching pattern but never the matched text — a scanner that echoes a
+  secret into a build log has published it where logs are most widely readable.
+- `validation/lib/dependency_manifest_check.sh` (computational-arch §2.2) rejects a manifest
+  naming a package that does not exist in its registry: an unregistered name is an unclaimed
+  namespace a third party can register, not a typo.
+
+**13/13 scenarios pass** (`validation/gates_run_2026-08-27.log`). Six exercise the secret scanner
+— and three of those assert it stays **quiet** on environment indirection, documentation
+placeholders and ordinary config, because a scanner that flags what a correct codebase is full of
+teaches people to switch it off, which costs more than its misses. Five exercise dependency
+existence, including a parser case where comments, `-r` includes, `--index-url`, extras and
+environment markers must not be read as package names. Two confirm invalid input is reported as
+invalid input rather than as a clean run, the distinction PV7/PV8 already make.
+
+**Resolution is injected** through `RFP_PKG_RESOLVER`, so the suite exercises the real decision
+logic and real exit codes with no network. A gate whose tests need the internet stops running the
+first time CI is offline.
+
+**Two fixture corrections found by running it.** The first AWS fixture used
+`AKIAIOSFODNN7EXAMPLE`, the canonical key from AWS's own documentation — the scanner correctly
+declined to flag it, since it contains `EXAMPLE`, and the fixture was wrong rather than the
+filter. The generic assignment pattern also missed `"password": "..."` because it required the
+key to be followed directly by `:`; JSON puts a quote in between.
+
+**`scripts/check-claims.sh` gained a `generic` anchor kind** while documenting this work: it
+flagged `package.json`, cited in `validation/REPORT.md` as a manifest *type* rather than as a
+file of this repository. That is not the same statement as the private-workspace anchors, which
+name real artifacts this checkout cannot see, so it is reported separately and left out of the
+unresolved count — folding them together would inflate the debt figure with things that were
+never debt.

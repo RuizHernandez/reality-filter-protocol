@@ -129,7 +129,7 @@ fi
 # Corollary the docs must respect: the "N/N" form is reserved for scenario
 # counts. Write other ratios as "N of N" so they are not read as one.
 valid_counts=""
-for logfile in validation/replay_run_2026-08-05.log validation/peer_run_2026-08-26.log; do
+for logfile in validation/replay_run_2026-08-05.log validation/peer_run_2026-08-26.log validation/gates_run_2026-08-27.log; do
   if [[ ! -f "$logfile" ]]; then
     echo "FAIL: expected run log missing: $logfile"
     fail=1

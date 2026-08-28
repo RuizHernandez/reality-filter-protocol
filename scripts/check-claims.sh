@@ -51,15 +51,25 @@ done
 # Registry: anchor <TAB> kind <TAB> reason. Held as a newline-delimited string
 # so membership is a builtin test and this stays portable to bash 3.2.
 reg_anchors=$'\n'
+# Kind `generic` names a filename used as a TYPE in prose -- `package.json`,
+# `go.mod` -- rather than an artifact of this repository. That is a different
+# statement from the private-workspace anchors, which do name real artifacts
+# this checkout cannot see, so the two are counted separately: folding them
+# together would inflate the debt figure with things that were never debt.
+generic_anchors=$'\n'
 while IFS=$'\t' read -r anchor kind reason; do
   case "${anchor:-}" in ''|\#*) continue ;; esac
+  if [ "${kind:-}" = generic ]; then
+    generic_anchors="${generic_anchors}${anchor}"$'
+'
+  fi
   if [ -z "${reason:-}" ]; then
     echo "FAIL: registry entry '$anchor' has no reason -- every unresolvable anchor must say why"
     fail=1
     continue
   fi
   case "$kind" in
-    sha|path|url|branch) ;;
+    sha|path|url|branch|generic) ;;
     *) echo "FAIL: registry entry '$anchor' has unknown kind '$kind'"; fail=1; continue ;;
   esac
   reg_anchors="${reg_anchors}${anchor}"$'\n'
@@ -135,6 +145,10 @@ for doc in "${DOCS[@]}"; do
       else
         echo "OK: $kind $tok"
       fi
+    elif [[ $generic_anchors == *$'
+'"$tok"$'
+'* ]]; then
+      echo "GENERIC: $tok (a filename used as a type in prose, not an artifact here)"
     elif [ "$is_registered" -eq 1 ]; then
       echo "UNRESOLVED: $kind $tok (registered)"
       unresolved=$((unresolved+1))

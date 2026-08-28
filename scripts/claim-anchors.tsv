@@ -26,3 +26,4 @@ app/ui/context.py	path	UNRESOLVED: private-workspace file named in the item-30 s
 app/ui/shell.py	path	UNRESOLVED: private-workspace file named in the item-30 stash evidence.
 Evidence/devswarm-p2/VERIFICATION-ITEM-30.md	path	UNRESOLVED: the full empirical record for item 30, held in the private DevSwrmxML workspace.
 ux/p1-progressive-disclosure	branch	UNRESOLVED: git branch in the private workspace, not a path and not a branch of this repository.
+package.json	generic	A manifest filename used as a type in prose (alongside requirements.txt and go.mod); this repository has no package.json of its own.

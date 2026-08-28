@@ -38,3 +38,5 @@ jobs:
         run: bash validation/replay_incident.sh "$RUNNER_TEMP/replay"
       - name: Peer-verification checker (PROTOCOL.md §3.12)
         run: bash validation/peer_verification_suite.sh
+      - name: Domain-skill gates (cybersecurity §2.3, computational-arch §2.2)
+        run: bash validation/skill_gates_suite.sh
