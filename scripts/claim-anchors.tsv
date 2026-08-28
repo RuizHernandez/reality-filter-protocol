@@ -1,0 +1,28 @@
+# Evidence anchors cited by this repository's documents that cannot resolve
+# inside this repository. Checked by scripts/check-claims.sh in both
+# directions: an unresolvable anchor MUST be listed here with a reason, and an
+# entry here that no document cites any more is reported as stale.
+#
+# Being listed here is NOT an exemption. Every entry is reported as UNRESOLVED
+# on each run -- the same convention scripts/check-citations.sh uses for
+# id_type=none. It is registered debt, deliberately visible.
+#
+# Columns: anchor <TAB> kind <TAB> reason
+# kind: sha | path | url | branch
+#
+# Nearly every entry below is the same category: the protocol was extracted
+# from a private multi-agent workspace (see LINEAGE.md, "Source provenance"),
+# and the incident record that justifies several v1.2.0 rules lives there. The
+# anchors are kept verbatim rather than paraphrased so the private record can
+# be located by anyone who does have access -- but they cannot be verified
+# from this repository, and the documents must not imply otherwise.
+
+ab08d13408add5c46c665e9e58dcb5684e662c53	sha	UNRESOLVED: source commit in the private Cerebro-Queen DevSwarm workspace, not in this repository's history.
+776f042	sha	UNRESOLVED: the rubric-capture incident commit in the private DevSwarm workspace; the incident it records is the basis for several v1.2.0 rules.
+docs/devswarm/PROTOCOL.md	path	UNRESOLVED: the private source file this protocol was generalized from; see LINEAGE.md "Source provenance".
+docs/ux/P2-impl-notes.md	path	UNRESOLVED: private-workspace file cited in the v1.2.0 incident record.
+docs/protected/	path	UNRESOLVED: illustrative path used to describe the specification-immutability rule, not a directory of this repository.
+app/ui/context.py	path	UNRESOLVED: private-workspace file named in the item-30 stash evidence.
+app/ui/shell.py	path	UNRESOLVED: private-workspace file named in the item-30 stash evidence.
+Evidence/devswarm-p2/VERIFICATION-ITEM-30.md	path	UNRESOLVED: the full empirical record for item 30, held in the private DevSwrmxML workspace.
+ux/p1-progressive-disclosure	branch	UNRESOLVED: git branch in the private workspace, not a path and not a branch of this repository.

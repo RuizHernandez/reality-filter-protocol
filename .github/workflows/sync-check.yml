@@ -18,6 +18,12 @@ jobs:
         # deliberately (`--online`) rather than on every push, so a resolver
         # outage cannot turn into a red build on an unrelated change.
         run: bash scripts/check-citations.sh
+      - name: Verify the evidence anchors the documents cite actually resolve
+        # Rule 2 applied to this repository's own [Empirical] claims: every
+        # commit SHA and file path cited by PROTOCOL.md / LINEAGE.md /
+        # EVIDENCE.md / validation/REPORT.md must resolve, or be registered as
+        # unresolvable with a reason in scripts/claim-anchors.tsv.
+        run: bash scripts/check-claims.sh
 
   validation:
     runs-on: ubuntu-latest
