@@ -127,7 +127,8 @@ fi
 # docs assert, and require each one to be a count some run log actually
 # produced. A stale "11/11" then fails no matter where it hides.
 # Corollary the docs must respect: the "N/N" form is reserved for scenario
-# counts. Write other ratios as "N of N" so they are not read as one.
+# counts. Write other ratios as "N of N" so they are not read as one, and
+# write scenario counts numerically: a count spelled as a word is invisible here.
 valid_counts=""
 for logfile in validation/replay_run_2026-08-05.log validation/peer_run_2026-08-26.log validation/gates_run_2026-08-27.log; do
   if [[ ! -f "$logfile" ]]; then
@@ -146,7 +147,13 @@ for logfile in validation/replay_run_2026-08-05.log validation/peer_run_2026-08-
 done
 echo "Run logs report passing scenario counts:$valid_counts"
 
-asserted=$(grep -ohP '\b([0-9]+)/\1\b' PROTOCOL.md LINEAGE.md validation/REPORT.md | sort -u || true)
+# TRIAL.md sat outside this list and kept asserting a stale count through the
+# whole v1.4.0 sweep. A word-form guard ("eleven ... scenarios") was written
+# and then dropped: it cannot tell a total from a delta ("two composed-hook
+# regression scenarios were added") or from prose quoting the corrected error,
+# and a check that cries wolf is a check someone switches off. Widening the
+# file list is the half that actually holds.
+asserted=$(grep -ohP '\b([0-9]+)/\1\b' PROTOCOL.md LINEAGE.md validation/REPORT.md validation/live-agent-trial-1/TRIAL.md | sort -u || true)
 for a in $asserted; do
   n="${a%%/*}"
   if ! printf '%s' "$valid_counts" | grep -qw "$n"; then

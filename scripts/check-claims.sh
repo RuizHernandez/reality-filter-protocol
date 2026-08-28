@@ -148,7 +148,7 @@ for doc in "${DOCS[@]}"; do
     elif [[ $generic_anchors == *$'
 '"$tok"$'
 '* ]]; then
-      echo "GENERIC: $tok (a filename used as a type in prose, not an artifact here)"
+      echo "GENERIC: $tok (a name used as a type in prose, not an artifact here)"
     elif [ "$is_registered" -eq 1 ]; then
       echo "UNRESOLVED: $kind $tok (registered)"
       unresolved=$((unresolved+1))

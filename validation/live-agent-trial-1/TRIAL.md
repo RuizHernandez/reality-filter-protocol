@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-05. **Status:** single trial (N=1), not the controlled A/B evaluation
 `CONTRIBUTING.md` calls for. Reported here as one additional, real-model data point on top of
-the eleven no-LLM synthetic scenarios in `../REPORT.md`.
+the thirteen no-LLM synthetic scenarios in `../REPORT.md`.
 
 ## Setup
 
