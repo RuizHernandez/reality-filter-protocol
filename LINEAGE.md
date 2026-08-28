@@ -303,3 +303,47 @@ conduct rules — the "social half" in `README.md`'s terms — and the repositor
 position is that a conversational instruction is not technical enforcement. Executable gates for
 these domains (dependency-audit and secret-scanning hooks) remain open work, and no `[E]`-tier
 evidence about their effect is claimed here.
+
+## Evidence-anchor verification — `scripts/check-claims.sh`, 2026-08-27
+
+**[Empirical]** The repository verified its bibliography (`scripts/check-citations.sh`) and its
+version markers (`scripts/sync-check.sh`), but never its own evidence anchors. `LINEAGE.md`,
+`EVIDENCE.md` and `validation/REPORT.md` assert `[Empirical]`-tagged claims anchored to commit
+SHAs and file paths, and nothing checked that those anchors resolve — so a renamed log or a
+mistyped SHA would leave the documents quietly asserting something false. That is the failure
+Rule 2 exists to prevent, in the one place where it is least defensible: a protocol that requires
+verification before assertion, not verifying its own assertions.
+
+`scripts/check-claims.sh` extracts every backticked commit SHA and repo path from those four
+documents and resolves each one — `git cat-file -e` for SHAs, existence (repo-root-relative, then
+relative to the citing document) for paths. On this baseline: **42 anchors resolve, 9 do not.**
+
+The 9 are registered in `scripts/claim-anchors.tsv` with a mandatory reason and reported as
+UNRESOLVED on every run — registered debt, deliberately visible, the same convention
+`scripts/check-citations.sh` uses for `id_type=none`. All 9 are the same category: the private
+Cerebro-Queen workspace the protocol was extracted from, and the incident record behind several
+v1.2.0 rules. They are kept verbatim rather than paraphrased so anyone with access can locate
+them, but they cannot be verified from here and the documents must not imply otherwise.
+
+**Three failure modes, each exercised against the real script before merge:** an unregistered
+dangling anchor fails; a registry entry that *does* resolve fails as a stale exemption; a
+registry entry no document cites any more fails as stale debt. Non-anchors are excluded
+structurally rather than by allowlist — URLs, glob patterns like `ux/p1-*` (a class of branches,
+not an artifact), and backticked regex or contract templates, which contain a slash while naming
+nothing.
+
+**Implementation note:** classification uses bash builtins rather than a pipeline per token. The
+first version spawned several subprocesses per token and took minutes under Git Bash on Windows,
+where process spawn is expensive; it now runs in about a second. A check nobody can afford to run
+locally is a check that rots — and `computational-arch` §1, added the same day, is precisely the
+rule against assuming someone else's environment.
+
+**Shallow-clone correction (same day).** The first CI run of this check failed on GitHub Actions
+while passing locally: `actions/checkout@v4` performs a depth-1 checkout by default, so the
+history the commit anchors live in was not present, and the script reported two commits that do
+exist as resolving nowhere. Reporting "does not resolve" when the truth is "this checkout cannot
+see it" is itself an unverified assertion — the failure mode the script was written to catch,
+reproduced by the script. It now detects a shallow repository, reports SHA anchors as
+UNVERIFIABLE, and fails with the remediation instead of with a false claim; the workflow sets
+`fetch-depth: 0`. Verified both ways: full clone resolves, a `--depth 1` clone reports
+UNVERIFIABLE.
