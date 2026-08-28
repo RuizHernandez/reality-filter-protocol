@@ -421,3 +421,42 @@ file of this repository. That is not the same statement as the private-workspace
 name real artifacts this checkout cannot see, so it is reported separately and left out of the
 unresolved count — folding them together would inflate the debt figure with things that were
 never debt.
+
+## A/B study apparatus and a stale spelled-out count, 2026-08-27
+
+**[Empirical]** `validation/ab-study/` adds the apparatus for the controlled evaluation
+`EVIDENCE.md` and `CONTRIBUTING.md` both say does not exist: design and rubric
+(`validation/ab-study/PROTOCOL-AB.md`), four seed tasks, an archiving runner, and a results
+template.
+
+**No data was collected and no result is claimed.** `EVIDENCE.md`'s statement stands unchanged.
+Building the harness does not shrink the gap, and recording that it did would be the exact
+failure this repository is about.
+
+Three design decisions worth keeping on the record:
+
+- **The control is "no protocol", not a different protocol variant.** A proposal reviewed the
+  same day suggested comparing a biology-flavoured build against a systems-flavoured one; that
+  measures nothing about whether the protocol causes any behaviour, because both arms have it.
+- **Every metric is a count of observable transcript events**, with M5 (spontaneous correction)
+  included as a counter-metric so the study can detect the protocol making things *worse*. A
+  treatment that only measures its intended effect cannot fail, and task T4 exists for the same
+  reason: §1 forbids fabricating objections as much as rubber-stamping, so a treatment that
+  merely makes an agent more negative must be scored as the different failure it is.
+- **The runner does not grade.** It writes a condition-stripped copy for blind grading, because
+  the evidence tags and protocol vocabulary label which arm a transcript came from. A harness
+  scoring its own runs would be the evaluator-immunity violation §5 names.
+
+The prompt-length confound (condition B also has a longer system prompt) is recorded as a stated
+limitation with the filler-arm control that would separate it, rather than left for a reader to
+find.
+
+**Stale count corrected.** `validation/live-agent-trial-1/TRIAL.md` still said "the eleven no-LLM
+synthetic scenarios" — the v1.4.0 sweep that corrected every numeric 11 to 13 could not see it,
+because `scripts/sync-check.sh` matches the `N/N` form and this was spelled as a word in a file
+outside its list. Fixed to thirteen, and TRIAL.md added to the guard's file list. A word-form
+guard was written and then **dropped**: it cannot distinguish a total from a delta ("two
+composed-hook regression scenarios were added") or from prose quoting the corrected error, and
+both of those false positives fired immediately on the real documents. A check that cries wolf is
+a check someone switches off — the same reasoning the secret scanner's placeholder filter rests
+on. The convention comment now tells authors to write scenario counts numerically.
