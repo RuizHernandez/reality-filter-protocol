@@ -1,0 +1,10 @@
+# Keep shell scripts and the machine-read data files LF in the working tree on
+# every platform. Without this, a Windows checkout rewrites them to CRLF: the
+# blank line in a .tsv becomes a lone carriage return, which reads as a record
+# with an empty first field rather than as a blank line, and the checkers
+# reject their own inventories. Linux CI never reproduces it, so the failure
+# only ever appears on a contributor's machine.
+*.sh    text eol=lf
+*.tsv   text eol=lf
+*.jsonl text eol=lf
+*.yml   text eol=lf

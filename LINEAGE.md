@@ -347,3 +347,12 @@ reproduced by the script. It now detects a shallow repository, reports SHA ancho
 UNVERIFIABLE, and fails with the remediation instead of with a false claim; the workflow sets
 `fetch-depth: 0`. Verified both ways: full clone resolves, a `--depth 1` clone reports
 UNVERIFIABLE.
+
+**CRLF correction (same day).** On a Windows checkout the registry's blank separator line becomes
+a lone carriage return, which `read` returns as a record whose first field is `\r` — not empty,
+not a comment — so `scripts/check-claims.sh` rejected its own inventory with "registry entry ''
+has no reason". Linux CI cannot reproduce this, since git only rewrites line endings on the
+platform that asked for them: the check was green on GitHub and red on the maintainer's machine
+at the same commit. Fixed at both levels — `.gitattributes` pins `*.sh`, `*.tsv`, `*.jsonl` and
+`*.yml` to LF in every working tree, and the reader strips carriage returns defensively for
+contributors who already have CRLF copies.
