@@ -17,7 +17,7 @@ snapshot; a `v1.4.0`-specific DOI will be added here once Zenodo mints it.
 
 Domain skills are the layer above the universal core: `PROTOCOL.md` governs conduct, each skill
 adds the invariants of one working domain. Two cover the biochemical-engineering / bioprocess
-research workflow of Dr. Itan Homero Ruiz-Hernández; one covers software and systems work.
+research workflow of Dr. Itan Homero Ruiz-Hernández; two cover software/systems and security work.
 
 - **`bio-ruiz-hernandez`** — the flagship specialization, and the clearest demonstration of
   what a domain layer adds beyond a plain port of the protocol. Three things make it
@@ -44,6 +44,17 @@ research workflow of Dr. Itan Homero Ruiz-Hernández; one covers software and sy
   at `[I]` because code with a race condition passes most runs; and destructive operations show
   their blast radius before running. It also states plainly that `[E]` means *empirically
   verified*, never *secure* — a clean static-analysis run is evidence about the tool, not the code.
+- **`cybersecurity`** — security work, **defensive and authorized only**. It deliberately inverts
+  `bio-ruiz-hernandez`'s layout: there the ethics layer is §5, here it is **§1**, because in
+  research ethics governs how a result is reported, while in security it governs whether the
+  action may run at all. §1 requires authorization and scope to be established before anything
+  else, treats scope as a hard boundary that is never self-extended, mandates lab isolation for
+  untrusted code, and covers responsible disclosure and third-party data. The rest applies the
+  reality filter to security's own failure modes: CVE/CWE/advisory identifiers verified against
+  authoritative databases before citing (models invent them); a finding without a documented
+  reproduction stays `[S]`, and "the scanner reported it" is `[I]`, since false positives are the
+  normal case; severity must be argued in *this* deployment's context rather than inherited from
+  an advisory; and "no vulnerabilities found" is a statement about coverage, never about the system.
 
 ## What this is
 
