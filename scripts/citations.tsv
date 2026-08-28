@@ -3,6 +3,14 @@
 # PROTOCOL.md must appear here, and every entry here must appear in PROTOCOL.md.
 #
 # Columns: surname <TAB> year <TAB> id_type <TAB> id <TAB> title_fragment <TAB> note
+# id_type: arxiv | doi | rfc | none
+#   rfc = IETF RFC number, digits only (e.g. 8446), resolved against the IETF
+#   Datatracker. RFCs are primary literature for much of computer systems and
+#   carry no DOI in general use. IEEE and ACM need no type of their own: their
+#   DOIs resolve through Crossref like any other -- the Wooldridge AAMAS entry
+#   below is an ACM DOI. No entry uses id_type=rfc yet; the resolver is in
+#   place for the systems-side citations, not retrofitted onto the current
+#   bibliography.
 # id_type "none" = no persistent identifier located. Such an entry MUST carry a
 # note saying so; the check reports it as UNRESOLVED on every run. It is
 # registered debt, deliberately visible — not an exemption.
