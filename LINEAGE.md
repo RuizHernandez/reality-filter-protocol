@@ -374,7 +374,7 @@ Verified against the live API: `rfc8446` resolves to "The Transport Layer Securi
 Version 1.3". No entry in `scripts/citations.tsv` uses `id_type=rfc` yet; the resolver is in place
 for future systems-side citations and was not retrofitted by inventing one.
 
-**Scheduled online resolution.** `check-citations.sh` runs structurally on every push and
+**Scheduled online resolution.** `scripts/check-citations.sh` runs structurally on every push and
 deliberately does not resolve identifiers, so a resolver outage cannot redden a build over an
 unrelated change. That keeps PRs honest but means an identifier that silently stopped resolving
 would never be noticed. `.github/workflows/citations-online.yml` runs the `--online` pass weekly
