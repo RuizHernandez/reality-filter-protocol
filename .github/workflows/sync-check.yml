@@ -18,6 +18,9 @@ jobs:
           fetch-depth: 0
       - name: Verify PROTOCOL.md / LINEAGE.md / READMEs / citation metadata / adapters are in sync
         run: bash scripts/sync-check.sh
+      - name: Verify every adapter carries the core protocol elements
+        # sync-check verifies a version mention; this verifies rule coverage.
+        run: bash scripts/adapter-coverage.sh
       - name: Verify the bibliography against the citation inventory
         # Structural only. Identifier resolution needs the network and is run
         # deliberately (`--online`) rather than on every push, so a resolver
