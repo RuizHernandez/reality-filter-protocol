@@ -1,0 +1,7 @@
+# Registered omissions from the adapter coverage matrix.
+# Same convention as claim-anchors.tsv: an element an adapter deliberately
+# does not carry, with a reason. An element listed here that the adapter
+# actually contains is a stale exemption and fails the check.
+# adapter<TAB>element<TAB>reason
+adapters/github-copilot/copilot-instructions.md	correction-format	Inline-suggestion token budget; the short-form ruleset carries labeling (rule 3) but not the full correction template.
+adapters/github-copilot/copilot-instructions.md	evaluator-immunity	Single-agent completion surface with no evaluation loop; §5 governs meta-evaluators, which Copilot inline is not.

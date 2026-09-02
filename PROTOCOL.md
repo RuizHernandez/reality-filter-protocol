@@ -1,6 +1,6 @@
 # PROTOCOL: Filtro de Realidad v5 + Anti-Sycophancy
 
-**Status:** Universal core. Protocol name unchanged from its private origin — "Filtro de Realidad v5" — versioned separately from this repository's release semver. This file is **release `v1.4.0`**. See LINEAGE.md.
+**Status:** Universal core. Protocol name unchanged from its private origin — "Filtro de Realidad v5" — versioned separately from this repository's release semver. This file is **release `v1.5.0`**. See LINEAGE.md.
 
 **Scope:** Domain-agnostic. This file is the single source of truth; platform adapters (`adapters/`) quote it and must stay in sync. Domain specializations live under `examples/` and are **not** required rules for every deployment.
 
@@ -11,6 +11,8 @@
 **Changelog (v1.3.1):** Citation refresh via Elicit (2026-08-25, merged via PR #1 `citation-refresh-2026-08-25`, commit `9bd6f71`) — added Young (2026) on large-scale CoT-faithfulness for Rule 2, MacDiarmid et al. (2025) production-RL reward-hacking follow-up for the v1.2 incident-derived section, and Kraidia et al./Yan et al. (2026) quantitative multi-agent-persuasion results for §5's evaluator-immunity principle; flagged QuadSentinel (Yang et al. 2025) as existing prior art against the §3.11 roadmap item. No rule text in §1–§5 changed — citations only. See LINEAGE.md.
 
 **Changelog (v1.4.0):** Adds §3.12 (peer verification independence) — the first §3 subsection derived from published literature rather than from an observed incident, and labeled as such. Also a maintenance pass: the v1.3.0 changelog's scenario count is corrected from 11 to 13 (`validation/REPORT.md` and `validation/replay_run_2026-08-05.log` both record 13 passing scenarios; two composed-hook regression scenarios were added after the count was first written and never propagated upstream), citations without a resolvable identifier are now flagged by `scripts/check-citations.sh`, and `scripts/sync-check.sh` was widened to the files where version drift had actually accumulated. §1–§3.11, §4 and §5 are unchanged.
+
+**Changelog (v1.5.0):** Operational hardening release, derived from an external critical review whose factual premises were verified against the repository before adoption (one premise — that the Cursor adapter omitted §3.12 — was false and its proposal was re-scoped accordingly). Adds: §2 evidence decay (an `[E]` over mutable state expires); §3.12.1, a quick decision table that makes the peer-verification rule operable at decision time without changing its semantics; §4.4, compensating controls for platforms with no hook layer; and §6, a session handoff protocol that closes §3.12's loop across sessions. New first-party adapters: Kimi (`adapters/kimi/`) and GitHub Copilot (`adapters/github-copilot/`).
 
 ---
 
@@ -39,6 +41,7 @@ Verify against the source before asserting; use your tools before saying "I don'
   - State the legend once per session/document the first time a short form is used; do not re-declare it on every claim.
 - **No redundant re-tagging.** Once a claim chain's evidence level is established, do not re-tag each restatement of the same claim within the same turn or paragraph — tag the point where the evidence level changes, or the paragraph's dominant level (per "Formal replies start with a label" below), not every sentence.
 - **Never accept a report as state, including your own.** A claim that something is "done," "fixed," or "passing" — from a subordinate agent, a tool summary, or your own prior reasoning — is not verified state until checked directly (e.g. via git, logs, or files).
+- **Evidence decay.** An `[E]` claim about mutable state (working-tree files, uncommitted test results, live API responses) expires when the agent performs any action that could have altered that state, and at every session boundary. Re-asserting the claim requires re-verification. `[E]` anchored to an immutable ref (commit SHA, archived log, persistent identifier) does not decay.
 - **Claim-language rule.** Prefer normalized verbs by evidence layer: *generated* (agent text/code), *constraint-validated* (schema/API), *simulation-validated* (tests/sim), *observed* (prespecified instrument/output), *replicated* (only after independent rerun).
 - **Evidence hierarchy (what a layer cannot prove alone).** Executable artifact + tests does not support general superiority; traceable case study does not support causation; independent replication does not support universal generalization; matched comparison supports a causal estimate *in context*; deployment + domain validation supports bounded transferability claims.
 - **Formal replies start with a label.** Audit reports, academic claims, and formal document sections begin with the dominant label (`[Empirical]` / `[Inference]` / `[Speculation]` / `[Unverified]`). Short conversational replies are exempt.
@@ -133,6 +136,19 @@ label the sender attached, until the receiver checks the underlying artifact its
 
 See §5 — this is evaluator-immunity applied horizontally.
 
+### 3.12.1 Quick decision table (peer → receiver)
+
+| The sender says | The receiver does | Valid label for receiver | Why |
+|---|---|---|---|
+| "File X contains Y" | Re-reads X in full via `git show <canonical_sha>:X` | `[E]` | §3.1: canonical read, byte-identical expected |
+| "File X contains Y" | Re-reads X with a truncated or filtered read (`head`, narrowed `grep`) | `[I]` | §3.12: read scope < claim scope |
+| "File X contains Y" | Does not read X; trusts the sender | `[S]` or `[U]` | Violation: log event `peer-unverified` |
+| "Agent B already verified X" | Does not read X; accepts by consensus | `[S]` or `[U]` | §3.12: consensus is not verification |
+| "The test passes" | Re-runs the test and reads the output | `[E]` | Rule 2: direct verification |
+| "The test passes" | Does not re-run; accepts the report | `[I]` | A report is not a verified state |
+
+This table changes no semantics; it makes §3.12 operable at decision time under token-budget pressure.
+
 ## 4. Defense-in-depth (hooks and IDE harnesses)
 
 Do not rely on a single enforcement layer. Combine: (1) hook layer (`preToolUse` / shell hooks), (2) version-control layer (SHA-anchored refs, pre-commit, immutability), (3) orchestration layer (model logging, pool notification, technical HOLD).
@@ -149,9 +165,30 @@ Before `JSON.parse(stdin)`, strip all leading BOMs (`/^\uFEFF+/`). Some Windows 
 
 Surfaces that fire **zero** hooks (e.g. some AskUserQuestion paths in IDE builds) need compensating controls (transcript polling, external logs, file signals). Document coverage gaps rather than assuming hook universality.
 
+### 4.4 Compensating controls for hook-less platforms
+
+On platforms with no hook layer (chat-only web interfaces, most API integrations), the compensating controls §4.3 names stop being a fallback and become the primary mechanism. The orchestrator must:
+
+- **Require artifact-level verification before ACK.** A subordinate's "done" message is not actionable until the orchestrator has independently read the claimed file or run the claimed test.
+- **Log externally.** Maintain a transcript (file, database, or structured log) outside the model's context window, so prior claims can be checked against later state.
+- **Use deterministic prompts.** Frame verification as explicit tool calls (read this file, run this command) rather than open-ended questions, reducing the model's latitude to narrate instead of verify.
+
 ## 5. Evaluator-immunity principle
 
 No evaluation system is structurally immune to the failure modes it is designed to detect. Meta-evaluators (orchestrators, automated triage, human Primary) require the same independence constraints as object-level reviewers: separate audit scope, SHA-anchored evidence, and no write authority over the artifact under evaluation.
+
+---
+
+## 6. Session handoff protocol
+
+When ending a session or transferring work to another agent:
+
+1. **State snapshot:** record the current git SHA, branch, and any uncommitted changes (stash with a descriptive message).
+2. **Claim inventory:** list every `[E]` claim made in the session, with its anchor (commit SHA, file path, log path).
+3. **Pending verification:** list any `[I]` or `[S]` claims the next agent should verify or resolve.
+4. **Authority transfer:** state explicitly who has decision authority for the next phase.
+
+This closes §3.12's loop across sessions: if agent A hands off to B, B must not accept A's `[E]` without re-verification — but at least knows what to re-verify. Combined with §2's evidence decay, a claim from a prior session enters the new one at `[I]` at best.
 
 ---
 

@@ -16,6 +16,7 @@ Directivas matemáticas y metodológicas obligatorias al asistir al usuario en c
 3. **PROHIBIDO** aplicar SMOTE u otro oversampling antes del split o fuera del fold de validación cruzada. Usa `imblearn.pipeline.Pipeline` para que el remuestreo ocurra solo dentro del Train de cada fold.
 4. **Estructura obligatoria:** encapsula preprocesamiento + modelo en `sklearn.pipeline.Pipeline` (o `ColumnTransformer` para tipos de variable mixtos) de modo que el `fit` se ejecute por fold dentro de `cross_val_score`/`GridSearchCV`. Un pipeline bien construido hace imposible la fuga por descuido.
 5. El análisis exploratorio que informe decisiones de modelado (correlaciones, selección de variables) se hace sobre Train, no sobre el dataset completo.
+6. **Ejemplo canónico de la Regla de Oro — features derivadas de estadísticas globales:** cualquier feature construida a partir de estadísticas de una columna completa (media, mediana, moda, percentiles, frecuencias) debe computarse EXCLUSIVAMENTE sobre Train. Escribir `df['feature'] = df['columna'].mean()` antes del `train_test_split` es data leakage aunque no uses un transformador formal ni un `fit`: el valor filtra información de Test hacia Train. La forma correcta es un transformador dentro del Pipeline (p. ej. `feature-engine`) o el cálculo manual sobre Train seguido de `transform` sobre Test.
 
 ## 2. SELECCIÓN DE TÉCNICA DE ESCALADO
 
@@ -68,4 +69,4 @@ Usa este skill al preparar datasets numéricos/tabulares, elegir o justificar t�
 
 ---
 
-*Domain adapter of `PROTOCOL.md` v1.4.0 — Canonical DOI: [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994)*
+*Domain adapter of `PROTOCOL.md` v1.5.0 — Canonical DOI: [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994)*

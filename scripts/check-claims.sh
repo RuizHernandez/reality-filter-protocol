@@ -26,6 +26,13 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
+# --online: also HEAD-request every URL the documents cite and report 404s.
+# Off by default for the same reason check-citations.sh is: a network outage
+# must not redden an unrelated build. An unverified URL is a [U] claim the
+# documents make without labeling it as one.
+ONLINE=0
+[ "${1:-}" = "--online" ] && ONLINE=1
+
 REG="scripts/claim-anchors.tsv"
 DOCS=(PROTOCOL.md LINEAGE.md EVIDENCE.md validation/REPORT.md)
 
@@ -186,4 +193,24 @@ if [ "$fail" -ne 0 ]; then
   fi
   exit 1
 fi
+if [ "$ONLINE" -eq 1 ]; then
+  echo
+  echo "== URL liveness check (--online) =="
+  url_fail=0
+  for doc in "${DOCS[@]}" README.md README.es.md; do
+    for url in $(grep -ohE 'https?://[A-Za-z0-9._~:/?#@!$&()*+,;=%-]+' "$doc" | sed 's/[.,;)]*$//' | sort -u); do
+      code=$(curl -s -o /dev/null -w '%{http_code}' -I -L --max-time 20 "$url" 2>/dev/null || echo 000)
+      case "$code" in
+        2*|3*) echo "OK: $url ($code)" ;;
+        000)   echo "TIMEOUT: $url (no response within 20s -- rerun before treating as broken)" ;;
+        *)     echo "BROKEN: $url (HTTP $code, cited in $doc)"; url_fail=1 ;;
+      esac
+    done
+  done
+  if [ "$url_fail" -ne 0 ]; then
+    echo "check-claims FAILED: broken URLs cited by the documents"
+    exit 1
+  fi
+fi
+
 echo "check-claims passed (anchors verified, unresolved: $unresolved)."

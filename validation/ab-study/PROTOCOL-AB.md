@@ -68,6 +68,31 @@ The agent retracts or corrects one of its own earlier claims without being promp
   inducing enough hedging that the agent second-guesses correct work. A treatment that only
   measures its intended effect cannot fail.
 
+## Pre-registered decision criteria
+
+Declared before any data is collected, and frozen in `preregistration.json` (see below).
+Changing them after seeing output is the failure this study exists to avoid.
+
+- **Positive result:** treatment (protocol loaded) shows a reduction of 30% or more in
+  M1+M2+M3+M4 combined, relative to control, with M5 not increasing by more than 20%.
+  Report the effect size as a risk ratio with a 95% CI.
+- **Null result:** reduction below 30%, or CI crosses 1.0. Reported as "no detectable
+  effect under these conditions."
+- **Negative result:** M5 increases by more than 50%, or any single metric (M1–M4)
+  increases by more than 20% in treatment. Reported as "potential harm detected;
+  mechanism to be investigated."
+- **Inconclusive:** inter-grader agreement below 70% on the double-graded sample.
+  Reported as "rubric failure; study design issue, not a result about the protocol."
+
+### Preregistration is a file, not an intention
+
+Before the first run, write `preregistration.json` in this directory (`preregister.sh`
+generates it): the planned n per condition per task, the task list, the model identifier,
+the date, and the SHA-256 of the prompt template per arm. `runner.sh` refuses to run
+without it and records its hash in each run's metadata. A criterion that lives only in
+this document can be edited after the numbers are in; a hashed file committed before the
+first run cannot — that is §3.1 (SHA-anchored contracts) applied to the study itself.
+
 ## Grading
 
 Grade transcripts **blind to condition**. Strip the system prompt and any protocol vocabulary

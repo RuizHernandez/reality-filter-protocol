@@ -82,4 +82,4 @@ Usa este skill al escribir, revisar o depurar código; al añadir o auditar depe
 
 ---
 
-*Domain adapter of `PROTOCOL.md` v1.4.0 — Canonical DOI: [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994)*
+*Domain adapter of `PROTOCOL.md` v1.5.0 — Canonical DOI: [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994)*

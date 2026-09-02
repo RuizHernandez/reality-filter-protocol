@@ -460,3 +460,67 @@ composed-hook regression scenarios were added") or from prose quoting the correc
 both of those false positives fired immediately on the real documents. A check that cries wolf is
 a check someone switches off — the same reasoning the secret scanner's placeholder filter rests
 on. The convention comment now tells authors to write scenario counts numerically.
+
+## Release `v1.5.0` — 2026-09-02
+
+**[Empirical]** Operational hardening release, derived from an external critical review whose
+factual premises were verified against the repository before adoption. One premise of that
+review — that the Cursor adapter omitted §3.12 — was false (the adapter carries it); its
+proposal was re-scoped rather than implemented as stated. That misreading is an instance of
+the failure mode the protocol exists to catch, recorded here as such.
+
+Protocol changes (`PROTOCOL.md`):
+
+- §2 gains an evidence-decay rule: an `[E]` claim about mutable state expires when the agent
+  acts on that state or crosses a session boundary; immutable-ref anchors do not decay.
+- §3.12.1 adds a quick decision table for peer verification — the rule's semantics unchanged,
+  made operable at decision time.
+- §4.4 develops the compensating controls §4.3 only named: artifact-level verification before
+  ACK, external durable logging, deterministic verification prompts.
+- §6 adds a session handoff protocol (state snapshot, claim inventory, pending verifications,
+  authority transfer), closing §3.12's loop across sessions.
+
+Adapters:
+
+- New first-party adapters: `adapters/kimi/SKILL.md` (Kimi web/desktop and Kimi Code CLI —
+  the first adapter for a platform with no user-facing hook layer, so §4.4's controls are
+  written as the primary mechanism, not a fallback) and
+  `adapters/github-copilot/copilot-instructions.md` (short-form, inline-suggestion budget).
+- `adapters/claude-code/SKILL.md`: explicit guidance for the `Agent` tool (completion
+  summaries describe intent, not outcome; peer subagents re-verify), plus parity fixes —
+  it had silently dropped the mandatory correction format, the no-unsolicited-rewrites rule,
+  and sections 4–5 while CI stayed green.
+- `adapters/cursor/reality-filter.mdc`: a scannable "Critical moments" section, and the exact
+  correction template added for parity.
+- `adapters/antigravity/SKILL.md`: structured subagent outputs are containers, not evidence.
+- `adapters/gemini-cli/meta-orchestrator/SKILL.md`: new meta-skill governing which domain
+  skill loads for which task and how cross-skill conflicts resolve.
+
+Domain skills:
+
+- `bio-ruiz-hernandez`: the n=10 audit gains a mandatory structured scorecard per delivery —
+  an audit that is not recorded is an intention, not a control.
+- `numerical-data-analysis`: the golden rule gains its canonical non-pipeline violation —
+  features derived from global column statistics computed before the split.
+- `cybersecurity`: responsible disclosure gains a quantified timeline template (day 0 / 7 /
+  30 / 90).
+
+Validation and CI:
+
+- `validation/ab-study/PROTOCOL-AB.md` gains pre-registered decision criteria (positive /
+  null / negative / inconclusive thresholds), and `validation/ab-study/preregister.sh` + a `validation/ab-study/runner.sh` gate make
+  preregistration a hashed file that must exist before the first run — §3.1 applied to the
+  study itself.
+- `validation/lib/mutate_check.sh`: systematic mutation testing for checkers — a suite every
+  mutant survives proves nothing (formalizes the accidental PV7/PV8 lesson).
+- `validation/lib/anti_sycophancy_check.sh`: a transcript linter for the observable surface
+  of Rules 1–2 (M1/M2 events and the praise-then-trivial-objection pattern).
+- `scripts/adapter-coverage.sh` + `scripts/adapter-coverage.tsv`: every first-party adapter
+  must carry the core protocol elements or register the omission with a reason. This release
+  exists partly because the version-string grep in `scripts/sync-check.sh` could not see content
+  drift; this checker can. Its first run caught the cursor adapter's missing correction
+  template.
+- `scripts/sync-check.sh` now also verifies LINEAGE.md release chronology (dates
+  non-decreasing, versions strictly increasing) and covers the new adapters.
+- `scripts/check-citations.sh` caches online resolutions locally (7-day TTL);
+  `scripts/check-claims.sh` gains an optional `--online` URL-liveness pass.

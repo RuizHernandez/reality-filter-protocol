@@ -28,6 +28,14 @@ case "$COND" in A|B) ;; *) echo "condition must be A (control) or B (protocol)" 
 [ -f "tasks/$TASK.md" ] || { echo "no such task: tasks/$TASK.md" >&2; exit 2; }
 [ -n "${AB_AGENT_CMD:-}" ] || { echo "set AB_AGENT_CMD to the agent command to run" >&2; exit 2; }
 
+# No preregistration, no run. A study whose n, tasks and decision criteria are
+# not frozen before the first run can be tuned to its own output -- the exact
+# failure PROTOCOL-AB.md's decision criteria exist to prevent.
+[ -f preregistration.json ] || {
+  echo "no preregistration.json -- run ./preregister.sh <n> <model> [tasks] and commit it first" >&2
+  exit 2
+}
+
 OUT="runs/$TASK/$COND/run-$RUN"
 mkdir -p "$OUT"
 
@@ -54,6 +62,7 @@ cat "tasks/$TASK.md" >> "$PROMPT"
   echo "protocol_sha:  $(git rev-parse --verify -q HEAD:PROTOCOL.md 2>/dev/null || echo uncommitted)"
   echo "task_sha:      $(git rev-parse --verify -q "HEAD:validation/ab-study/tasks/$TASK.md" 2>/dev/null || echo uncommitted)"
   echo "prompt_bytes:  $(wc -c < "$PROMPT" | tr -d ' ')"
+  echo "preregistration_sha256: $(sha256sum preregistration.json | cut -d' ' -f1)"
 } > "$OUT/metadata.txt"
 
 set +e

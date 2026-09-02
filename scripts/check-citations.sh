@@ -105,7 +105,18 @@ while IFS=$'\t' read -r surname year idtype id frag note; do
     continue
   fi
 
+  # Online resolution is cached for 7 days: a weekly CI cron plus pre-commit
+  # runs would otherwise re-hit arXiv/Crossref/Datatracker for identifiers
+  # whose resolved titles cannot change, and a check that rate-limits its
+  # author is a check that gets switched off.
+  CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/rfp-citations"
+  mkdir -p "$CACHE_DIR"
+  cache_file="$CACHE_DIR/${idtype}_${id}"
   title=""
+  if [ -f "$cache_file" ] && [ -n "$(find "$cache_file" -mtime -7 2>/dev/null)" ]; then
+    title=$(cat "$cache_file")
+  fi
+  if [ -z "$title" ]; then
   if [ "$idtype" = "arxiv" ]; then
     title=$(curl -sSL --max-time 30 "https://export.arxiv.org/api/query?id_list=$id" 2>/dev/null \
       | python3 -c "import re,sys;t=re.findall(r'<title>(.*?)</title>',sys.stdin.read(),re.S);print(' '.join(t[1].split()) if len(t)>1 else '')" 2>/dev/null)
@@ -119,6 +130,9 @@ while IFS=$'\t' read -r surname year idtype id frag note; do
     title=$(curl -sS --max-time 30 "https://api.crossref.org/works/$id" \
       -H 'User-Agent: rfp-citation-check/1.0 (mailto:noreply@example.org)' 2>/dev/null \
       | jq -r '.message.title[0] // ""' 2>/dev/null)
+  fi
+
+    [ -n "$title" ] && printf '%s' "$title" > "$cache_file"
   fi
 
   if [ -z "$title" ]; then
