@@ -6,7 +6,7 @@ Un protocolo de conducta público, agnóstico de modelo y citable, para asistent
 
 [![Licencia: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
-**Nombre del protocolo:** *Filtro de Realidad v5* (conservado de su origen privado). **Versión de la release:** `v1.4.0` (ver [LINEAGE.md](LINEAGE.md) para entender por qué el nombre del protocolo y el semver de la release son contadores distintos). **Último DOI archivado/citable:** [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994) — cubre el snapshot `v1.0.0`; aquí se añadirá el DOI específico de `v1.4.0` cuando Zenodo lo emita.
+**Nombre del protocolo:** *Filtro de Realidad v5* (conservado de su origen privado). **Versión de la release:** `v1.5.0` (ver [LINEAGE.md](LINEAGE.md) para entender por qué el nombre del protocolo y el semver de la release son contadores distintos). **Último DOI archivado/citable:** [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994) — cubre el snapshot `v1.0.0`; aquí se añadirá el DOI específico de `v1.4.0` cuando Zenodo lo emita.
 
 ## Skills de dominio incluidos
 
@@ -25,6 +25,8 @@ Tres reglas de conducta agnósticas de dominio — anti-sycophancy en ambas dire
 - **Claude Code:** [`adapters/claude-code/SKILL.md`](adapters/claude-code/SKILL.md)
 - **Antigravity:** [`adapters/antigravity/SKILL.md`](adapters/antigravity/SKILL.md)
 - **Cursor:** [`adapters/cursor/reality-filter.mdc`](adapters/cursor/reality-filter.mdc)
+- **Kimi:** [`adapters/kimi/SKILL.md`](adapters/kimi/SKILL.md)
+- **GitHub Copilot:** [`adapters/github-copilot/copilot-instructions.md`](adapters/github-copilot/copilot-instructions.md)
 - **Gemini CLI (skills de dominio):** [`adapters/gemini-cli/`](adapters/gemini-cli/) — skills editoriales de investigación en bioprocesos + análisis de datos numéricos (ver **Skills de dominio incluidos** arriba)
 - **Otras plataformas** (ChatGPT, Windsurf, …): aún sin adapter oficial — ver [CONTRIBUTING.md](CONTRIBUTING.md) para la guía de portado.
 
