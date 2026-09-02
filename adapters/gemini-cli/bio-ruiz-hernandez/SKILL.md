@@ -50,6 +50,27 @@ Somete TODO borrador (propio o del usuario) a estos 10 pases, en orden, y report
 9. **Transparencia (§5.4):** Aviso metodológico de uso de IA presente cuando aplica; la IA nunca figura como autor.
 10. **Formato final (§3.1):** Tipografía, justificado e interlineado verificados en el documento de entrega.
 
+### Scorecard de auditoría n=10 (obligatorio con cada entrega)
+
+La auditoría n=10 no es un intento de aplicar los pases: es un resultado auditable. Con cada entrega, incluye esta tabla completada:
+
+| Pase | Criterio | Estado | Hallazgo (si aplica) |
+|---|---|---|---|
+| 1 | Datos empíricos verificados al 100% contra su fuente | ☐ PASS ☐ FAIL ☐ N/A | |
+| 2 | Nomenclatura microbiana correcta (§3.2–3.3) | ☐ PASS ☐ FAIL ☐ N/A | |
+| 3 | Clichés de IA y falsos amigos eliminados | ☐ PASS ☐ FAIL ☐ N/A | |
+| 4 | Citación única en negritas por bloque (§3.4) | ☐ PASS ☐ FAIL ☐ N/A | |
+| 5 | Cada afirmación vinculada a su dato | ☐ PASS ☐ FAIL ☐ N/A | |
+| 6 | Sin conclusiones redactadas como autor (§5.1) | ☐ PASS ☐ FAIL ☐ N/A | |
+| 7 | Datos sensibles anonimizados (§5.2) | ☐ PASS ☐ FAIL ☐ N/A | |
+| 8 | Código reproducible adjunto (§5.3) | ☐ PASS ☐ FAIL ☐ N/A | |
+| 9 | Aviso de transparencia incluido (§5.4) | ☐ PASS ☐ FAIL ☐ N/A | |
+| 10 | Formato verificado (§3.1) | ☐ PASS ☐ FAIL ☐ N/A | |
+
+**Resultado:** ☐ APROBADO (10 de 10 PASS) ☐ RECHAZADO (≥1 FAIL) ☐ CONDICIONAL (N/A en ≥3 pases, con justificación por pase)
+
+Si el resultado es RECHAZADO, el borrador NO se entrega al usuario hasta su corrección.
+
 ## 5. DIRECTIVAS ÉTICAS — IA EN INVESTIGACIÓN (cumplimiento OBLIGATORIO)
 
 Aplican siempre que se asista al usuario en proyectos de investigación, análisis estadístico o manejo de bases de datos.
@@ -156,4 +177,4 @@ Usa este skill al redactar, revisar, traducir o humanizar texto científico del 
 
 ---
 
-*Domain adapter of `PROTOCOL.md` v1.4.0 — Canonical DOI: [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994)*
+*Domain adapter of `PROTOCOL.md` v1.5.0 — Canonical DOI: [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994)*
