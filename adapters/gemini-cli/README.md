@@ -15,6 +15,8 @@ cover **software and systems** work and **security** work.
 | `computational-arch` | [`computational-arch/SKILL.md`](computational-arch/SKILL.md) | Software & systems: mandatory **environment preflight** (detect, never assume), anti-hallucination rules for APIs and dependencies (verify against the *installed* version; registry check before adding a package, against slopsquatting), executable evidence for test/build and performance claims, concurrency claims capped at `[I]`, irreversible-operation gate. |
 | `cybersecurity` | [`cybersecurity/SKILL.md`](cybersecurity/SKILL.md) | Security work, **defensive and authorized only**: authorization and scope verified as §1 (a precondition, not an appendix — it decides whether an action may run at all), lab isolation, responsible disclosure, CVE/CWE identifiers verified against authoritative databases before citing, findings capped at `[S]` without a documented reproduction, severity argued in context rather than inherited, secrets never written to code or logs. |
 
+| `rfp-meta-orchestrator` | [`meta-orchestrator/SKILL.md`](meta-orchestrator/SKILL.md) | **Meta-skill:** loads the correct domain skill by task type and resolves conflicts between skills when a task spans domains. It adds no domain rules of its own; `PROTOCOL.md` remains the universal arbiter. |
+
 **Language note:** all three skills are written in Spanish. The two bioprocess skills are
 reproduced undiluted from the working source — same convention as
 [`examples/ml-swarm/`](../../examples/ml-swarm/). `computational-arch` and `cybersecurity` are
@@ -39,6 +41,7 @@ cp -r adapters/gemini-cli/bio-ruiz-hernandez ~/.gemini/config/skills/
 cp -r adapters/gemini-cli/numerical-data-analysis ~/.gemini/config/skills/
 cp -r adapters/gemini-cli/computational-arch ~/.gemini/config/skills/
 cp -r adapters/gemini-cli/cybersecurity ~/.gemini/config/skills/
+cp -r adapters/gemini-cli/meta-orchestrator ~/.gemini/config/skills/
 ```
 
 Each skill activates from its frontmatter `description`; no further configuration is needed.
