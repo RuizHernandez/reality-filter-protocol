@@ -65,6 +65,29 @@ if grep -qE "Changelog \(v$protocol_version, proposed\)" PROTOCOL.md; then
   fail=1
 fi
 
+# Release chronology in LINEAGE.md: dates must be non-decreasing and
+# versions strictly increasing. Both fail by copy-paste -- v1.4.0's entry
+# nearly shipped with v1.3.1's date shape, and a repeated version with a new
+# date passes a date-only check.
+mapfile -t rel_lines < <(grep -E '^## Release `v[0-9]+\.[0-9]+\.[0-9]+`' LINEAGE.md)
+prev_date=""; prev_ver=""
+for line in "${rel_lines[@]}"; do
+  ver=$(grep -oP '^## Release `v\K[0-9]+\.[0-9]+\.[0-9]+' <<<"$line")
+  date=$(grep -oP '\d{4}-\d{2}-\d{2}' <<<"$line" | head -1)
+  if [ -n "$prev_date" ]; then
+    if [[ "$date" < "$prev_date" ]]; then
+      echo "FAIL: release v$ver is dated $date, before the previous release date $prev_date"
+      fail=1
+    fi
+    if ! printf '%s\n%s\n' "$prev_ver" "$ver" | sort -V -C        || [ "$prev_ver" = "$ver" ]; then
+      echo "FAIL: release versions are not strictly increasing: v$prev_ver then v$ver"
+      fail=1
+    fi
+  fi
+  prev_date="$date"; prev_ver="$ver"
+done
+echo "OK: LINEAGE.md release chronology is monotone (dates non-decreasing, versions strictly increasing)"
+
 # Any other LINEAGE.md section header still marked "proposed" for a date
 # that is not the newest entry is stale by construction; surface it so a
 # human decides rather than silently pass.
@@ -84,10 +107,13 @@ adapters=(
   "adapters/claude-code/SKILL.md"
   "adapters/cursor/reality-filter.mdc"
   "adapters/antigravity/SKILL.md"
+  "adapters/kimi/SKILL.md"
+  "adapters/github-copilot/copilot-instructions.md"
   "adapters/gemini-cli/bio-ruiz-hernandez/SKILL.md"
   "adapters/gemini-cli/numerical-data-analysis/SKILL.md"
   "adapters/gemini-cli/computational-arch/SKILL.md"
   "adapters/gemini-cli/cybersecurity/SKILL.md"
+  "adapters/gemini-cli/meta-orchestrator/SKILL.md"
 )
 
 # README.es.md carries its own release marker and was two releases behind
