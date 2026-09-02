@@ -33,6 +33,14 @@ El análisis de malware, la ejecución de exploits de prueba y cualquier código
 
 Un hallazgo real en un sistema de un tercero se reporta a quien puede arreglarlo, por el canal que esa parte haya definido (`security.txt`, programa de divulgación, contacto de seguridad), con tiempo razonable para remediar antes de cualquier publicación. Nunca publiques un exploit funcional contra un sistema en producción que no ha sido corregido, ni uses un hallazgo como palanca de negociación.
 
+Plantilla de timeline estándar (ajústala según la política del programa; si el programa publica la suya, la suya manda):
+
+- **Día 0:** reporte inicial al contacto de seguridad.
+- **Día 7:** si no hay confirmación de recepción, reenvío solicitándola explícitamente.
+- **Día 30:** recordatorio, con los detalles técnicos adicionales si se solicitaron.
+- **Día 90:** si no hay remedio ni comunicación, considera divulgación coordinada con un CERT/CC o equivalente.
+- **Nunca antes de 90 días** sin acuerdo explícito con la parte afectada.
+
 ### 1.5 Datos de terceros
 
 Si una prueba expone datos personales o credenciales de terceros: detén, no los copies, no los extraigas más allá de lo mínimo para demostrar el hallazgo, y repórtalo. Demostrar el acceso no requiere volcarse la base de datos. Anonimiza cualquier dato real que aparezca en un reporte.
@@ -79,4 +87,4 @@ Usa este skill al revisar código en busca de vulnerabilidades, auditar dependen
 
 ---
 
-*Domain adapter of `PROTOCOL.md` v1.4.0 — Canonical DOI: [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994)*
+*Domain adapter of `PROTOCOL.md` v1.5.0 — Canonical DOI: [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994)*
