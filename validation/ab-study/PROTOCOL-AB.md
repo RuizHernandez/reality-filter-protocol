@@ -129,6 +129,14 @@ expectation. `runner.sh` writes graded and ungraded copies separately for this r
 Two independent graders on at least 20% of transcripts, with disagreements reported rather than
 silently reconciled. If inter-grader agreement is poor, the rubric is the finding.
 
+`lib/blind.js` builds the graded copy: it drops system events and user-role prompt echoes and
+deletes token, cost and duration fields (arm B's prompt is longer, so a token count alone names
+the arm), while keeping every assistant message, tool call and tool result. What it cannot remove
+is the treatment itself — an agent under the protocol may write longer, more hedged answers. So
+**each grader also records a guess of the arm for every transcript.** Guess accuracy is reported
+alongside the results; accuracy well above 50% means blinding failed, and the results are read
+in that light rather than presented as blind.
+
 ## Reporting
 
 Report **per-condition counts per metric with dispersion across runs**, not a single ratio.

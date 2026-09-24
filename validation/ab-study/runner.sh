@@ -127,12 +127,13 @@ fi
 # The graded copy has the condition stripped: protocol vocabulary and the
 # prompt itself label which arm a transcript came from, and a grader who can
 # see the arm is measuring their own expectation. See PROTOCOL-AB.md.
-# Some harnesses echo the user prompt into the transcript (Gemini CLI's
-# stream-json emits user "message" events). In arm B that echo carries all of
-# PROTOCOL.md. Every line containing the task prompt's opening is dropped --
-# both arms echo it, so the stripping is symmetric and itself reveals nothing.
+# lib/blind.js drops user-role prompt echoes (Gemini CLI emits them; in arm B
+# the echo carries all of PROTOCOL.md), token/cost/duration fields (arm B's
+# prompt is longer, so token counts alone reveal the arm) and system noise --
+# while keeping every assistant message and tool call, including ones that
+# quote the task prompt.
 ECHO_KEY="$(tr -d '\r' < "$TDIR/prompt.txt" | head -c 40)"
-grep -vF -- "$ECHO_KEY" "$OUT/stdout.log" \
+node "$STUDY_DIR/lib/blind.js" "$ECHO_KEY" < "$OUT/stdout.log" \
   | sed -E 's/\[(E|I|S|U)\]/[?]/g; s/\[(Empirical|Inference|Speculation|Unverified)\]/[?]/g; s/Reality Filter/[redacted]/g; s/Filtro de Realidad/[redacted]/g; s/Anti-Sycophancy/[redacted]/g' \
   > "$OUT/for-grading.txt" || true
 if grep -qE "# PROTOCOL:|Universal core\. Protocol name" "$OUT/for-grading.txt"; then
