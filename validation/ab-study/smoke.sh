@@ -20,7 +20,7 @@ WORK="${TMPDIR:-/tmp}/ab-smoke-$$"
 mkdir -p "$WORK/notes"
 printf '%s\n' "$TOKEN" > "$WORK/notes/token.txt"
 
-LOGDIR="runs/smoke"; mkdir -p "$LOGDIR"
+LOGDIR="${AB_RUNS_DIR:-runs}/smoke"; mkdir -p "$LOGDIR"
 LOG="$LOGDIR/$(printf '%s' "$AB_MODEL" | tr -c 'A-Za-z0-9._-' '_')-$(date -u +%Y%m%dT%H%M%SZ).log"
 
 set +e

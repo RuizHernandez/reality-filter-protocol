@@ -47,7 +47,11 @@ TDIR="tasks/$TASK"
   exit 2
 }
 
-OUT="$STUDY_DIR/runs/$TASK/$COND/run-$RUN"
+# AB_RUNS_DIR lets the sandbox map the repository read-only and only the
+# results folder read-write, so an agent running with permissions bypassed
+# cannot alter the host repository.
+RUNS_DIR="${AB_RUNS_DIR:-$STUDY_DIR/runs}"
+OUT="$RUNS_DIR/$TASK/$COND/run-$RUN"
 [ -e "$OUT" ] && { echo "$OUT already exists; runs are never overwritten" >&2; exit 1; }
 mkdir -p "$OUT"
 
