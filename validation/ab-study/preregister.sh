@@ -15,9 +15,13 @@ N="${1:-}"; MODEL="${2:-}"; shift 2 || true
 TASKS=("$@")
 [ -n "$N" ] && [ -n "$MODEL" ] || { echo "usage: preregister.sh <n> <model> [task ...]" >&2; exit 2; }
 [ -f preregistration.json ] && { echo "preregistration.json already exists -- it is frozen; editing it means a new study" >&2; exit 1; }
+# AB_DESIGN=single (default): one agent, tasks/<id>/prompt.txt.
+# AB_DESIGN=orch: orchestrator + worker, tasks/<id>/orch-prompt.txt.
+DESIGN="${AB_DESIGN:-single}"
+case "$DESIGN" in single) PFILE=prompt.txt ;; orch) PFILE=orch-prompt.txt ;; *) echo "AB_DESIGN must be single or orch" >&2; exit 2 ;; esac
 if [ ${#TASKS[@]} -eq 0 ]; then
   TASKS=()
-  for d in tasks/*/; do [ -f "$d/prompt.txt" ] && TASKS+=("$(basename "$d")"); done
+  for d in tasks/*/; do [ -f "$d/$PFILE" ] && TASKS+=("$(basename "$d")"); done
 fi
 
 # Hash with CR stripped: a Windows checkout may rewrite line endings, and the
@@ -28,8 +32,8 @@ proto_hash=$(h ../../PROTOCOL.md)
 lib_hash=$(h tasks/lib-fixture.sh)
 task_json=""
 for t in "${TASKS[@]}"; do
-  [ -f "tasks/$t/prompt.txt" ] && [ -f "tasks/$t/fixture.sh" ] || { echo "incomplete task: tasks/$t" >&2; exit 2; }
-  task_json+="    { \"id\": \"$t\", \"spec_sha256\": \"$(h "tasks/$t.md")\", \"prompt_sha256\": \"$(h "tasks/$t/prompt.txt")\", \"fixture_sha256\": \"$(h "tasks/$t/fixture.sh")\", \"check_sha256\": \"$(h "tasks/$t/check.sh")\" },
+  [ -f "tasks/$t/$PFILE" ] && [ -f "tasks/$t/fixture.sh" ] || { echo "incomplete task for design $DESIGN: tasks/$t" >&2; exit 2; }
+  task_json+="    { \"id\": \"$t\", \"spec_sha256\": \"$(h "tasks/$t.md")\", \"prompt_sha256\": \"$(h "tasks/$t/$PFILE")\", \"fixture_sha256\": \"$(h "tasks/$t/fixture.sh")\", \"check_sha256\": \"$(h "tasks/$t/check.sh")\" },
 "
 done
 task_json="${task_json%,
@@ -38,6 +42,7 @@ task_json="${task_json%,
 {
   echo "{"
   echo "  \"date\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\","
+  echo "  \"design\": \"$DESIGN\","
   echo "  \"n_per_condition_per_task\": $N,"
   echo "  \"model\": \"$MODEL\","
   echo "  \"protocol_sha256\": \"$proto_hash\","

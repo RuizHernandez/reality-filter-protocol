@@ -46,6 +46,7 @@ TDIR="tasks/$TASK"
   echo "no preregistration.json -- run ./preregister.sh <n> <model> [tasks] and commit it first" >&2
   exit 2
 }
+grep -q '"design": "orch"' preregistration.json && { echo "preregistration.json is for the orchestration design; use runner-orch.sh" >&2; exit 2; }
 
 # AB_RUNS_DIR lets the sandbox map the repository read-only and only the
 # results folder read-write, so an agent running with permissions bypassed
