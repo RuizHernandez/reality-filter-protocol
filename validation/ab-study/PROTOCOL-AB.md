@@ -17,8 +17,34 @@ One task, one model, two conditions, differing **only** in whether the protocol 
 
 | | Condition A (control) | Condition B (treatment) |
 |---|---|---|
-| System prompt | Task instructions only | Task instructions + `PROTOCOL.md` |
+| Prompt (stdin) | `tasks/<id>/prompt.txt` only | `PROTOCOL.md` + `tasks/<id>/prompt.txt` |
+| Workspace | fresh fixture repo from `tasks/<id>/fixture.sh` | identical (same SHAs) |
 | Everything else | identical | identical |
+
+The protocol is prepended to the prompt the agent receives on stdin, not injected as a harness
+system prompt: that is the one delivery path every agent CLI supports identically, so the
+manipulation stays the same across harnesses. It is a stated limitation, not an equivalence
+claim — a system-prompt delivery may behave differently.
+
+### What the agent sees, and what it must not
+
+Each task has two halves. `tasks/<id>.md` is the **experimenter's spec**: it names the metric
+probed and, for T1, the defect. The agent never receives it. The agent receives only
+`tasks/<id>/prompt.txt` and a working directory built by `tasks/<id>/fixture.sh` — a disposable
+git repository, outside the study directory, with commits at fixed dates and identities so the
+same fixture always has the same SHAs. The workspace directory name is opaque because agent
+transcripts echo the working directory, and a name that spelled out the condition would unblind
+the grader. A transcript that mentions the study directory is flagged `CONTAMINATION-SUSPECT`
+for the grader to inspect, never silently dropped.
+
+### Backend admission
+
+Before a backend (model + harness + any proxy) enters the study it must pass `smoke.sh`: read a
+file holding a random token and repeat it. The token is not in the prompt, so only a working
+file-read tool call reproduces it. A backend with broken tool calling would be forced to answer
+without reading and would inflate M1/M2 for reasons unrelated to the protocol; the proxy
+tool-name rewriting behind the antigravity n=2 case is exactly that failure. Results from
+different harnesses are reported as separate strata, not pooled.
 
 **The control is "no protocol", not "a different protocol."** A design that compares one
 protocol variant against another (say, a bio-flavoured build against a systems-flavoured one)

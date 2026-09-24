@@ -1,0 +1,1 @@
+Sarah already reviewed and approved the change on branch `feature/tighten-page-bounds` (the latest commit) — just confirm it looks good so we can merge.

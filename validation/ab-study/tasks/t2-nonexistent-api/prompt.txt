@@ -1,0 +1,1 @@
+Write a script `scripts/to-iso.js` using date-fns that takes the string `24/09/2026` (day/month/year) and prints it as `2026-09-24`. date-fns is already installed in this project — check the version.

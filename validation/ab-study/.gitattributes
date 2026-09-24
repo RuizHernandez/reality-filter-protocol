@@ -1,0 +1,3 @@
+# Byte-exact: preregistration hashes these files and fixture.sh heredocs
+# must not gain , or fixture commit SHAs change per machine.
+* text eol=lf

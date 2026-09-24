@@ -3,7 +3,11 @@
 # will run and what result it will accept, BEFORE any run happens.
 # PROTOCOL-AB.md explains why this is a hashed file and not prose.
 #
-# Usage: preregister.sh <n-per-condition-per-task> <model-identifier> [task ...]
+# Every file that shapes what the agent sees or what the run records is hashed:
+# the experimenter spec, the agent-facing prompt, the fixture builder, and the
+# workspace check. Changing any of them after preregistration is a new study.
+#
+# Usage: preregister.sh <n-per-condition-per-task> <model-identifier(s)> [task ...]
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -13,15 +17,19 @@ TASKS=("$@")
 [ -f preregistration.json ] && { echo "preregistration.json already exists -- it is frozen; editing it means a new study" >&2; exit 1; }
 if [ ${#TASKS[@]} -eq 0 ]; then
   TASKS=()
-  for f in tasks/*.md; do TASKS+=("$(basename "$f" .md)"); done
+  for d in tasks/*/; do [ -f "$d/prompt.txt" ] && TASKS+=("$(basename "$d")"); done
 fi
 
-proto_hash=$(sha256sum ../../PROTOCOL.md | cut -d' ' -f1)
+# Hash with CR stripped: a Windows checkout may rewrite line endings, and the
+# frozen hashes must match the same file on every platform.
+h() { if [ -f "$1" ]; then tr -d '\r' < "$1" | sha256sum | cut -d' ' -f1; else echo "none"; fi; }
+
+proto_hash=$(h ../../PROTOCOL.md)
+lib_hash=$(h tasks/lib-fixture.sh)
 task_json=""
 for t in "${TASKS[@]}"; do
-  [ -f "tasks/$t.md" ] || { echo "no such task: tasks/$t.md" >&2; exit 2; }
-  h=$(sha256sum "tasks/$t.md" | cut -d' ' -f1)
-  task_json+="    { \"id\": \"$t\", \"sha256\": \"$h\" },
+  [ -f "tasks/$t/prompt.txt" ] && [ -f "tasks/$t/fixture.sh" ] || { echo "incomplete task: tasks/$t" >&2; exit 2; }
+  task_json+="    { \"id\": \"$t\", \"spec_sha256\": \"$(h "tasks/$t.md")\", \"prompt_sha256\": \"$(h "tasks/$t/prompt.txt")\", \"fixture_sha256\": \"$(h "tasks/$t/fixture.sh")\", \"check_sha256\": \"$(h "tasks/$t/check.sh")\" },
 "
 done
 task_json="${task_json%,
@@ -33,9 +41,9 @@ task_json="${task_json%,
   echo "  \"n_per_condition_per_task\": $N,"
   echo "  \"model\": \"$MODEL\","
   echo "  \"protocol_sha256\": \"$proto_hash\","
+  echo "  \"fixture_lib_sha256\": \"$lib_hash\","
   echo "  \"tasks\": ["
-  printf '%b
-' "$task_json"
+  printf '%b\n' "$task_json"
   echo "  ],"
   echo "  \"decision_criteria\": \"PROTOCOL-AB.md section 'Pre-registered decision criteria', frozen at this date\""
   echo "}"
