@@ -5,22 +5,45 @@ project has no controlled evaluation stands unchanged until someone runs this an
 
 | File | What it is |
 |---|---|
-| [`PROTOCOL-AB.md`](PROTOCOL-AB.md) | Design, rubric (M1–M5 with operational definitions), grading and reporting rules, and what the design cannot establish |
-| [`tasks/`](tasks/) | Five tasks (T5 reproduces the antigravity n=2 tool-deprivation case). `tasks/<id>.md` is the experimenter's spec (never shown to the agent); `tasks/<id>/prompt.txt` is all the agent sees; `tasks/<id>/fixture.sh` builds its byte-reproducible workspace repo; optional `check.sh` records workspace facts (not scores) |
-| [`smoke.sh`](smoke.sh) | Backend admission gate: a model/harness/proxy must prove its file-read tool works before it enters the study |
-| [`preregister.sh`](preregister.sh) | Freezes n, model(s), and the SHA-256 of every spec, prompt, fixture and check into `preregistration.json` |
-| [`runner.sh`](runner.sh) | Runs one cell in a fresh fixture workspace outside the study dir; archives prompt, transcript, exit code, metadata, post-run workspace diff, check facts, and a condition-stripped copy for blind grading |
+| [`PROTOCOL-AB.md`](PROTOCOL-AB.md) | Design, rubric (M1–M6 with operational definitions), grading and reporting rules, and what the design cannot establish |
+| [`tasks/`](tasks/) | Six tasks (T5 reproduces the antigravity n=2 tool-deprivation case; T6, orchestration only, reproduces the paper's rubric-capture incident). `tasks/<id>.md` is the experimenter's spec (never shown to an agent); `prompt.txt` / `orch-prompt.txt` is all an agent sees; `fixture.sh` builds its byte-reproducible workspace repo; optional `check.sh` records workspace facts (not scores) |
+| [`docker/`](docker/) | Agent image (pinned base and CLI versions, tools only) and backend definitions (`deepseek`, `gemini`) |
+| [`preregister.sh`](preregister.sh) | Freezes design, n, model(s), and the SHA-256 of every spec, prompt, fixture and check into `preregistration.json` |
+| [`smoke-docker.sh`](smoke-docker.sh) | Admission gates: a backend must prove its file-read tool works; an orchestrator/worker pair must prove delegation works |
+| [`runner-docker.sh`](runner-docker.sh) | Runs one cell, every agent in its own container; archives prompts, transcripts, workspace diff, check facts, redacted credentials, and condition-stripped copies for blind grading |
+| [`run-batch-docker.sh`](run-batch-docker.sh) | Gates, then every cell in a seeded shuffle |
 | [`RESULTS-TEMPLATE.md`](RESULTS-TEMPLATE.md) | Reporting skeleton, with a null/negative result treated as a first-class outcome |
-| `runs/` | Archived runs (empty) |
 
-Three choices worth knowing before using it:
+## Running it
+
+Needs Docker and Git Bash. Secrets live outside the repository in a file you create
+(default `C:\ab-secrets\secrets.env`, override with `AB_SECRETS`):
+
+```
+DEEPSEEK_API_KEY=...
+DEEPSEEK_MODEL=...     # exact id from the provider's docs
+GEMINI_API_KEY=...
+GEMINI_MODEL=...
+```
+
+```bash
+docker build -t ab-agent:1 docker/
+AB_DESIGN=orch ./preregister.sh 10 "google:<model>>deepseek:<model>"   # then commit it
+./run-batch-docker.sh orch gemini deepseek 10
+```
+
+Results go to `AB_RUNS_DIR` (default `C:\ab-runs`), outside the repository and outside any synced
+folder, because transcripts can contain whatever an agent printed.
+
+Three choices worth knowing:
 
 **The control is "no protocol."** Not a different protocol variant. Comparing two variants
 measures nothing about whether the protocol causes any behaviour, since both arms have it.
 
-**The runner does not grade.** Grading is blind and manual; `runner.sh` writes a copy with the
-evidence tags and protocol vocabulary stripped, because those label the arm. A harness that
-scored its own runs would be the evaluator-immunity violation §5 names.
+**The runner does not grade.** Grading is blind and manual; the runner writes copies with the
+evidence tags, protocol vocabulary, prompt echoes and token counts stripped, because those label
+the arm. A harness that scored its own runs would be the evaluator-immunity violation §5 names.
 
-**The agent command is injected** (`AB_AGENT_CMD`), so the study is not welded to one vendor's
-CLI and a run stays reproducible against whatever tool exists later.
+**Agents cannot see the study.** Each agent container holds only its workspace (and, for an
+orchestrator, a mailbox). See PROTOCOL-AB.md, "What the agent sees, and what it must not", for
+why this replaced path-hiding after pilot 3.

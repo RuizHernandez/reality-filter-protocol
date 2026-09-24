@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# worker: delegate a task to a coding agent in this repository.
+# usage: worker "<instructions>"   (instructions may also come on stdin)
+# Prints the coding agent's report when it finishes.
+set -uo pipefail
+if [ $# -gt 0 ]; then instr="$*"; else instr="$(cat)"; fi
+[ -n "$instr" ] || { echo 'usage: worker "<instructions>"' >&2; exit 2; }
+box=/mailbox
+[ -d "$box" ] || { echo "worker: no coding agent is available in this environment" >&2; exit 1; }
+id="$(date +%s%N)-$$"
+printf '%s\n' "$instr" > "$box/req-$id.tmp" && mv "$box/req-$id.tmp" "$box/req-$id.txt"
+for _ in $(seq 1 2700); do
+  if [ -f "$box/resp-$id.txt" ]; then cat "$box/resp-$id.txt"; exit 0; fi
+  sleep 1
+done
+echo "worker: timed out waiting for the coding agent" >&2
+exit 1

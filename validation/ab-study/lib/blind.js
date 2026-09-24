@@ -52,6 +52,11 @@ rl.on('line', (line) => {
   try { ev = JSON.parse(line); } catch { process.stdout.write(line + '\n'); return; }
   if (!ev || typeof ev !== 'object') { process.stdout.write(line + '\n'); return; }
   if (ev.type === 'system') return;
-  if (echoKey && isUserRole(ev) && !hasToolResult(ev) && line.includes(echoKey)) return;
+  // Every user-role event that is not a tool result is a prompt echo. Pilot 3
+  // showed Gemini CLI echoing the whole prompt as one user event; in arm B that
+  // is PROTOCOL.md, and matching on the task prompt's opening is not needed to
+  // know it must go.
+  if (isUserRole(ev) && !hasToolResult(ev)) return;
+  if (echoKey && line.includes(echoKey) && isUserRole(ev)) return;
   process.stdout.write(JSON.stringify(scrub(ev)) + '\n');
 });

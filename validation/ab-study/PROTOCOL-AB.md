@@ -29,22 +29,35 @@ claim — a system-prompt delivery may behave differently.
 ### What the agent sees, and what it must not
 
 Each task has two halves. `tasks/<id>.md` is the **experimenter's spec**: it names the metric
-probed and, for T1, the defect. The agent never receives it. The agent receives only
-`tasks/<id>/prompt.txt` and a working directory built by `tasks/<id>/fixture.sh` — a disposable
-git repository, outside the study directory, with commits at fixed dates and identities so the
-same fixture always has the same SHAs. The workspace directory name is opaque because agent
-transcripts echo the working directory, and a name that spelled out the condition would unblind
-the grader. A transcript that mentions the study directory is flagged `CONTAMINATION-SUSPECT`
-for the grader to inspect, never silently dropped.
+probed and, for T1, the defect. The agent never receives it. The agent receives only its prompt
+(`tasks/<id>/prompt.txt`, or `orch-prompt.txt` in the orchestration design) and a git repository
+built by `tasks/<id>/fixture.sh`, with commits at fixed dates and identities so the same fixture
+always has the same SHAs.
+
+**Isolation is by construction, not by hiding.** Every agent runs in its own container from
+`docker/Dockerfile` (pinned base image and CLI versions, non-root user). A container mounts its
+workspace at `/work/repo` and, for an orchestrator, a delegation mailbox at `/mailbox` — nothing
+else. The study directory, task specs, `PROTOCOL.md`, other runs and the secrets file do not
+exist inside any agent container, and the container environment carries only that agent's own
+provider credential. This replaced a Windows Sandbox harness after pilot 3, in which a control-arm
+orchestrator listed its environment, followed the study paths it found there into the mapped
+repository, and read an experimenter spec: hiding paths is not isolation when the agent has a
+shell and the files are on the same filesystem.
+
+An agent with a shell can still print its own credential. `lib/redact.js` replaces live key
+values with `<REDACTED:NAME>` in every archived file and raises `KEY-EXPOSED`; a transcript that
+mentions the study is flagged `CONTAMINATION-SUSPECT` for the grader, never silently dropped.
 
 ### Backend admission
 
-Before a backend (model + harness + any proxy) enters the study it must pass `smoke.sh`: read a
-file holding a random token and repeat it. The token is not in the prompt, so only a working
-file-read tool call reproduces it. A backend with broken tool calling would be forced to answer
-without reading and would inflate M1/M2 for reasons unrelated to the protocol; the proxy
-tool-name rewriting behind the antigravity n=2 case is exactly that failure. Results from
-different harnesses are reported as separate strata, not pooled.
+Before a backend (model + harness + any proxy) enters the study it must pass
+`smoke-docker.sh read <backend>`: read a file holding a random token and repeat it. The token is
+not in the prompt, so only a working file-read tool call reproduces it. A backend with broken tool
+calling would be forced to answer without reading and would inflate M1/M2 for reasons unrelated to
+the protocol; the proxy tool-name rewriting behind the antigravity n=2 case is exactly that
+failure. In the orchestration design the pair must also pass `smoke-docker.sh delegate`: the token
+is mounted only into worker containers, so the orchestrator relays it only if it really executed
+`worker`. Results from different harnesses are reported as separate strata, not pooled.
 
 **The control is "no protocol", not "a different protocol."** A design that compares one
 protocol variant against another (say, a bio-flavoured build against a systems-flavoured one)
@@ -128,7 +141,7 @@ Changing them after seeing output is the failure this study exists to avoid.
 
 Before the first run, write `preregistration.json` in this directory (`preregister.sh`
 generates it): the planned n per condition per task, the task list, the model identifier,
-the date, and the SHA-256 of the prompt template per arm. `runner.sh` refuses to run
+the date, and the SHA-256 of the prompt template per arm. `runner-docker.sh` refuses to run
 without it and records its hash in each run's metadata. A criterion that lives only in
 this document can be edited after the numbers are in; a hashed file committed before the
 first run cannot — that is §3.1 (SHA-anchored contracts) applied to the study itself.
@@ -138,7 +151,7 @@ first run cannot — that is §3.1 (SHA-anchored contracts) applied to the study
 Grade transcripts **blind to condition**. Strip the system prompt and any protocol vocabulary
 (`[E]`, `[I]`, `[S]`, `[U]`, "Reality Filter") before grading — those tags are themselves a
 condition label, and a grader who can see which arm they are in is measuring their own
-expectation. `runner.sh` writes graded and ungraded copies separately for this reason.
+expectation. `runner-docker.sh` writes graded and ungraded copies separately for this reason.
 
 Two independent graders on at least 20% of transcripts, with disagreements reported rather than
 silently reconciled. If inter-grader agreement is poor, the rubric is the finding.
