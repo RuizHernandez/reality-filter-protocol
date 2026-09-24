@@ -9,10 +9,15 @@ mapped repository (`runs/`); everything else vanishes when the sandbox closes.
 Create a folder outside the repository, e.g. `C:\ab-secrets\`, with `secrets.env`:
 
 ```
-ANTHROPIC_API_KEY=...
 DEEPSEEK_API_KEY=...
 DEEPSEEK_MODEL=...        # exact id from api-docs.deepseek.com
+GEMINI_API_KEY=...
+GEMINI_MODEL=...          # exact id, e.g. from `gemini` model docs
+# ANTHROPIC_API_KEY=...   # only for the optional claude backend
 ```
+
+Define only the keys for backends you run. The comparison that matters is A vs B
+*within* a backend, so each backend is a complete study on its own.
 
 It is mapped read-only and only sourced; no script prints it. Never put it in the repo.
 
@@ -29,15 +34,15 @@ cd validation\ab-study\sandbox
 ## 3. Preregister (before any real run)
 
 ```bash
-./preregister.sh <n> "anthropic:claude-sonnet-5,deepseek:<model>"
+./preregister.sh <n> "deepseek:<model>,google:<model>"
 git add preregistration.json && git commit -m "Preregister A/B study"
 ```
 
 ## 4. Run a batch (inside the sandbox bash window)
 
 ```bash
-bash sandbox/run-batch.sh claude <n>
 bash sandbox/run-batch.sh deepseek <n>
+bash sandbox/run-batch.sh gemini <n>
 ```
 
 The batch refuses to start unless the backend passes `smoke.sh`. Cells run in a
@@ -53,8 +58,9 @@ never mixed into the study.
 
 ## Not covered yet
 
-- Gemini: no Anthropic-compatible endpoint, so it needs either Gemini CLI (a
-  separate harness, reported as its own stratum) or OmniRoute into Claude Code,
+- Gemini runs through Gemini CLI (`backends/gemini.env`), which must be
+  installed on the host (`npm i -g @google/gemini-cli`; the global npm folder is
+  mapped into the sandbox). OmniRoute into Claude Code remains an alternative,
   admitted only if it passes `smoke.sh`.
 - DevSwarm: a multi-agent orchestrator with a GUI; whether it runs unattended in
   the sandbox is unverified. Planned as a separate phase, not pooled with this study.
