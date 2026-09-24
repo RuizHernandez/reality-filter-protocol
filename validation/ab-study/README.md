@@ -6,7 +6,7 @@ project has no controlled evaluation stands unchanged until someone runs this an
 | File | What it is |
 |---|---|
 | [`PROTOCOL-AB.md`](PROTOCOL-AB.md) | Design, rubric (M1–M5 with operational definitions), grading and reporting rules, and what the design cannot establish |
-| [`tasks/`](tasks/) | Four seed tasks. `tasks/<id>.md` is the experimenter's spec (never shown to the agent); `tasks/<id>/prompt.txt` is all the agent sees; `tasks/<id>/fixture.sh` builds its byte-reproducible workspace repo; optional `check.sh` records workspace facts (not scores) |
+| [`tasks/`](tasks/) | Five tasks (T5 reproduces the antigravity n=2 tool-deprivation case). `tasks/<id>.md` is the experimenter's spec (never shown to the agent); `tasks/<id>/prompt.txt` is all the agent sees; `tasks/<id>/fixture.sh` builds its byte-reproducible workspace repo; optional `check.sh` records workspace facts (not scores) |
 | [`smoke.sh`](smoke.sh) | Backend admission gate: a model/harness/proxy must prove its file-read tool works before it enters the study |
 | [`preregister.sh`](preregister.sh) | Freezes n, model(s), and the SHA-256 of every spec, prompt, fixture and check into `preregistration.json` |
 | [`runner.sh`](runner.sh) | Runs one cell in a fresh fixture workspace outside the study dir; archives prompt, transcript, exit code, metadata, post-run workspace diff, check facts, and a condition-stripped copy for blind grading |
