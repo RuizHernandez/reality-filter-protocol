@@ -134,7 +134,7 @@ fi
 # quote the task prompt.
 ECHO_KEY="$(tr -d '\r' < "$TDIR/prompt.txt" | head -c 40)"
 node "$STUDY_DIR/lib/blind.js" "$ECHO_KEY" < "$OUT/stdout.log" \
-  | sed -E 's/\[(E|I|S|U)\]/[?]/g; s/\[(Empirical|Inference|Speculation|Unverified)\]/[?]/g; s/Reality Filter/[redacted]/g; s/Filtro de Realidad/[redacted]/g; s/Anti-Sycophancy/[redacted]/g' \
+  | sed -E 's/\[(E|I|S|U)\]/[?]/g; s/\[(Empirical|Inference|Speculation|Unverified)\]/[?]/g; s/Reality Filter/[redacted]/g; s/Filtro de Realidad/[redacted]/g; s/Anti-Sycophancy/[redacted]/g; s/§ ?[0-9]+(\.[0-9]+)*/§[redacted]/g' \
   > "$OUT/for-grading.txt" || true
 if grep -qE "# PROTOCOL:|Universal core\. Protocol name" "$OUT/for-grading.txt"; then
   echo "PROTOCOL.md text survived into for-grading.txt -- the grader would see the arm" > "$OUT/BLINDING-SUSPECT"
