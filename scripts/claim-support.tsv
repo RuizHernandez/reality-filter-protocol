@@ -1,0 +1,38 @@
+# Documentary-support ledger for the quantitative claims PROTOCOL.md attributes
+# to its citations ("Grounded in research"). Checked by
+# scripts/check-claim-support.sh.
+#
+# Three different statements, kept apart on purpose:
+#   1. The source EXISTS              -- scripts/check-citations.sh (identifier
+#                                        resolves, title matches).
+#   2. The source SAYS what we cite   -- this ledger (documentary support).
+#   3. What the source says is TRUE   -- certified by no tool in this
+#                                        repository, and never implied by 1-2.
+# A real paper cited for a figure it does not state is the failure case 1
+# cannot see: the identifier resolves, the title matches, and the claim is
+# still unsupported.
+#
+# Columns (TAB-separated):
+#   claim_id  citation  claim_text  status  source_version  locator  checked_on  method  note
+# citation:       surname as in scripts/citations.tsv
+# claim_text:     verbatim substring of PROTOCOL.md (checked)
+# status:         SUPPORTED | PARTIAL | NOT_SUPPORTED | CONTRADICTED | NOT_CHECKED
+#   SUPPORTED     the located passage states the claim as worded
+#   PARTIAL       the figures are stated, but the wording adds, drops or shifts
+#                 something (scope, modality, framing) -- note says what
+#   NOT_SUPPORTED the located passage does not state it        -> check FAILS
+#   CONTRADICTED  the located passage states something else     -> check FAILS
+#   NOT_CHECKED   no passage located yet; visible debt, not an exemption
+# source_version: e.g. arXiv:2603.22582v1 -- what was actually read
+# locator:        where in that version (abstract / section / table)
+# method:         how it was read (API endpoint or page), not from memory
+#
+# Abstract-level support is the floor: a figure found in an abstract is
+# stated there; the full text was not audited unless the locator says so.
+
+C1	Young	41,832-run study across 12 open-weight reasoning models	SUPPORTED	arXiv:2603.22582v1	abstract	2026-10-11	export.arxiv.org API (id_list) abstract text	Abstract: "Across 41,832 inference runs" and "12 open-weight reasoning models".
+C2	Young	sycophancy-hint acknowledgment as low as 53.9%	PARTIAL	arXiv:2603.22582v1	abstract	2026-10-11	export.arxiv.org API (id_list) abstract text	53.9% is the aggregate acknowledgment rate for sycophancy hints, one of the two lowest hint categories (consistency: 35.5%); "as low as" frames it as a floor, which the abstract does not state. Lowest per-model rate in the abstract is 39.7%.
+C3	Young	a gap between internal (~87.5%) and stated (~28.6%) hint recognition	SUPPORTED	arXiv:2603.22582v1	abstract	2026-10-11	export.arxiv.org API (id_list) abstract text	Abstract: thinking-token (~87.5%) vs answer-text (~28.6%) acknowledgment from keyword-based analysis; "internal"/"stated" is the citing text's gloss, which the abstract's own "internally recognize" supports.
+C4	Kraidia	a single adversarial debate agent drops group accuracy 10–40%	SUPPORTED	doi:10.1038/s41598-026-42705-7 (published 2026-04-08)	abstract	2026-10-11	nature.com article page abstract (Crossref record carries no abstract)	Abstract: a single adversarial agent "can lower the system's overall accuracy by 10–40%".
+C5	Kraidia	inference-time techniques like Best-of-N/RAG amplify rather than mitigate the effect	PARTIAL	doi:10.1038/s41598-026-42705-7 (published 2026-04-08)	abstract	2026-10-11	nature.com article page abstract	Abstract says Best-of-N and RAG "can unintentionally amplify" the attacks; the citing text drops the modal "can" and states it as a general effect.
+C6	Yan	aggregate truth recovery collapsing from 72.50% to 14.17% when one agent holds falsified evidence	SUPPORTED	arXiv:2608.03421v3	abstract	2026-10-11	export.arxiv.org API (id_list) abstract text	Abstract: "aggregate truth recovery falls from 72.50% to 14.17%" under "controlled deception by a key evidence holder". v3 dated 2026-08-13.

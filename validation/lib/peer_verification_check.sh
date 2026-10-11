@@ -44,7 +44,11 @@ fi
 # artifact FULLY otherwise. §3.12: a whole-artifact claim verified only
 # through a narrowed read is [I], because the narrowing is where a
 # contradicting record hides.
-narrowing_re='(^|[|;[:space:]])(head|tail|grep|egrep|fgrep|cut)([[:space:]]|$)|sed[[:space:]]+-n|awk[[:space:]]+.*NR[[:space:]]*[<>]'
+narrowing_re='(^|[|;([:space:]])(head|tail|grep|egrep|fgrep|cut)([[:space:]]|$)|sed[^|;]*[[:space:]]-[A-Za-z]*n|sed[^|;]*[[:space:]][0-9]+q|awk[^|;]*NR[[:space:]]*(==|[<>])'
+
+# Commands that name a file without reading its content. Naming the scope is
+# not reading it: `ls impl.py` or `echo impl.py` used to count as verification.
+non_read_re='^[[:space:]]*(echo|printf|ls|touch|stat|test|file|wc|rm|mv|cp|mkdir|chmod|chown)([[:space:]]|$)'
 
 # PROTOCOL.md §4.1 (fail closed): an unparseable or empty transcript is a
 # dispatch failure, not evidence of compliance. Never treat it as a pass.
@@ -65,7 +69,7 @@ emit() {
     --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
     '{event:"peer-unverified",rule:$rule,sub_rule:$sub,claim_scope:$scope,
       sender_agent:$sender,receiver_agent:$receiver,detail:$detail,timestamp:$ts}' \
-    >> "$PEER_LOG"
+    | tr -d '\r' >> "$PEER_LOG"
 }
 
 # Scratch goes in a temp dir, never next to the transcript: the fixtures live
@@ -73,20 +77,37 @@ emit() {
 CLAIMS=$(mktemp "${TMPDIR:-/tmp}/rfp-peer-claims-XXXXXX") || exit 2
 trap 'rm -f "$CLAIMS"' EXIT INT TERM
 
+# jq.exe on Windows writes CRLF. A stray CR becomes part of the last field of
+# every record -- it was reaching the peer-unverified log as "analyst-a\r" --
+# so every jq read below is normalised through this.
+jqs() { jq "$@" | tr -d '\r'; }
+
+# A command reads the claimed artifact only if the scope appears in it as a
+# whole path token. A substring test accepted `cat old_impl.py.bak` as a read
+# of `impl.py`: a different file, verified by a coincidence of spelling.
+# Left boundary: start, blank, quote, `:` (git show <sha>:path), `=`, `(`,
+# `<`, optionally followed by `./`. Right boundary: end, blank, quote, or a
+# shell separator.
+scope_token_re() {
+  esc=$(printf '%s' "$1" | sed 's/[][\.*^$+?(){}|]/\\&/g')
+  printf '(^|[[:space:]"'"'"':=(<])(\\./)?%s($|[[:space:]"'"'"');|>,])' "$esc"
+}
+
 # Each [E] claim by the receiver, tab-separated: seq, scope, tool count.
 jq -r --arg r "$RECEIVER" '
   select(.agent==$r and .event=="claim" and (.label|ascii_upcase)=="E")
   | [(.seq|tostring), .scope, ((.tools // [])|length|tostring)] | @tsv
-' "$TRANSCRIPT" > "$CLAIMS" || { echo "parse error" >&2; exit 2; }
+' "$TRANSCRIPT" > "$CLAIMS.raw" || { rm -f "$CLAIMS.raw"; echo "parse error" >&2; exit 2; }
+tr -d '\r' < "$CLAIMS.raw" > "$CLAIMS"; rm -f "$CLAIMS.raw"
 
 while IFS="$(printf '\t')" read -r seq scope ntools; do
   [ -n "${seq:-}" ] || continue
 
   # Peers who made a claim on the same scope before this one.
-  senders=$(jq -r --arg r "$RECEIVER" --arg s "$scope" --argjson q "$seq" '
+  senders=$(jqs -r --arg r "$RECEIVER" --arg s "$scope" --argjson q "$seq" '
     select(.agent!=$r and .event=="claim" and .scope==$s and .seq < $q) | .agent
   ' "$TRANSCRIPT" | paste -sd, - )
-  npeers=$(jq -r --arg r "$RECEIVER" --arg s "$scope" --argjson q "$seq" '
+  npeers=$(jqs -r --arg r "$RECEIVER" --arg s "$scope" --argjson q "$seq" '
     select(.agent!=$r and .event=="claim" and .scope==$s and .seq < $q) | .agent
   ' "$TRANSCRIPT" | wc -l | tr -d ' ')
   [ -n "$senders" ] || senders="(none)"
@@ -105,24 +126,40 @@ while IFS="$(printf '\t')" read -r seq scope ntools; do
 
   # At least one receiver command must read this scope without narrowing it.
   full=0
-  cmds=$(jq -r --arg r "$RECEIVER" --argjson q "$seq" '
+  token_re=$(scope_token_re "$scope")
+  cmds=$(jqs -r --arg r "$RECEIVER" --argjson q "$seq" '
     select(.agent==$r and .seq==$q) | (.tools // [])[]
   ' "$TRANSCRIPT")
+  # Commands peers ran on this scope earlier. Re-running one of them is
+  # allowed (§3.12: the canonical `git show <sha>:path` is expected to be
+  # byte-identical across agents), but it is the same METHOD, so agreement it
+  # produces is not an independent-method confirmation. Reported as a NOTE;
+  # it never changes the exit code.
+  peer_cmds=$(jqs -r --arg r "$RECEIVER" --arg s "$scope" --argjson q "$seq" '
+    select(.agent!=$r and .event=="claim" and .scope==$s and .seq < $q) | (.tools // [])[]
+  ' "$TRANSCRIPT")
+  reads=0
   while IFS= read -r cmd; do
     [ -n "${cmd:-}" ] || continue
-    case "$cmd" in
-      *"$scope"*) ;;
-      *) continue ;;
-    esac
+    printf '%s' "$cmd" | grep -Eq -- "$token_re" || continue
+    printf '%s' "$cmd" | grep -Eq -- "$non_read_re" && continue
+    reads=1
     if printf '%s' "$cmd" | grep -Eq "$narrowing_re"; then
       continue
     fi
     full=1
+    if [ -n "$peer_cmds" ] && printf '%s\n' "$peer_cmds" | grep -qxF -- "$cmd"; then
+      echo "NOTE [peer-verification §3.12, dependency]: agent '$RECEIVER' verified '$scope' with the same command a peer ran ('$cmd'). Valid re-execution, but not an independent method: agreement here is not independent corroboration."
+    fi
   done <<CMDS
 $cmds
 CMDS
 
-  if [ "$full" -eq 0 ]; then
+  if [ "$reads" -eq 0 ]; then
+    echo "REJECTED [peer-verification PROTOCOL.md §3.12]: agent '$RECEIVER' labelled '$scope' [E], but none of its commands reads that artifact (the scope does not appear as a path token in any of them). A peer's [E] is at most [I] to the receiver." >&2
+    emit no_artifact_read "$scope" "$senders" "$(printf '%s' "$cmds" | paste -sd';' -)"
+    violations=$((violations+1))
+  elif [ "$full" -eq 0 ]; then
     echo "REJECTED [peer-verification PROTOCOL.md §3.12]: agent '$RECEIVER' labelled '$scope' [E], but every read of that artifact was narrowed (truncated/filtered). A whole-artifact claim verified only through a narrowed read is [I]." >&2
     emit narrowed_scope "$scope" "$senders" "$(printf '%s' "$cmds" | paste -sd';' -)"
     violations=$((violations+1))

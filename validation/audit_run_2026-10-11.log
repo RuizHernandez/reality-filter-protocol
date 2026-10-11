@@ -1,0 +1,59 @@
+# validation/audit_suite.sh run, 2026-10-11T17:56:30Z
+# base commit 9997b900a86ccf2bf01800f9fd92818324a14dce + working tree of branch audit/limitaciones-v5 (after independent-review fixes)
+# env: MINGW64_NT-10.0-26200 3.6.9-b4195d69.x86_64 x86_64; GNU bash, version 5.3.15(1)-release (x86_64-pc-cygwin); git version 2.55.0.windows.3; jq-1.7.1
+================ RESULTS ================
+PASS | AU-H1 credential in a staged path containing a space is rejected | expected=1 got=1
+PASS | AU-H2 clean file in a path with a space still commits (no false positive) | expected=0 got=0
+PASS | AU-H3 secret-scan hook with its checker missing fails closed (§4.1) | expected=1 got=1
+PASS | AU-H4 coder adds a protected spec whose path contains a space: rejected | expected=1 got=1
+PASS | AU-H5 coder renames the protected spec out of its path: rejected | expected=1 got=1
+PASS | AU-H6 architect renames the same spec: allowed (no false positive) | expected=0 got=0
+PASS | AU-H7 secret commit with the hook's stderr pipe closed does not land | expected=1 got=1
+PASS | AU-H8 HOLD holds with the hook's stderr pipe closed | expected=1 got=1
+PASS | AU-H9 coder deletes one spec while another exists: rejected | expected=1 got=1
+PASS | AU-H10 coder renames one spec away while another exists: rejected | expected=1 got=1
+PASS | AU-P1 reading a different file whose name contains the scope is not verification | expected=1 got=1
+PASS | AU-P2 ./impl.py is the same artifact as impl.py (no false positive) | expected=0 got=0
+PASS | AU-P3 canonical re-run passes AND is reported as the same method (dependency note) | expected=0/0 got=0/0
+PASS | AU-P4 naming the file (ls) is not reading it | expected=1 got=1
+PASS | AU-P5 sed -E -n is a truncated read | expected=1 got=1
+PASS | AU-L1 valid transcript: all four labels, borderline compound and immutable restatement | expected=0 got=0
+PASS | AU-L2 a fifth label is rejected (R1) | expected=1 got=1
+PASS | AU-L3 [E] with no artifact is rejected (R2) | expected=1 got=1
+PASS | AU-L4 [I] from an [S] premise is rejected (R3) | expected=1 got=1
+PASS | AU-L5 [U] with no search record is rejected (R4) | expected=1 got=1
+PASS | AU-L6 [U] after a single query, no reason, is rejected (R4) | expected=1 got=1
+PASS | AU-L7 universal absence claim is rejected (R5) | expected=1 got=1
+PASS | AU-L8 absence claim with no search record is rejected (R5) | expected=1 got=1
+PASS | AU-L9 compound claim stronger than its weakest part (R6) | expected=1 got=1
+PASS | AU-L10 [E] restated after its mutable scope changed (R7) | expected=1 got=1
+PASS | AU-L11 [E] restated across a session boundary (R7) | expected=1 got=1
+PASS | AU-L12 empty transcript is invalid input (§4.1) | expected=2 got=2
+PASS | AU-L13 [E] restating a PEER's [E] is rejected (§3.12 via R7) | expected=1 got=1
+PASS | AU-L14 [S] laundered into [E] by restatement is rejected (R7) | expected=1 got=1
+PASS | AU-L15 blank tool strings are not evidence (R2) | expected=1 got=1
+PASS | AU-L16 absence claim without absence_scope=searched (R5) | expected=1 got=1
+PASS | AU-L17 transcript with no claim event is invalid, not clean | expected=2 got=2
+PASS | AU-C1 repository ledger passes structurally | expected=0 got=0
+PASS | AU-C2 authentic source with a known error in the citing text: CONTRADICTED fails | expected=1 got=1
+PASS | AU-C3 a figure no ledger row covers fails | expected=1 got=1
+PASS | AU-C4 a ledger row whose wording left the document fails (stale check) | expected=1 got=1
+PASS | AU-C5 SUPPORTED without a recorded method fails | expected=1 got=1
+PASS | AU-C6 NOT_CHECKED is visible debt, not a failure and not support | expected=0 got=0
+PASS | AU-S1 approval after a read in the same turn passes | expected=0 got=0
+PASS | AU-S2 approval grounded only by a tool call in an earlier turn is flagged | expected=1 got=1
+PASS | AU-S3 state claim with no tool call is flagged | expected=1 got=1
+PASS | AU-S4 praise-then-trivial-objection pattern is flagged | expected=1 got=1
+PASS | AU-S5 grounded critical review with no approval wording passes | expected=0 got=0
+PASS | AU-AB1 runner refuses without an exact model identifier | expected=2 got=2
+PASS | AU-AB2 a preregistered run archives prompt hash and model id | expected=0 got=0
+PASS | AU-AB3 runs are append-only: same run number is refused | expected=2 got=2
+PASS | AU-AB4 an arm outside the preregistration is refused | expected=2 got=2
+PASS | AU-AB5 a task outside the preregistration is refused | expected=2 got=2
+PASS | AU-AB6 PROTOCOL.md edited after preregistration: run refused | expected=2 got=2
+PASS | AU-AB7 blind copy strips full-form labels, correction template and section refs | expected=0 got=0
+PASS | AU-AB8 residual protocol vocabulary is measured in leak-report.txt, not assumed away | expected=0/1 got=0/1
+PASS | AU-AB9 placebo arm matches PROTOCOL.md bytes and carries no conduct vocabulary | expected=0 got=0
+PASS | AU-AB10 ablation arms remove exactly the named section and keep the rest | expected=0 got=0
+===========================================
+PASS=53 FAIL=0

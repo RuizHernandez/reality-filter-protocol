@@ -156,7 +156,7 @@ fi
 # counts. Write other ratios as "N of N" so they are not read as one, and
 # write scenario counts numerically: a count spelled as a word is invisible here.
 valid_counts=""
-for logfile in validation/replay_run_2026-08-05.log validation/peer_run_2026-08-26.log validation/gates_run_2026-08-27.log; do
+for logfile in validation/replay_run_2026-08-05.log validation/peer_run_2026-08-26.log validation/gates_run_2026-08-27.log validation/audit_run_2026-10-11.log; do
   if [[ ! -f "$logfile" ]]; then
     echo "FAIL: expected run log missing: $logfile"
     fail=1

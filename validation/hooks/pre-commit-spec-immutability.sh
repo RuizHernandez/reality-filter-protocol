@@ -13,20 +13,46 @@ PROTECTED_SPEC_GLOBS="docs/ux/*impl-notes*.md docs/ux/*ACCEPTANCE*.md docs/ux/*a
 AUTHORIZED_ROLES="architect orchestrator"
 
 role="${AGENT_ROLE:-unknown}"
-staged=$(git diff --cached --name-only)
 
+# Git for Windows treats a hook killed by a signal as success. If whoever
+# reads stderr closes the pipe, the first message would SIGPIPE this script
+# and the commit would go through. Ignore SIGPIPE so the exit code decides.
+trap '' PIPE
+
+# --no-renames: with rename detection on (git's default), moving a spec out of
+# its protected path lists only the NEW path, and the move passed unchecked.
+# -z + newline: one path per line even when the path contains spaces, which
+# the old word-split `for f in $staged` cut into fragments no glob matched.
+# Through a file, not a pipe: piped into tr, a failing `git diff` would read
+# as "nothing staged" and the hook would allow.
+list=$(mktemp "${TMPDIR:-/tmp}/rfp-spec-XXXXXX") || exit 1
+trap 'rm -f "$list"' EXIT INT TERM
+if ! git diff --cached --name-only --no-renames -z > "$list"; then
+  echo "REJECTED [spec-immutability PROTOCOL.md §3.2]: could not list staged paths -- fail closed (§4.1)." >&2
+  exit 1
+fi
+staged=$(tr '\0' '\n' < "$list")
+
+# set -f: the globs below are case patterns, not filenames. Left unquoted with
+# globbing on, the shell expanded each one against the worktree first; with a
+# second spec on disk, `docs/ux/*impl-notes*.md` became that file's literal
+# name, and deleting or renaming a DIFFERENT spec matched nothing.
+set -f
 touches_spec=0
 touched_files=""
-for f in $staged; do
+while IFS= read -r f; do
+  [ -n "$f" ] || continue
   for pat in $PROTECTED_SPEC_GLOBS; do
     case "$f" in
       $pat)
         touches_spec=1
-        touched_files="$touched_files $f"
+        touched_files="$touched_files '$f'"
         ;;
     esac
   done
-done
+done <<STAGED
+$staged
+STAGED
 
 if [ "$touches_spec" -eq 1 ]; then
   authorized=0

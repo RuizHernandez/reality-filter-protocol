@@ -6,7 +6,7 @@ Un protocolo de conducta público, agnóstico de modelo y citable, para asistent
 
 [![Licencia: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 
-**Nombre del protocolo:** *Filtro de Realidad v5* (conservado de su origen privado). **Versión de la release:** `v1.5.0` (ver [LINEAGE.md](LINEAGE.md) para entender por qué el nombre del protocolo y el semver de la release son contadores distintos). **Último DOI archivado/citable:** [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994) — cubre el snapshot `v1.0.0`; aquí se añadirá el DOI específico de `v1.4.0` cuando Zenodo lo emita.
+**Nombre del protocolo:** *Filtro de Realidad v5* (conservado de su origen privado). **Versión de la release:** `v1.5.0` (ver [LINEAGE.md](LINEAGE.md) para entender por qué el nombre del protocolo y el semver de la release son contadores distintos). **Último DOI archivado/citable:** [10.5281/zenodo.22256185](https://doi.org/10.5281/zenodo.22256185) — snapshot `v1.5.0` (registro de Zenodo publicado el 2026-09-02). Todas las versiones: [10.5281/zenodo.21499993](https://doi.org/10.5281/zenodo.21499993) (DOI concepto); `v1.0.0`: [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994).
 
 ## Skills de dominio incluidos
 
@@ -75,8 +75,8 @@ Ver [EVIDENCE.md](EVIDENCE.md) para la versión extendida de esta sección, incl
 
 ```
 Ruiz-Hernández, I. (2026). Filtro de Realidad v5 + Anti-Sycophancy:
-A model-agnostic conduct protocol for AI coding assistants (v1.0.0).
-Zenodo. https://doi.org/10.5281/zenodo.21499994
+A model-agnostic conduct protocol for AI coding assistants (v1.5.0).
+Zenodo. https://doi.org/10.5281/zenodo.22256185
 ```
 
 `CITATION.cff` también está presente para la función "Cite this repository" de GitHub.

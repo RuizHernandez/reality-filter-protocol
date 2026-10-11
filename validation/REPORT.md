@@ -249,6 +249,70 @@ offline.
 - Nothing about secrets already in history: once a credential is in an object,
   a pre-commit hook cannot help, and rotation is the only remedy.
 
+## Limitations audit (added 2026-10-11)
+
+A structured audit of seven limitations (full record, in Spanish, in
+`research/AUDITORIA_LIMITACIONES_V5.md` and `research/RESULTADOS_Y_EVIDENCIAS.md`)
+re-ran every suite on a Windows 11 / Git Bash checkout and found defects in the
+harnesses themselves, not only in the controls they test.
+
+**Oracle defect in the replay (fixed).** With a scratch path too long for
+Windows, `git init` failed, nothing was installed, and the replay still printed
+`PASS` for A2, B1, C1, D1 and G1 -- every scenario that expects a rejection -- because
+"git failed" and "the hook rejected" both exit 1. The replay now (a) stops with
+exit 2 and `ENVIRONMENT ERROR` when it cannot build its repository, and (b)
+counts an expected rejection only when the control's own tag is in stderr;
+anything else is reported as `1(untagged)`. The peer suite gained the same
+discipline: without `jq`, PV7/PV8 used to pass while nothing was parsed. Scenario
+counts are unchanged (13, 8, 13).
+
+**Mutation testing was inert (fixed).** No suite read the variable through which
+`validation/lib/mutate_check.sh` substitutes a mutant, so every mutant "survived"
+against the original checker. The suites now honour it; a baseline run against
+the unmutated checker guards the result; operators skip comment lines. All
+applicable mutants of the four jq/grep checkers are now killed -- with only four
+operators, a coarse floor rather than a mutation score.
+
+**Hook bypasses found by adversarial input (fixed).** A credential in a staged
+path containing a space was committed unscanned; the secret-scan hook allowed
+every commit when its checker file was missing; a Coder could rename the
+protected spec out of its path (rename detection listed only the new path); and,
+on Git for Windows 2.55, a hook killed by a signal counts as success, so a closed
+stderr pipe turned a rejection into a commit. The hooks now read NUL-delimited
+paths without rename detection, fail closed, and ignore SIGPIPE. SIGTERM/SIGKILL
+remain out of a client-side hook's reach -- a server-side check is the only
+answer, as Limitation 2 above already says.
+
+**What the first pass missed.** An independent review of the diff (a separate
+agent session; same model family, so operationally but not statistically
+independent) confirmed by execution a bypass this audit's own scenarios did not
+cover: the spec-immutability hook iterated over its glob list unquoted, so the
+shell expanded each pattern against the worktree; with a second spec present,
+deleting or renaming the first matched nothing. Present in the original hook;
+fixed with `set -f`. The same review showed that the new label checker accepted
+an `[E]` laundered through a restatement of an `[S]` or of a peer's `[E]`, blank
+tool strings as evidence, and transcripts with no claim at all, and that two
+oracles (G2 here, AU-H1 in the audit suite) could pass for the wrong reason.
+All were fixed and given scenarios; the audit suite grew from 44 to 53.
+
+**New checks, all structural.** `validation/lib/epistemic_label_check.sh`
+checks that each §2 label carries what it requires (an artifact for `[E]`,
+premises for `[I]`, a search record for `[U]`, no universal absence claims, no
+compound claim stronger than its weakest part) and enforces §2 evidence decay.
+`scripts/check-claim-support.sh` checks that cited sources state the figures
+attributed to them; two of six are recorded as PARTIAL (`scripts/claim-support.tsv`).
+The A/B runner now verifies the preregistered hashes, requires an exact model
+identifier, strips full-form labels from the blind copy and reports residual
+leakage, and supports a length-matched placebo arm and section ablations
+(`validation/ab-study/make_arms.sh`). `validation/audit_suite.sh` exercises all
+of it: **53/53** (`validation/audit_run_2026-10-11.log`); 27 of those scenarios
+fail when the modified files are reverted to their pre-audit versions.
+
+**What this does not establish.** Nothing here tests an LLM. The new label
+checker verifies the shape of a labelled claim, not that the label is right;
+the support ledger verifies that a source states a figure, not that the figure
+is true.
+
 ## Reproduce it
 
 ```bash
@@ -261,8 +325,18 @@ bash validation/peer_verification_suite.sh
 # domain-skill gates (cybersecurity §2.3 + computational-arch §2.2, 13 scenarios)
 bash validation/skill_gates_suite.sh
 
+# limitations-audit scenarios (53 scenarios; needs jq and a short scratch path on Windows)
+bash validation/audit_suite.sh /path/to/scratch-dir
+
+# everything, with the environment each result came from
+bash validation/run_all.sh
+
 # bibliography (structural; add --online to resolve every identifier)
 bash scripts/check-citations.sh
+
+# documentary support of cited figures (add --online to re-read abstracts and
+# query Crossref for corrections/retractions)
+bash scripts/check-claim-support.sh
 
 # cross-file version and scenario-count consistency
 bash scripts/sync-check.sh

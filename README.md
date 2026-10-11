@@ -10,8 +10,10 @@ swarms.
 **Protocol name:** *Filtro de Realidad v5* (preserved from its private origin). **Release
 version:** `v1.5.0` (see [LINEAGE.md](LINEAGE.md) for why the protocol name and release semver
 are different counters). **Latest archived/citable DOI:**
-[10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994) — this covers the `v1.0.0`
-snapshot; a `v1.4.0`-specific DOI will be added here once Zenodo mints it.
+[10.5281/zenodo.22256185](https://doi.org/10.5281/zenodo.22256185) — the `v1.5.0` snapshot
+(Zenodo record, published 2026-09-02). All versions:
+[10.5281/zenodo.21499993](https://doi.org/10.5281/zenodo.21499993) (concept DOI);
+`v1.0.0`: [10.5281/zenodo.21499994](https://doi.org/10.5281/zenodo.21499994).
 
 ## Included domain skills
 
@@ -155,12 +157,17 @@ verify that these specific events occurred as described. Treat as self-report.
 prompt and observes the model visibly invoking it outside the original project ("per your reality
 filter and anti-sycophancy…") during ordinary browsing/coding. User self-report, not measurement.
 
-**What is actually executable.** Two harnesses in `validation/` run real commands and report
+**What is actually executable.** Four suites in `validation/` run real commands and report
 real exit codes: `replay_incident.sh` (13/13) replays the incident's artifact-level shape against
-git hooks implementing §3.1/§3.2/§3.3/§3.8/§3.10, and `peer_verification_suite.sh` (8/8) exercises
-the §3.12 peer-verification checker. `scripts/check-citations.sh` resolves the bibliography's
-identifiers, and `scripts/sync-check.sh` catches version drift between this file, `PROTOCOL.md`,
-`LINEAGE.md` and the adapters. All four run in CI. **None of them tests a model**: they test
+git hooks implementing §3.1/§3.2/§3.3/§3.8/§3.10; `peer_verification_suite.sh` (8/8) exercises
+the §3.12 peer-verification checker; `skill_gates_suite.sh` (13/13) exercises the secret and
+dependency gates of two domain skills; and `audit_suite.sh` (53/53, added by the 2026-10-11
+limitations audit in [`research/`](research/)) exercises the hooks under adversarial input, the
+§2 label-structure checker, the documentary-support ledger and the A/B apparatus.
+`scripts/check-citations.sh` checks that cited sources *exist*; `scripts/check-claim-support.sh`
+checks that they *state* the figures attributed to them — neither certifies that a figure is
+true. `scripts/sync-check.sh` catches version drift. `validation/run_all.sh` runs everything and
+records the environment each result came from. **None of them tests a model**: they test
 artifact-layer and document-layer controls. The behavioral claims above are still Tier 1–3
 observations, not measurements — see `validation/REPORT.md` for what each harness does and does
 not establish.

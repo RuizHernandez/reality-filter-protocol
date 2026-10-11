@@ -17,8 +17,24 @@ set -u
 
 SELF_DIR="$(cd "$(dirname "$0")" && pwd)"
 CHECK="$SELF_DIR/lib/peer_verification_check.sh"
+# validation/lib/mutate_check.sh substitutes a mutant through these two
+# variables. A suite that ignores them makes every mutant "survive" -- which
+# is what happened before they were honoured here.
+if [ -n "${RFP_CHECKER_UNDER_TEST:-}" ]; then
+  [ "${RFP_CHECKER_TARGET:-}" = "$(basename "$CHECK")" ] || {
+    echo "ENVIRONMENT ERROR: RFP_CHECKER_TARGET='${RFP_CHECKER_TARGET:-}' is not a checker this suite runs" >&2; exit 2; }
+  CHECK="$RFP_CHECKER_UNDER_TEST"
+fi
 FIX="$SELF_DIR/fixtures/peer-transcripts"
 WORKDIR="${1:-$(mktemp -d "${TMPDIR:-/tmp}/rfp-peer-XXXXXX")}"
+
+# The checker exits 2 without jq. Run anyway and PV7/PV8 "pass" -- invalid
+# input reported as invalid input -- while nothing was parsed at all. A
+# missing dependency is an environment error, not a scenario result.
+command -v jq >/dev/null 2>&1 || {
+  echo "ENVIRONMENT ERROR: jq is required by the checker under test; no scenario was evaluated" >&2
+  exit 2
+}
 
 mkdir -p "$WORKDIR"
 export PEER_LOG="$WORKDIR/peer-unverified.jsonl"
@@ -42,8 +58,17 @@ record() {
 run() {
   # run <label> <fixture> <receiver> <expected-exit>
   local name="$1" fixture="$2" receiver="$3" expect="$4" got=0
+  local err="$WORKDIR/stderr.txt"
   echo "=== $name ==="
-  "$CHECK" "$FIX/$fixture" "$receiver" || got=$?
+  sh "$CHECK" "$FIX/$fixture" "$receiver" 2>"$err" || got=$?
+  cat "$err" >&2
+  # A non-zero exit counts only when the checker states the reason the
+  # scenario is about; any other cause (a crash, a missing tool) is
+  # reported as `<code>(untagged)` and cannot match the expectation.
+  case "$got" in
+    1) grep -q 'REJECTED \[peer-verification PROTOCOL.md §3.12\]' "$err" || got="1(untagged)" ;;
+    2) grep -q 'empty or unparseable' "$err" || got="2(untagged)" ;;
+  esac
   record "$name" "$expect" "$got"
   echo
 }

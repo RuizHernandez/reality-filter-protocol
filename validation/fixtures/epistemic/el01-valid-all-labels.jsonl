@@ -1,0 +1,11 @@
+{"seq":1,"agent":"reviewer","event":"claim","label":"E","scope":"impl.py","text":"impl.py defines go_to_space()","tools":["cat impl.py"]}
+{"seq":2,"agent":"reviewer","event":"claim","label":"Inference","scope":"impl.py","text":"so the router is reachable from the shell","premises":[1]}
+{"seq":3,"agent":"reviewer","event":"claim","label":"I","scope":"impl.py","text":"so P2 routing can be tested in isolation","premises":[2]}
+{"seq":4,"agent":"reviewer","event":"claim","label":"S","scope":"perf","text":"the router is probably not the bottleneck"}
+{"seq":5,"agent":"reviewer","event":"claim","label":"U","scope":"lib-x","text":"whether lib-x 2.1 changed parse() cannot be confirmed","search":{"queries":["lib-x 2.1 changelog parse","lib-x parse signature 2.1"],"sources":["pypi:lib-x","github:lib-x/CHANGELOG.md"],"coverage":"PyPI metadata and the project changelog; source of 2.1 not inspected"}}
+{"seq":6,"agent":"reviewer","event":"claim","label":"E","scope":"deps","kind":"absence","absence_scope":"searched","text":"no call to eval() in the 3 files searched","tools":["grep -rn 'eval(' app/"],"search":{"queries":["eval(","exec("],"sources":["app/"],"coverage":"app/ only; vendored code and tests not searched"}}
+{"seq":7,"agent":"reviewer","event":"claim","label":"S","scope":"impl.py","text":"impl.py defines go_to_space() and will scale to 10 spaces","parts":["E","S"]}
+{"seq":8,"agent":"reviewer","event":"claim","label":"E","scope":"spec.md","text":"the spec has 4 sections","tools":["git show 4d5e6f7:spec.md"]}
+{"seq":9,"agent":"coder","event":"action","scope":"spec.md","text":"edits working-tree spec.md"}
+{"seq":10,"agent":"reviewer","event":"claim","label":"E","scope":"spec.md","text":"the spec at 4d5e6f7 has 4 sections","restates":8}
+{"seq":11,"agent":"reviewer","event":"claim","label":"E","scope":"impl.py","text":"impl.py defines go_to_space()","restates":1}

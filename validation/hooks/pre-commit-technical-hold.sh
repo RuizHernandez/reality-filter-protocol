@@ -3,6 +3,10 @@
 # the repo root blocks commits from every role except the orchestrator, instead
 # of relying on a markdown STOP notice an implementer agent could ignore.
 
+# Git for Windows treats a hook killed by a signal as success; a closed stderr
+# pipe would SIGPIPE the `cat` below and let the commit through. Ignore it.
+trap '' PIPE
+
 HOLD_FILE="$(git rev-parse --show-toplevel)/.HOLD"
 role="${AGENT_ROLE:-unknown}"
 

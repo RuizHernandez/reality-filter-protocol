@@ -43,3 +43,7 @@ jobs:
         run: bash validation/peer_verification_suite.sh
       - name: Domain-skill gates (cybersecurity §2.3, computational-arch §2.2)
         run: bash validation/skill_gates_suite.sh
+      - name: Limitations-audit scenarios (hooks under adversarial input, §2 labels, claim support, A/B apparatus)
+        run: bash validation/audit_suite.sh "$RUNNER_TEMP/audit"
+      - name: Documentary support of cited figures (structural; existence is check-citations.sh)
+        run: bash scripts/check-claim-support.sh

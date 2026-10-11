@@ -524,3 +524,24 @@ Validation and CI:
   non-decreasing, versions strictly increasing) and covers the new adapters.
 - `scripts/check-citations.sh` caches online resolutions locally (7-day TTL);
   `scripts/check-claims.sh` gains an optional `--online` URL-liveness pass.
+
+## Limitations audit — validation hardening, 2026-10-11 (unreleased)
+
+**[Empirical]** A seven-limitation audit (record in Spanish under `research/`) re-ran every
+suite on Windows 11 / Git Bash. The headline counts reproduced (13, 8, 13) only under specific
+conditions: a short scratch path for the replay and `jq` on PATH for the peer suite. Under a
+long path, the replay printed 5 PASS / 8 FAIL without ever creating its repository, and the five
+passes were the five expected rejections. That is the failure this protocol names — a report
+accepted as state — inside the harness that is supposed to catch it. Protocol text (§1–§6) is
+unchanged; no release version was bumped.
+
+> Correction: the v1.5.0 entry above describes `validation/lib/mutate_check.sh` as systematic mutation testing for checkers. It was wrong because no suite read the variable the tool substitutes mutants through, so every mutant was tested as the unmutated checker and reported as surviving. The suites now honour it, a baseline run guards it, and all applicable mutants of the four checkers are killed — by four operators, a coarse floor.
+
+Changes, each with a scenario in `validation/audit_suite.sh` that fails on the pre-audit file:
+harness oracles that require the rejecting control's own tag; NUL-delimited, rename-blind,
+fail-closed, SIGPIPE-immune hooks; a token-boundary scope match in the §3.12 checker plus a
+same-method dependency note; per-turn grounding in the anti-sycophancy linter; preregistration
+hash checks, model identifier, blinding of full-form labels, a placebo arm and section ablations
+in the A/B apparatus. New structural checks: `validation/lib/epistemic_label_check.sh` (§2 labels
+and evidence decay) and `scripts/check-claim-support.sh` with `scripts/claim-support.tsv`
+(documentary support of cited figures — two of six recorded as PARTIAL). None of it tests a model.

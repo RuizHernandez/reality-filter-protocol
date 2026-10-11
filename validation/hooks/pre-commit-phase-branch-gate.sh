@@ -6,6 +6,10 @@
 # drift is rejected at commit time instead of discovered later via stash
 # archaeology.
 
+# Git for Windows treats a hook killed by a signal as success; a closed stderr
+# pipe would SIGPIPE the rejection below and let the commit through.
+trap '' PIPE
+
 branch=$(git rev-parse --abbrev-ref HEAD)
 branch_phase=$(echo "$branch" | grep -oE 'p[0-9]+' | head -1)
 

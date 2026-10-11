@@ -1,0 +1,2 @@
+{"seq":1,"agent":"explorer","event":"claim","label":"E","scope":"impl.py","text":"impl.py defines go_to_space()","tools":["cat impl.py"]}
+{"seq":2,"agent":"implementer","event":"claim","label":"E","scope":"impl.py","text":"impl.py defines go_to_space()","restates":1}

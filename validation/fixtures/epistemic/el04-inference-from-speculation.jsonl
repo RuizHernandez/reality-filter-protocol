@@ -1,0 +1,2 @@
+{"seq":1,"agent":"a","event":"claim","label":"S","scope":"db","text":"the DB is probably the bottleneck"}
+{"seq":2,"agent":"a","event":"claim","label":"I","scope":"db","text":"so caching will fix latency","premises":[1]}

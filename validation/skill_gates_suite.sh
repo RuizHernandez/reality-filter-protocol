@@ -27,6 +27,15 @@ set -u
 SELF_DIR="$(cd "$(dirname "$0")" && pwd)"
 SECRET="$SELF_DIR/lib/secret_scan_check.sh"
 DEPS="$SELF_DIR/lib/dependency_manifest_check.sh"
+# validation/lib/mutate_check.sh substitutes one checker at a time through
+# these variables; without this hook every mutant "survived" by construction.
+if [ -n "${RFP_CHECKER_UNDER_TEST:-}" ]; then
+  case "${RFP_CHECKER_TARGET:-}" in
+    "$(basename "$SECRET")") SECRET="$RFP_CHECKER_UNDER_TEST" ;;
+    "$(basename "$DEPS")")   DEPS="$RFP_CHECKER_UNDER_TEST" ;;
+    *) echo "ENVIRONMENT ERROR: RFP_CHECKER_TARGET='${RFP_CHECKER_TARGET:-}' is not a checker this suite runs" >&2; exit 2 ;;
+  esac
+fi
 SFIX="$SELF_DIR/fixtures/secrets"
 MFIX="$SELF_DIR/fixtures/manifests"
 WORKDIR="${1:-$(mktemp -d "${TMPDIR:-/tmp}/rfp-gates-XXXXXX")}"

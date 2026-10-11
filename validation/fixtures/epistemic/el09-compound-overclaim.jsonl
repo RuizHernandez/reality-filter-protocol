@@ -1,0 +1,1 @@
+{"seq":1,"agent":"a","event":"claim","label":"E","scope":"impl.py","text":"impl.py defines go_to_space() and will scale to 10 spaces","tools":["cat impl.py"],"parts":["E","S"]}
