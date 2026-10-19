@@ -54,7 +54,7 @@ done
 echo "cited in PROTOCOL.md: $(printf '%s\n' "$cited" | grep -c .) | inventory entries: $(printf '%s\n' "$inv_names" | grep -c .)"
 
 echo
-echo "== Identifier check =="
+ echo "== Identifier check =="
 while IFS=$'\t' read -r surname year idtype id frag note; do
   case "${surname:-}" in ''|\#*) continue ;; esac
   case "$idtype" in
@@ -111,15 +111,18 @@ while IFS=$'\t' read -r surname year idtype id frag note; do
   # author is a check that gets switched off.
   CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/rfp-citations"
   mkdir -p "$CACHE_DIR"
-  cache_file="$CACHE_DIR/${idtype}_${id}"
+  cache_key=$(printf '%s' "${idtype}:${id}" | sha256sum | cut -d' ' -f1)
+  cache_file="$CACHE_DIR/$cache_key"
   title=""
   if [ -f "$cache_file" ] && [ -n "$(find "$cache_file" -mtime -7 2>/dev/null)" ]; then
     title=$(cat "$cache_file")
   fi
   if [ -z "$title" ]; then
   if [ "$idtype" = "arxiv" ]; then
-    title=$(curl -sSL --max-time 30 "https://export.arxiv.org/api/query?id_list=$id" 2>/dev/null \
-      | python3 -c "import re,sys;t=re.findall(r'<title>(.*?)</title>',sys.stdin.read(),re.S);print(' '.join(t[1].split()) if len(t)>1 else '')" 2>/dev/null)
+    title=$(curl --fail --silent --show-error --location \
+      --connect-timeout 10 --max-time 30 \
+      --retry 3 --retry-delay 5 "https://export.arxiv.org/api/query?id_list=$id" \
+      | python3 -c "import re,sys;t=re.findall(r'<title>(.*?)</title>',sys.stdin.read(),re.S);print(' '.join(t[1].split()) if len(t)>1 else '')")
   elif [ "$idtype" = "rfc" ]; then
     # IETF Datatracker. Parsed with python3 rather than jq so that adding RFC
     # support does not add a dependency the offline path never needed --
