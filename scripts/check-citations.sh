@@ -123,6 +123,12 @@ while IFS=$'\t' read -r surname year idtype id frag note; do
       --connect-timeout 10 --max-time 30 \
       --retry 3 --retry-delay 5 "https://export.arxiv.org/api/query?id_list=$id" \
       | python3 -c "import re,sys;t=re.findall(r'<title>(.*?)</title>',sys.stdin.read(),re.S);print(' '.join(t[1].split()) if len(t)>1 else '')")
+    if [ -z "$title" ]; then
+      title=$(curl --fail --silent --show-error --location \
+        --connect-timeout 10 --max-time 20 \
+        --retry 2 --retry-delay 3 "https://arxiv.org/abs/$id" \
+        | python3 -c "import re,sys;t=re.findall(r'<title>(.*?)</title>',sys.stdin.read(),re.S);print(' '.join(t[0].split()) if t else '')")
+    fi
   elif [ "$idtype" = "rfc" ]; then
     # IETF Datatracker. Parsed with python3 rather than jq so that adding RFC
     # support does not add a dependency the offline path never needed --
