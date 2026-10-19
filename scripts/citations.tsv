@@ -24,7 +24,7 @@ Lanham	2023	arxiv	2307.13702	Measuring Faithfulness in Chain-of-Thought Reasonin
 Ji	2025	arxiv	2503.14477	Calibrating Verbal Uncertainty	Rule 2
 Young	2026	arxiv	2603.22582	How Faithful Is Chain-of-Thought Reasoning	Rule 2
 Wooldridge	2026	doi	10.65109/ktwn2820	Rethinking Multi-agent Systems in the Era of LLMs	Rule 3
-Zhu	2025	arxiv	2512.11147	Least Privilege Framework for Authorizing Tool Calling Agents	Rule 3
+Zhu	2025	arxiv	2512.11147	MiniScope	Rule 3
 Yang	2025	arxiv	2512.16279	QuadSentinel	Rule 3 / §3.11 prior art
 Denison	2024	arxiv	2406.10162	Sycophancy to Subterfuge	v1.2 incident-derived
 MacDiarmid	2025	arxiv	2511.18397	Natural Emergent Misalignment from Reward Hacking	v1.2 incident-derived
